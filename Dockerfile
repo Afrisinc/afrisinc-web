@@ -19,16 +19,10 @@ RUN pnpm build
 FROM node:20-alpine
 WORKDIR /app
 
-# Enable pnpm again (new stage)
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
 # Copy built files
 COPY --from=builder /app/dist ./dist
 
-# Install only what is needed to serve (vite)
-RUN pnpm add -g vite
-
 EXPOSE 8090
 
-# Serve the built app
-CMD ["vite", "preview", "--host", "0.0.0.0", "--port", "8090"]
+# Serve the built app (Vite preview)
+CMD ["npx", "vite", "preview", "--host", "0.0.0.0", "--port", "8090"]
