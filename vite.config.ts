@@ -11,9 +11,9 @@ export default defineConfig(({ mode }) => ({
     allowedHosts: ['webqa.afrisinc.com', 'afrisinc.com', 'web.afrisinc.com'],
   },
   preview: {
-  host: true,
-  port: 8090, 
-  allowedHosts: ['webqa.afrisinc.com', 'afrisinc.com', 'web.afrisinc.com'],
+    host: true,
+    port: 8090,
+    allowedHosts: ['webqa.afrisinc.com', 'afrisinc.com', 'web.afrisinc.com'],
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {

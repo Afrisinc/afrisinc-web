@@ -16,13 +16,14 @@ COPY . .
 RUN pnpm build
 
 # ---------- Serve ----------
-FROM node:20-alpine
-WORKDIR /app
+FROM nginx:alpine
 
-# Copy built files
-COPY --from=builder /app/dist ./dist
+# Copy built files from builder
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 8090
 
-# Serve the built app (Vite preview)
-CMD ["npx", "vite", "preview", "--host", "0.0.0.0", "--port", "8090"]
+CMD ["nginx", "-g", "daemon off;"]
