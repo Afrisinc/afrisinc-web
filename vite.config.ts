@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8090,
+    allowedHosts: ['webqa.afrisinc.com', 'afrisinc.com', 'web.afrisinc.com'],
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
