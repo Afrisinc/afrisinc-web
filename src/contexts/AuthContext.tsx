@@ -1,6 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { User, Session } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
 
 interface CustomUser {
   id: string;
@@ -16,8 +14,8 @@ interface CustomUser {
 }
 
 interface AuthContextType {
-  user: CustomUser | User | null;
-  session: Session | null;
+  user: CustomUser | null;
+  session: null;
   token: string | null;
   loading: boolean;
   signUp: (email: string, password: string, fullName?: string) => Promise<{ error: Error | null }>;
@@ -37,8 +35,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<CustomUser | User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<CustomUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -56,47 +53,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
 
-    // Set up auth state listener for Supabase FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setSession(session);
-        if (session?.user && !storedUser) {
-          setUser(session.user);
-        }
-        setLoading(false);
-      }
-    );
-
-    // THEN get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session?.user && !storedUser) {
-        setUser(session.user);
-      }
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    // Mark as not loading after checking localStorage
+    setLoading(false);
   }, []);
 
   const signUp = async (email: string, password: string, fullName?: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: window.location.origin,
-        data: {
-          full_name: fullName,
+    try {
+      const { getApiUrl } = await import("@/lib/config");
+      const apiUrl = getApiUrl();
+      const response = await fetch(`${apiUrl}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      },
-    });
-    return { error: error as Error | null };
+        body: JSON.stringify({ email, password, fullName }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { error: new Error(errorData.resp_msg || "Registration failed") };
+      }
+
+      return { error: null };
+    } catch (error) {
+      return { error: error instanceof Error ? error : new Error("Registration failed") };
+    }
   };
 
   const signIn = async (email: string, password: string) => {
     try {
       // Call custom endpoint instead of Supabase
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8091";
+      const { getApiUrl } = await import("@/lib/config");
+      const apiUrl = getApiUrl();
       const response = await fetch(`${apiUrl}/auth/login`, {
         method: "POST",
         headers: {
@@ -133,21 +121,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    await supabase.auth.signOut();
   };
 
   const resetPassword = async (email: string) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-    return { error: error as Error | null };
+    try {
+      const { getApiUrl } = await import("@/lib/config");
+      const apiUrl = getApiUrl();
+      const response = await fetch(`${apiUrl}/auth/reset-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { error: new Error(errorData.resp_msg || "Password reset failed") };
+      }
+
+      return { error: null };
+    } catch (error) {
+      return { error: error instanceof Error ? error : new Error("Password reset failed") };
+    }
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        session,
+        session: null,
         token,
         loading,
         signUp,

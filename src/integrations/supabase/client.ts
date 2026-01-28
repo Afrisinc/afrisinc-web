@@ -8,10 +8,27 @@ const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-  auth: {
-    storage: localStorage,
-    persistSession: true,
-    autoRefreshToken: true,
-  }
-});
+let supabase: ReturnType<typeof createClient<Database>>;
+
+// Only initialize if both URL and key are present
+if (SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY) {
+  supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    auth: {
+      storage: localStorage,
+      persistSession: true,
+      autoRefreshToken: true,
+    }
+  });
+} else {
+  // Create a stub client that won't be used - prevents errors
+  console.warn('Supabase credentials not configured. Using custom API backend.');
+  supabase = createClient<Database>('https://stub.supabase.co', 'stub-key', {
+    auth: {
+      storage: localStorage,
+      persistSession: false,
+      autoRefreshToken: false,
+    }
+  });
+}
+
+export { supabase };

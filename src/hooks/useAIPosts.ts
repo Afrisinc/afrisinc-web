@@ -51,7 +51,8 @@ export const useGenerateAIPost = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Not authenticated");
 
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8091";
+      const { getApiUrl } = await import("@/lib/config");
+      const apiUrl = getApiUrl();
 
       // Create an AbortController with 1 minute (60000ms) timeout
       const controller = new AbortController();
