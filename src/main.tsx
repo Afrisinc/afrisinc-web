@@ -9,13 +9,9 @@ loadRuntimeConfig().then(() => {
   );
 }).catch((error) => {
   console.error("Failed to load runtime configuration:", error);
+  // Still render the app, but log the error
+  // Configuration will fall back to build-time env vars
   createRoot(document.getElementById("root")!).render(
-    <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
-      <h1>Configuration Error</h1>
-      <p>Failed to load application configuration. Please check the config.json file.</p>
-      <pre style={{ background: "#f5f5f5", padding: "10px", overflow: "auto" }}>
-        {error.message}
-      </pre>
-    </div>
+    <App />
   );
 });
