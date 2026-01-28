@@ -30,7 +30,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            --build-arg VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }} \
+            --build-arg VITE_API_URL=${{ secrets.VITE_API_URL }} \
             -t ghcr.io/${{ secrets.GHCR_OWNER }}/afrisinc-web:latest .
 
       # Step 4: Push Docker image to GHCR
