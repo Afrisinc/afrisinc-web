@@ -51,8 +51,8 @@ export const useGenerateAIPost = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("Not authenticated");
 
-      const { getApiUrl } = await import("@/lib/config");
-      const apiUrl = getApiUrl();
+      const { getRuntimeConfig } = await import("@/lib/config");
+      const config = getRuntimeConfig();
 
       // Create an AbortController with 1 minute (60000ms) timeout
       const controller = new AbortController();
@@ -60,7 +60,7 @@ export const useGenerateAIPost = () => {
 
       try {
         const response = await fetch(
-          `${apiUrl}/content/ai/generate`,
+          `${config.serverUrl}/content/ai/generate`,
           {
             method: "POST",
             headers: {

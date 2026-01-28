@@ -59,9 +59,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, fullName?: string) => {
     try {
-      const { getApiUrl } = await import("@/lib/config");
-      const apiUrl = getApiUrl();
-      const response = await fetch(`${apiUrl}/auth/register`, {
+      const { getRuntimeConfig } = await import("@/lib/config");
+      const config = getRuntimeConfig();
+      const response = await fetch(`${config.serverUrl}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,9 +83,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signIn = async (email: string, password: string) => {
     try {
       // Call custom endpoint instead of Supabase
-      const { getApiUrl } = await import("@/lib/config");
-      const apiUrl = getApiUrl();
-      const response = await fetch(`${apiUrl}/auth/login`, {
+      const { getRuntimeConfig } = await import("@/lib/config");
+      const config = getRuntimeConfig();
+      const response = await fetch(`${config.serverUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -125,9 +125,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const resetPassword = async (email: string) => {
     try {
-      const { getApiUrl } = await import("@/lib/config");
-      const apiUrl = getApiUrl();
-      const response = await fetch(`${apiUrl}/auth/reset-password`, {
+      const { getRuntimeConfig } = await import("@/lib/config");
+      const config = getRuntimeConfig();
+      const response = await fetch(`${config.serverUrl}/auth/reset-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

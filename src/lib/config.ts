@@ -1,54 +1,64 @@
-/**
- * Runtime configuration loader
- * Loads API URL from public/config.json (injected by Docker at runtime)
- * For development: falls back to VITE_API_URL from .env
- * For production: VITE_API_URL must be passed to Docker container
- */
-
-interface RuntimeConfig {
-  API_URL?: string;
+export interface RuntimeConfig {
+  serverUrl: string;
 }
 
 let config: RuntimeConfig | null = null;
+let configLoaded = false;
 
-export async function loadConfig(): Promise<RuntimeConfig> {
-  if (config) {
-    return config;
+export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
+  if (configLoaded) {
+    return config!;
   }
 
   try {
-    const response = await fetch('/config.json');
-    if (response.ok) {
-      config = await response.json();
-      console.log('Loaded runtime config from /config.json');
-      return config;
+    const response = await fetch('/config.json', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to load config.json: ${response.status}`);
     }
+
+    const runtimeConfig = await response.json();
+
+    // Use runtime config if available, fall back to build-time env vars
+    config = {
+      serverUrl: runtimeConfig.serverUrl || import.meta.env.VITE_API_URL || '',
+    };
+
+    if (!config.serverUrl) {
+      console.error('[Config] serverUrl is required but not found');
+    }
+
+    configLoaded = true;
+    return config;
   } catch (error) {
-    console.warn('Failed to load /config.json:', error);
+    console.warn('[Config] Could not load config.json, falling back to build-time variables', error);
+    config = {
+      serverUrl: import.meta.env.VITE_API_URL || '',
+    };
+    configLoaded = true;
+    if (!config.serverUrl) {
+      console.error('[Config] Configuration incomplete: serverUrl is required');
+    }
+    return config;
   }
+}
 
-  // Fallback to build-time VITE_API_URL (development only)
-  const viteUrl = import.meta.env.VITE_API_URL;
-  config = {
-    API_URL: viteUrl,
-  };
-
+export function getRuntimeConfig(): RuntimeConfig {
+  if (!configLoaded || !config) {
+    throw new Error('Configuration not loaded. Call loadRuntimeConfig() first.');
+  }
   return config;
 }
 
-export function getApiUrl(): string {
-  if (!config) {
-    console.warn('Config not loaded yet, trying build-time VITE_API_URL');
-    const viteUrl = import.meta.env.VITE_API_URL;
-    if (!viteUrl) {
-      throw new Error('API_URL not configured. Set VITE_API_URL env variable for development or pass VITE_API_URL to Docker container for production.');
-    }
-    return viteUrl;
-  }
+export function getConfigValue(key: keyof RuntimeConfig): string {
+  const cfg = getRuntimeConfig();
+  return cfg[key] || '';
+}
 
-  if (!config.API_URL) {
-    throw new Error('API_URL not configured in config.json. For production, ensure VITE_API_URL is passed to Docker container: docker run -e VITE_API_URL=https://api.example.com ...');
-  }
-
-  return config.API_URL;
+export function isRuntimeConfigLoaded(): boolean {
+  return configLoaded;
 }
