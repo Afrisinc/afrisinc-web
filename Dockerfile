@@ -2,6 +2,9 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+# Accept build-time argument for API URL
+ARG VITE_API_URL=http://localhost:8091
+
 # Enable pnpm via Corepack
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
@@ -12,8 +15,8 @@ RUN pnpm install --frozen-lockfile
 # Copy source code
 COPY . .
 
-# Build the Vite app
-RUN pnpm build
+# Build the Vite app with API URL
+RUN VITE_API_URL=${VITE_API_URL} pnpm build
 
 # ---------- Serve ----------
 FROM nginx:alpine
