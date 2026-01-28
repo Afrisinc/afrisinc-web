@@ -2,9 +2,23 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
+interface CustomUser {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  tin: string;
+  companyName: string;
+  createdAt: string;
+  updatedAt: string;
+  lastLogin: string;
+}
+
 interface AuthContextType {
-  user: User | null;
+  user: CustomUser | User | null;
   session: Session | null;
+  token: string | null;
   loading: boolean;
   signUp: (email: string, password: string, fullName?: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
@@ -23,16 +37,32 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<CustomUser | User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
+    // Check for stored custom user and token
+    const storedUser = localStorage.getItem("user");
+    const storedToken = localStorage.getItem("token");
+
+    if (storedUser && storedToken) {
+      try {
+        setUser(JSON.parse(storedUser));
+        setToken(storedToken);
+      } catch (error) {
+        console.error("Failed to parse stored user data", error);
+      }
+    }
+
+    // Set up auth state listener for Supabase FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setSession(session);
-        setUser(session?.user ?? null);
+        if (session?.user && !storedUser) {
+          setUser(session.user);
+        }
         setLoading(false);
       }
     );
@@ -40,7 +70,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // THEN get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      setUser(session?.user ?? null);
+      if (session?.user && !storedUser) {
+        setUser(session.user);
+      }
       setLoading(false);
     });
 
@@ -62,14 +94,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { error: error as Error | null };
+    try {
+      // Call custom endpoint instead of Supabase
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8091";
+      const response = await fetch(`${apiUrl}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { error: new Error(errorData.resp_msg || "Login failed") };
+      }
+
+      const data = await response.json();
+
+      if (data.success && data.data?.user && data.data?.token) {
+        // Store custom user and token
+        const customUser: CustomUser = data.data.user;
+        setUser(customUser);
+        setToken(data.data.token);
+        localStorage.setItem("user", JSON.stringify(customUser));
+        localStorage.setItem("token", data.data.token);
+        return { error: null };
+      }
+
+      return { error: new Error(data.resp_msg || "Login failed") };
+    } catch (error) {
+      return { error: error instanceof Error ? error : new Error("Login failed") };
+    }
   };
 
   const signOut = async () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     await supabase.auth.signOut();
   };
 
@@ -85,6 +148,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         user,
         session,
+        token,
         loading,
         signUp,
         signIn,

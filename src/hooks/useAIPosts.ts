@@ -47,27 +47,44 @@ export const useGenerateAIPost = () => {
       platform: "facebook" | "instagram" | "both";
       formMode?: "test" | "production";
     }) => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error("Not authenticated");
+      // Get token from localStorage (set during login)
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Not authenticated");
 
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-ai-post`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify(params),
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8091";
+
+      // Create an AbortController with 1 minute (60000ms) timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+      try {
+        const response = await fetch(
+          `${apiUrl}/content/ai/generate`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(params),
+            signal: controller.signal,
+          }
+        );
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.resp_msg || error.error || "Failed to generate post");
         }
-      );
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to generate post");
+        return response.json();
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") {
+          throw new Error("Request timeout - AI generation took too long (max 1 minute)");
+        }
+        throw error;
+      } finally {
+        clearTimeout(timeoutId);
       }
-
-      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ai-posts"] });

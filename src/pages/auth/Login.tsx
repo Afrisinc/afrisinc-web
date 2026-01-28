@@ -22,18 +22,6 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Hardcoded test credentials bypass
-    if (email === "test@afrisinc.com" && password === "test123456") {
-      localStorage.setItem("testUser", "true");
-      toast({
-        title: "Welcome back!",
-        description: "Logged in with test credentials.",
-      });
-      setLoading(false);
-      navigate(from, { replace: true });
-      return;
-    }
-
     const { error } = await signIn(email, password);
 
     if (error) {
@@ -115,30 +103,6 @@ const Login = () => {
                 "Sign In"
               )}
             </Button>
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">or</span>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={() => {
-                  setEmail("test@afrisinc.com");
-                  setPassword("test123456");
-                }}
-              >
-                Use Test Credentials
-              </Button>
-              <p className="text-xs text-center text-muted-foreground">
-                First <Link to="/register" className="text-primary hover:underline">register</Link> with these credentials
-              </p>
-            </div>
           </form>
           <p className="text-center text-sm text-muted-foreground mt-6">
             Don't have an account?{" "}

@@ -8,6 +8,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      DEPLOY_GHCR_USERNAME: ${{ secrets.DEPLOY_GHCR_USERNAME }}
+      DEPLOY_GHCR_TOKEN: ${{ secrets.DEPLOY_GHCR_TOKEN }}
+
 
     steps:
       # Step 1: Checkout code
@@ -44,8 +48,17 @@ jobs:
           port: 22
           timeout: 30s
           command_timeout: 10m
+
+          # 🔐 PASS DEPLOY CREDS TO VPS
+          envs: DEPLOY_GHCR_USERNAME,DEPLOY_GHCR_TOKEN
           script: |
-            cd /opt/apps/afrisinc/afrisinc-web
+            set -e
+            APP_PATH="${{ secrets.VPS_APP_PATH }}"
+            APP_PATH=${APP_PATH:=/opt/apps/afrisinc/afrisinc-web}
+            cd $APP_PATH
+
+            echo "$DEPLOY_GHCR_TOKEN" | docker login ghcr.io -u "$DEPLOY_GHCR_USERNAME" --password-stdin
+
             docker compose pull
             docker compose up -d
             docker image prune -f
