@@ -56,7 +56,7 @@ const PlatformIcon = ({ platform }: { platform: string }) => {
 };
 
 const PostsTable = () => {
-  const { data: posts, isLoading, error } = useAIPosts();
+  const { data: posts, isLoading, error } = useAIPosts(10); // Fetch latest 10 posts for table
 
   if (isLoading) {
     return (
@@ -108,7 +108,7 @@ const PostsTable = () => {
             </div>
             <h3 className="font-semibold text-foreground mb-1">No posts yet</h3>
             <p className="text-sm text-muted-foreground max-w-sm">
-              Create your first AI-generated post using the form on the left. 
+              Create your first AI-generated post using the form on the left.
               Your posts will appear here.
             </p>
           </div>
@@ -126,11 +126,11 @@ const PostsTable = () => {
               </TableHeader>
               <TableBody>
                 {posts.map((post, index) => {
-                  const status = statusConfig[post.status];
+                  const status = statusConfig[post.status as keyof typeof statusConfig] || statusConfig.draft;
                   const StatusIcon = status.icon;
-                  
+
                   return (
-                    <TableRow 
+                    <TableRow
                       key={post.id}
                       className={cn(
                         "transition-colors",
@@ -139,21 +139,21 @@ const PostsTable = () => {
                     >
                       <TableCell>
                         <div className="space-y-1">
-                          <p className="font-medium text-foreground">{post.topic_name}</p>
-                          {post.keywords && (
+                          <p className="font-medium text-foreground">{post.topic_name || post.topic}</p>
+                          {(post.fb_hashtags || post.insta_hashtags) && (
                             <p className="text-xs text-muted-foreground line-clamp-1">
-                              {post.keywords}
+                              {post.fb_hashtags || post.insta_hashtags}
                             </p>
                           )}
-                          {post.link && (
-                            <a 
-                              href={post.link} 
-                              target="_blank" 
+                          {(post.fb_url || post.insta_url) && (
+                            <a
+                              href={post.fb_url || post.insta_url}
+                              target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
                             >
                               <ExternalLink className="w-3 h-3" />
-                              View Link
+                              View Post
                             </a>
                           )}
                         </div>
@@ -161,11 +161,12 @@ const PostsTable = () => {
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <PlatformIcon platform={post.platform} />
+                          <span className="text-sm capitalize">{post.platform}</span>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge 
-                          variant="outline" 
+                        <Badge
+                          variant="outline"
                           className={cn(
                             "flex items-center gap-1.5 w-fit font-medium border",
                             status.className
@@ -183,7 +184,7 @@ const PostsTable = () => {
                         </span>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
-                        {post.published_at ? (
+                        {post.published_at && post.published_at !== "null" ? (
                           <>
                             {format(new Date(post.published_at), "MMM d, yyyy")}
                             <br />

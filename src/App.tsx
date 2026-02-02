@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
+import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
@@ -12,6 +13,8 @@ import Index from "./pages/Index";
 import About from "./pages/About";
 import Technology from "./pages/Technology";
 import Media from "./pages/Media";
+import ArticlesPage from "./pages/media/Articles";
+import ArticleDetail from "./pages/media/ArticleDetail";
 import Products from "./pages/Products";
 import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
@@ -37,21 +40,24 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<Index />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/technology" element={<Technology />} />
-              <Route path="/media" element={<Media />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/careers" element={<Careers />} />
-              <Route path="/contact" element={<Contact />} />
+    <HelmetProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AuthProvider>
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<Index />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/technology" element={<Technology />} />
+                <Route path="/media" element={<Media />} />
+                <Route path="/media/articles" element={<ArticlesPage />} />
+                <Route path="/media/articles/:slug" element={<ArticleDetail />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/careers" element={<Careers />} />
+                <Route path="/contact" element={<Contact />} />
               
               {/* Auth Routes */}
               <Route path="/login" element={<Login />} />
@@ -80,6 +86,7 @@ const App = () => (
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
+  </HelmetProvider>
   </QueryClientProvider>
 );
 

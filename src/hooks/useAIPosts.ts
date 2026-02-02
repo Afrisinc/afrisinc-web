@@ -1,37 +1,58 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { getRuntimeConfig } from "@/lib/config";
 
 export interface AIPost {
   id: string;
-  user_id: string;
-  topic_id: string | null;
-  topic_name: string;
-  keywords: string | null;
-  link: string | null;
-  status: "draft" | "pending" | "published" | "failed";
-  platform: "facebook" | "instagram" | "both";
-  external_post_id: string | null;
-  external_response: Record<string, unknown> | null;
-  error_message: string | null;
-  scheduled_at: string | null;
-  published_at: string | null;
+  post_id: string;
+  topic: string;
+  topic_name?: string;
+  platform: string;
+  fb_post_id?: string;
+  fb_url?: string;
+  fb_content?: string;
+  fb_hashtags?: string;
+  insta_post_id?: string;
+  insta_url?: string;
+  insta_content?: string;
+  insta_hashtags?: string;
+  status: string;
   created_at: string;
-  updated_at: string;
+  published_at: string | null;
 }
 
-export const useAIPosts = () => {
+export const useAIPosts = (limit: number = 10) => {
   return useQuery({
-    queryKey: ["ai-posts"],
+    queryKey: ["ai-posts", limit],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("ai_posts")
-        .select("*")
-        .order("created_at", { ascending: false });
-      
-      if (error) throw error;
-      return data as AIPost[];
+      const config = getRuntimeConfig();
+      const token = localStorage.getItem("token");
+
+      if (!token) throw new Error("Not authenticated");
+
+      const url = `${config.serverUrl}/generated-posts?limit=${limit}`;
+
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch generated posts: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Map the API response to AIPost format, ensuring topic_name is set
+      return (data.data?.data || []).map((post: AIPost) => ({
+        ...post,
+        topic_name: post.topic_name || post.topic || "Untitled",
+      })) as AIPost[];
     },
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
 

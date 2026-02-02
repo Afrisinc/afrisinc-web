@@ -2,6 +2,7 @@ import { PublicLayout } from "@/components/layout/PublicLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   Newspaper, 
   Youtube, 
@@ -12,42 +13,9 @@ import {
   ArrowRight,
   TrendingUp
 } from "lucide-react";
-
-const featuredArticle = {
-  title: "The Rise of African Tech: A New Era of Innovation",
-  excerpt: "Exploring how African startups are reshaping the global technology landscape with innovative solutions and sustainable business models.",
-  category: "Industry Insights",
-  readTime: "8 min read",
-  date: "Jan 8, 2026",
-  image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&q=80",
-};
-
-const articles = [
-  {
-    title: "Building Scalable Cloud Infrastructure in Emerging Markets",
-    category: "Technology",
-    readTime: "5 min read",
-    date: "Jan 6, 2026",
-  },
-  {
-    title: "The Future of Digital Payments Across Africa",
-    category: "Fintech",
-    readTime: "6 min read",
-    date: "Jan 4, 2026",
-  },
-  {
-    title: "How AI is Transforming Healthcare Delivery",
-    category: "AI & Health",
-    readTime: "7 min read",
-    date: "Jan 2, 2026",
-  },
-  {
-    title: "Enterprise SaaS: Lessons from Building for Scale",
-    category: "SaaS",
-    readTime: "4 min read",
-    date: "Dec 30, 2025",
-  },
-];
+import { useFeaturedArticle, useArticles } from "@/hooks/useArticles";
+import { ArticleCard } from "@/components/articles/ArticleCard";
+import { formatDistanceToNow } from "date-fns";
 
 const videos = [
   {
@@ -92,6 +60,9 @@ const podcasts = [
 ];
 
 const Media = () => {
+  const { data: featuredArticle, isLoading: isLoadingFeatured } = useFeaturedArticle();
+  const { data: articlesData, isLoading: isLoadingArticles } = useArticles({ per_page: 4 });
+
   return (
     <PublicLayout>
       {/* Hero Section */}
@@ -118,20 +89,25 @@ const Media = () => {
       <section className="py-8 border-b border-border sticky top-[72px] bg-background z-40">
         <div className="container mx-auto px-6">
           <div className="flex gap-8 overflow-x-auto">
-            {[
-              { name: "All", icon: TrendingUp },
-              { name: "Articles", icon: FileText },
-              { name: "Videos", icon: Youtube },
-              { name: "Podcasts", icon: Mic },
-            ].map((tab) => (
-              <button
-                key={tab.name}
-                className="flex items-center gap-2 pb-4 border-b-2 border-transparent hover:border-primary text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-              >
-                <tab.icon className="w-4 h-4" />
-                {tab.name}
-              </button>
-            ))}
+            <button className="flex items-center gap-2 pb-4 border-b-2 border-primary text-foreground font-medium whitespace-nowrap">
+              <TrendingUp className="w-4 h-4" />
+              All
+            </button>
+            <Link 
+              to="/media/articles" 
+              className="flex items-center gap-2 pb-4 border-b-2 border-transparent hover:border-primary text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+            >
+              <FileText className="w-4 h-4" />
+              Articles
+            </Link>
+            <button className="flex items-center gap-2 pb-4 border-b-2 border-transparent hover:border-primary text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
+              <Youtube className="w-4 h-4" />
+              Videos
+            </button>
+            <button className="flex items-center gap-2 pb-4 border-b-2 border-transparent hover:border-primary text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
+              <Mic className="w-4 h-4" />
+              Podcasts
+            </button>
           </div>
         </div>
       </section>
@@ -139,42 +115,60 @@ const Media = () => {
       {/* Featured Article */}
       <section className="py-12">
         <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="relative rounded-2xl overflow-hidden aspect-video animate-fade-up">
-              <img
-                src={featuredArticle.image}
-                alt={featuredArticle.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-              <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground">
-                Featured
-              </Badge>
-            </div>
-            <div className="animate-fade-up animation-delay-100">
-              <Badge variant="outline" className="mb-4">
-                {featuredArticle.category}
-              </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                {featuredArticle.title}
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                {featuredArticle.excerpt}
-              </p>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
-                <span>{featuredArticle.date}</span>
-                <span>•</span>
-                <span className="flex items-center gap-1">
-                  <Clock className="w-4 h-4" />
-                  {featuredArticle.readTime}
-                </span>
+          {isLoadingFeatured ? (
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
+              <Skeleton className="aspect-video rounded-2xl" />
+              <div className="space-y-4">
+                <Skeleton className="h-6 w-24" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-3/4" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-10 w-32" />
               </div>
-              <Button variant="gold">
-                Read Article
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
             </div>
-          </div>
+          ) : featuredArticle ? (
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
+              <Link 
+                to={`/media/articles/${featuredArticle.slug}`}
+                className="relative rounded-2xl overflow-hidden aspect-video animate-fade-up group"
+              >
+                <img
+                  src={featuredArticle.featured_image}
+                  alt={featuredArticle.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground">
+                  Featured
+                </Badge>
+              </Link>
+              <div className="animate-fade-up animation-delay-100">
+                <Badge variant="outline" className="mb-4">
+                  {featuredArticle.category.name}
+                </Badge>
+                <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                  {featuredArticle.title}
+                </h2>
+                <p className="text-muted-foreground mb-6">
+                  {featuredArticle.summary}
+                </p>
+                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                  <span>{formatDistanceToNow(new Date(featuredArticle.published_at), { addSuffix: true })}</span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    {featuredArticle.read_time} min read
+                  </span>
+                </div>
+                <Button variant="gold" asChild>
+                  <Link to={`/media/articles/${featuredArticle.slug}`}>
+                    Read Article
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -183,35 +177,39 @@ const Media = () => {
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-foreground">Latest Articles</h2>
-            <Button variant="ghost">
-              View All
-              <ArrowRight className="w-4 h-4 ml-2" />
+            <Button variant="ghost" asChild>
+              <Link to="/media/articles">
+                View All
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
             </Button>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {articles.map((article, index) => (
-              <div
-                key={article.title}
-                className="group bg-card rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all hover:-translate-y-1 cursor-pointer animate-fade-up"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <Badge variant="outline" className="mb-4 text-xs">
-                  {article.category}
-                </Badge>
-                <h3 className="text-lg font-semibold text-foreground mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                  {article.title}
-                </h3>
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span>{article.date}</span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {article.readTime}
-                  </span>
+          {isLoadingArticles ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="bg-card rounded-xl overflow-hidden">
+                  <Skeleton className="aspect-[16/10] w-full" />
+                  <div className="p-5 space-y-3">
+                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-5 w-full" />
+                    <Skeleton className="h-4 w-3/4" />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {articlesData?.articles.slice(0, 4).map((article, index) => (
+                <div
+                  key={article.id}
+                  className="animate-fade-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <ArticleCard article={article} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -220,8 +218,8 @@ const Media = () => {
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center">
-                <Youtube className="w-5 h-5 text-red-500" />
+              <div className="w-10 h-10 rounded-lg bg-destructive/10 flex items-center justify-center">
+                <Youtube className="w-5 h-5 text-destructive" />
               </div>
               <h2 className="text-2xl font-bold text-foreground">Video Content</h2>
             </div>
@@ -244,11 +242,11 @@ const Media = () => {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center">
+                    <div className="w-14 h-14 rounded-full bg-background flex items-center justify-center">
                       <Play className="w-6 h-6 text-foreground fill-current ml-1" />
                     </div>
                   </div>
-                  <span className="absolute bottom-2 right-2 px-2 py-1 bg-black/80 text-white text-xs rounded">
+                  <span className="absolute bottom-2 right-2 px-2 py-1 bg-charcoal text-primary-foreground text-xs rounded">
                     {video.duration}
                   </span>
                 </div>
@@ -303,19 +301,19 @@ const Media = () => {
       </section>
 
       {/* Newsletter CTA */}
-      <section className="py-20 bg-charcoal text-white">
+      <section className="py-20 bg-charcoal">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary-foreground">
             Stay Updated
           </h2>
-          <p className="text-white/70 max-w-xl mx-auto mb-8">
+          <p className="text-primary-foreground/70 max-w-xl mx-auto mb-8">
             Get the latest insights, news, and updates delivered directly to your inbox.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="flex-1 px-4 py-3 rounded-lg bg-background/10 border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <Button variant="gold" size="lg">
               Subscribe

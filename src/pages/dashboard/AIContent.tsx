@@ -5,7 +5,7 @@ import PostsTable from "@/components/dashboard/PostsTable";
 import { useAIPosts } from "@/hooks/useAIPosts";
 
 const AIContent = () => {
-  const { data: posts } = useAIPosts();
+  const { data: posts } = useAIPosts(100); // Fetch up to 100 posts for stats
 
   const stats = {
     total: posts?.length || 0,
