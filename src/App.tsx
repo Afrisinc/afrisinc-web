@@ -28,6 +28,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
 import DashboardOverview from "./pages/dashboard/Overview";
 import DashboardProducts from "./pages/dashboard/Products";
+import VPNManagement from "./pages/dashboard/VPNManagement";
 import DashboardUsers from "./pages/dashboard/Users";
 import DashboardMedia from "./pages/dashboard/Media";
 import DashboardNotifications from "./pages/dashboard/Notifications";
@@ -73,6 +74,7 @@ const App = () => (
                 <Route index element={<DashboardOverview />} />
                 <Route path="ai-content" element={<AIContent />} />
                 <Route path="products" element={<DashboardProducts />} />
+                 <Route path="products/vpn" element={<VPNManagement />} />
                 <Route path="users" element={<DashboardUsers />} />
                 <Route path="media" element={<DashboardMedia />} />
                 <Route path="notifications" element={<DashboardNotifications />} />
