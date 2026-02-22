@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { logoutHandler } from '@/lib/authUtils';
 import { getRuntimeConfig } from '@/lib/config';
 
-const apiClient = () => {
+const createApiClient = () => {
     const config = getRuntimeConfig();
 
     const token = localStorage.getItem("token");
@@ -42,4 +42,13 @@ const apiClient = () => {
     return instance;
 }
 
-export default apiClient();
+let apiClientInstance: AxiosInstance | null = null;
+
+const getApiClient = () => {
+    if (!apiClientInstance) {
+        apiClientInstance = createApiClient();
+    }
+    return apiClientInstance;
+}
+
+export default getApiClient;

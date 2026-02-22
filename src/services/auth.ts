@@ -2,7 +2,7 @@ import { LoginSchemaType, RegisterSchemaType } from "@/lib/schemas/auth";
 import apiClient from "./apiClient";
 
 export const loginService = async (params: LoginSchemaType) => {
-    const { data } = await apiClient.post('/auth/login', {
+    const { data } = await apiClient().post('/auth/login', {
         email: params.email,
         password: params.password
     });
@@ -11,7 +11,7 @@ export const loginService = async (params: LoginSchemaType) => {
 }
 
 export const registrationService = async (params: RegisterSchemaType) => {
-    const { data } = await apiClient.post('/auth/register', {
+    const { data } = await apiClient().post('/auth/register', {
         email: params.email,
         password: params.password,
         firstName: params.firstName,
