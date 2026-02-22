@@ -35,7 +35,20 @@ import DashboardNotifications from "./pages/dashboard/Notifications";
 import DashboardSettings from "./pages/dashboard/Settings";
 import AIContent from "./pages/dashboard/AIContent";
 
+
+
+// Platform Admin Pages
+import PlatformOverview from "./pages/platform/Overview";
+import PlatformUsers from "./pages/platform/Users";
+import PlatformAccounts from "./pages/platform/Accounts";
+import PlatformOrganizations from "./pages/platform/Organizations";
+import PlatformProducts from "./pages/platform/Products";
+import PlatformGrowth from "./pages/platform/Growth";
+import PlatformSecurity from "./pages/platform/Security";
+
+
 import NotFound from "./pages/NotFound";
+import TestComponent from "./pages/TestComponent";
 
 const queryClient = new QueryClient();
 
@@ -64,7 +77,10 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
-              
+
+              {/* Test Component Route */}
+              <Route path="/testcomponent" element={<TestComponent />} />
+
               {/* Dashboard Routes - Protected */}
               <Route path="/dashboard" element={
                 <ProtectedRoute>
@@ -79,6 +95,15 @@ const App = () => (
                 <Route path="media" element={<DashboardMedia />} />
                 <Route path="notifications" element={<DashboardNotifications />} />
                 <Route path="settings" element={<DashboardSettings />} />
+
+                 {/* Platform Admin Routes */}
+                <Route path="platform" element={<PlatformOverview />} />
+                <Route path="platform/users" element={<PlatformUsers />} />
+                <Route path="platform/accounts" element={<PlatformAccounts />} />
+                <Route path="platform/organizations" element={<PlatformOrganizations />} />
+                <Route path="platform/products" element={<PlatformProducts />} />
+                <Route path="platform/growth" element={<PlatformGrowth />} />
+                <Route path="platform/security" element={<PlatformSecurity />} />
               </Route>
               
               {/* Catch-all */}
