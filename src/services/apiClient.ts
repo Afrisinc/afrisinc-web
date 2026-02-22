@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { logoutHandler } from '@/lib/authUtils';
+import { getRuntimeConfig } from '@/lib/config';
 
 const apiClient = () => {
+    const config = getRuntimeConfig();
+
     const token = localStorage.getItem("token");
     const instance = axios.create({
-        baseURL: import.meta.env.VITE_API_URL
+        baseURL: config.serverUrl ||  import.meta.env.VITE_API_URL
     });
 
     instance.interceptors.request.use(async (request) => {

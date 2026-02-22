@@ -10,7 +10,6 @@ import type {
   PaginatedResponse,
   UserAccountsResponse,
   AccountProduct,
-  AccountOwner,
   AccountProductEnrollment,
 } from "@/types/platform";
 import apiClient from "./apiClient";
