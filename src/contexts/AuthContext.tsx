@@ -3,14 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 interface CustomUser {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  phone: string;
-  tin: string;
-  companyName: string;
-  createdAt: string;
-  updatedAt: string;
-  lastLogin: string;
+  accountIds: string[];
 }
 
 interface AuthContextType {
@@ -100,9 +93,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       const data = await response.json();
 
-      if (data.success && data.data?.user && data.data?.token) {
-        // Store custom user and token
-        const customUser: CustomUser = data.data.user;
+      if (data.success && data.data?.token && data.data?.user_id) {
+        // Create user object from response data
+        const customUser: CustomUser = {
+          id: data.data.user_id,
+          email: data.data.email,
+          accountIds: data.data.account_ids || [],
+        };
         setUser(customUser);
         setToken(data.data.token);
         localStorage.setItem("user", JSON.stringify(customUser));
