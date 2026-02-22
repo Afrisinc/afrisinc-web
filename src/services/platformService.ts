@@ -18,7 +18,7 @@ import apiClient from "./apiClient";
 
 export async function fetchPlatformOverview(): Promise<PlatformOverview> {
   try {
-    const { data } = await apiClient.get('/platform/analytics/overview');
+    const { data } = await apiClient().get('/platform/analytics/overview');
 
     if (!data.success || !data.data) {
       throw new Error("Invalid API response format");
@@ -61,7 +61,7 @@ export async function fetchPlatformUsers(params: {
     const page = Math.floor(offset / limit) + 1;
 
     // Call API
-    const { data } = await apiClient.get('/users', {
+    const { data } = await apiClient().get('/users', {
       params: {
         page,
         limit,
@@ -110,7 +110,7 @@ export async function fetchPlatformUsers(params: {
 
 export async function fetchPlatformUserAccounts(user_id: string): Promise<UserAccountsResponse> {
   try {
-    const { data } = await apiClient.get(`/accounts/user/${user_id}`);
+    const { data } = await apiClient().get(`/accounts/user/${user_id}`);
 
     if (!data.success || !data.data?.accounts) {
       throw new Error("Invalid API response format");
@@ -140,7 +140,7 @@ export async function fetchPlatformAccounts(params: {
     const { limit = 10, offset = 0 } = params;
     const page = Math.floor(offset / limit) + 1;
 
-    const { data } = await apiClient.get('/accounts/all', {
+    const { data } = await apiClient().get('/accounts/all', {
       params: {
         page,
         limit,
@@ -212,7 +212,7 @@ export async function enrollAccountInProduct(
   productData: { product_code: string; plan: "FREE" | "PRO" | "ENTERPRISE" }
 ): Promise<AccountProductEnrollment> {
   try {
-    const { data } = await apiClient.post(
+    const { data } = await apiClient().post(
       `/accounts/${accountId}/enroll-product`,
       productData
     );
@@ -243,7 +243,7 @@ export async function fetchPlatformOrganizations(params: {
     const { limit = 10, offset = 0 } = params;
     const page = Math.floor(offset / limit) + 1;
 
-    const { data } = await apiClient.get('/organizations', {
+    const { data } = await apiClient().get('/organizations', {
       params: {
         page,
         limit,
@@ -289,7 +289,7 @@ export async function fetchPlatformOrganizationDetails(
   organizationId: string
 ): Promise<PlatformOrganization> {
   try {
-    const { data } = await apiClient.get(`/organizations/${organizationId}`);
+    const { data } = await apiClient().get(`/organizations/${organizationId}`);
 
     if (!data.success || !data.data) {
       throw new Error("Invalid API response format");
@@ -325,7 +325,7 @@ export async function createPlatformOrganization(organizationData: {
   location: string;
 }): Promise<{ organization_id: string; account_id: string; name: string }> {
   try {
-    const { data } = await apiClient.post('/organizations', organizationData);
+    const { data } = await apiClient().post('/organizations', organizationData);
 
     if (!data.success || !data.data) {
       throw new Error("Invalid API response format");
@@ -356,7 +356,7 @@ export async function updatePlatformOrganization(
   }>
 ): Promise<PlatformOrganization> {
   try {
-    const { data } = await apiClient.put(
+    const { data } = await apiClient().put(
       `/organizations/${organizationId}`,
       updateData
     );
@@ -389,7 +389,7 @@ export async function fetchPlatformOrganizationMembers(
   organizationId: string
 ): Promise<{ members: OrganizationMember[] }> {
   try {
-    const { data } = await apiClient.get(`/organizations/${organizationId}/members`);
+    const { data } = await apiClient().get(`/organizations/${organizationId}/members`);
 
     if (!data.success || !data.data) {
       throw new Error("Invalid API response format");
@@ -420,7 +420,7 @@ export async function addPlatformOrganizationMember(
   memberData: { user_id: string; role: "OWNER" | "ADMIN" | "MEMBER" }
 ): Promise<OrganizationMember> {
   try {
-    const { data } = await apiClient.post(
+    const { data } = await apiClient().post(
       `/organizations/${organizationId}/members`,
       memberData
     );
@@ -442,7 +442,7 @@ export async function removePlatformOrganizationMember(
   userId: string
 ): Promise<void> {
   try {
-    const { data } = await apiClient.delete(
+    const { data } = await apiClient().delete(
       `/organizations/${organizationId}/members/${userId}`
     );
 
@@ -457,7 +457,7 @@ export async function removePlatformOrganizationMember(
 
 export async function fetchProductEnrollments(): Promise<ProductEnrollment[]> {
   try {
-    const { data } = await apiClient.get('/products/enrollments');
+    const { data } = await apiClient().get('/products/enrollments');
 
     if (!data.success || !Array.isArray(data.data)) {
       throw new Error("Invalid API response format");
@@ -486,7 +486,7 @@ export async function fetchProductEnrollments(): Promise<ProductEnrollment[]> {
 
 export async function fetchProductAccounts(productId: string): Promise<PlatformAccount[]> {
   try {
-    const { data } = await apiClient.get(`/products/${productId}/accounts`);
+    const { data } = await apiClient().get(`/products/${productId}/accounts`);
 
     if (!data.success || !data.data?.accounts) {
       throw new Error("Invalid API response format");
@@ -532,7 +532,7 @@ export async function createProduct(productData: {
   description?: string;
 }): Promise<{ id: string; name: string; code: string; description?: string; createdAt: string; updatedAt: string }> {
   try {
-    const { data } = await apiClient.post('/products', productData);
+    const { data } = await apiClient().post('/products', productData);
 
     if (!data.success || !data.data) {
       throw new Error("Invalid API response format");
@@ -554,7 +554,7 @@ export async function createProduct(productData: {
 
 export async function fetchGrowthData(range: "7d" | "30d" | "90d"): Promise<GrowthData[]> {
   try {
-    const { data } = await apiClient.get('/platform/analytics/growth', {
+    const { data } = await apiClient().get('/platform/analytics/growth', {
       params: { range },
     });
 
@@ -610,7 +610,7 @@ export async function fetchGrowthData(range: "7d" | "30d" | "90d"): Promise<Grow
 
 export async function fetchSecurityOverview(): Promise<SecurityOverview> {
   try {
-    const { data } = await apiClient.get('/platform/security/overview');
+    const { data } = await apiClient().get('/platform/security/overview');
 
     if (!data.success || !data.data) {
       throw new Error("Invalid API response format");
@@ -644,7 +644,7 @@ export async function fetchSecurityOverview(): Promise<SecurityOverview> {
 
 export async function suspendUser(userId: string): Promise<void> {
   try {
-    const { data } = await apiClient.post(`/users/${userId}/suspend`);
+    const { data } = await apiClient().post(`/users/${userId}/suspend`);
 
     if (!data.success) {
       throw new Error("Failed to suspend user");
@@ -657,7 +657,7 @@ export async function suspendUser(userId: string): Promise<void> {
 
 export async function reactivateUser(userId: string): Promise<void> {
   try {
-    const { data } = await apiClient.post(`/users/${userId}/reactivate`);
+    const { data } = await apiClient().post(`/users/${userId}/reactivate`);
 
     if (!data.success) {
       throw new Error("Failed to reactivate user");
@@ -670,7 +670,7 @@ export async function reactivateUser(userId: string): Promise<void> {
 
 export async function suspendAccount(accountId: string): Promise<void> {
   try {
-    const { data } = await apiClient.post(`/accounts/${accountId}/suspend`);
+    const { data } = await apiClient().post(`/accounts/${accountId}/suspend`);
 
     if (!data.success) {
       throw new Error("Failed to suspend account");
