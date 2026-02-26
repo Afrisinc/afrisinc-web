@@ -18,8 +18,8 @@ const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: "org.owner@example.com",
-      password: "Password123!",
+      email: "",
+      password: "",
     },
   });
 

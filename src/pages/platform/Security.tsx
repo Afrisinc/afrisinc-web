@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ShieldAlert, ShieldCheck, Key, AlertTriangle } from "lucide-react";
+import { LoginEventsTable } from "@/components/platform/LoginEventsTable";
 
 export default function PlatformSecurity() {
   const { data, isLoading } = useSecurityOverview();
@@ -80,6 +81,16 @@ export default function PlatformSecurity() {
           </CardContent>
         </Card>
       </div>
+
+      {/* login events table  */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Login Events</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <LoginEventsTable />
+        </CardContent>
+      </Card>
     </div>
   );
 }
