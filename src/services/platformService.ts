@@ -12,7 +12,10 @@ import type {
   AccountProduct,
   AccountProductEnrollment,
 } from "@/types/platform";
+
 import apiClient from "./apiClient";
+import { QueryParams } from "@/types/shared";
+import { LoginEventResponse } from "@/types/auth.security";
 
 // Service functions
 
@@ -677,6 +680,41 @@ export async function suspendAccount(accountId: string): Promise<void> {
     }
   } catch (error) {
     console.error("[Platform API] Error suspending account:", error);
+    throw error;
+  }
+}
+
+
+
+export async function LoginEvents(params?: QueryParams): Promise<PaginatedResponse<LoginEventResponse>> {
+  try {
+    const { page = 1, limit = 10, search, sortBy = 'desc' } = params || {};
+
+    const { data } = await apiClient().get('/platform/security/loginevents', {
+      params: {
+        page,
+        limit,
+        ...(search && { search }),
+        ...(sortBy && { sortBy }),
+      },
+    });
+
+    if (!data.success) {
+      throw new Error("Failed to fetch login events");
+    }
+
+    const { pagination } = data.data;
+
+    return {
+      data: data.data.data,
+      meta: {
+        limit: pagination.limit,
+        offset: (pagination.page - 1) * pagination.limit,
+        total: pagination.total,
+      },
+    };
+  } catch (error) {
+    console.error("[Platform API] Error fetching login events:", error);
     throw error;
   }
 }

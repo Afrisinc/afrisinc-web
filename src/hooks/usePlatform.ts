@@ -20,7 +20,9 @@ import {
   suspendAccount,
   enrollAccountInProduct,
   createProduct,
+  LoginEvents,
 } from "@/services/platformService";
+import { QueryParams } from "@/types/shared";
 
 export const usePlatformOverview = () =>
   useQuery({ queryKey: ["platform", "overview"], queryFn: fetchPlatformOverview });
@@ -52,6 +54,9 @@ export const useGrowthData = (range: "7d" | "30d" | "90d") =>
 
 export const useSecurityOverview = () =>
   useQuery({ queryKey: ["platform", "security"], queryFn: fetchSecurityOverview });
+
+export const useLoginEvents = (params?: QueryParams) =>
+  useQuery({ queryKey: ["platform", "login-events", params], queryFn: () => LoginEvents(params) });
 
 export const useSuspendUser = () => {
   const qc = useQueryClient();
