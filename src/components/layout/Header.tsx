@@ -39,9 +39,11 @@ export const Header = () => {
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
-            <span className="text-primary-foreground font-bold text-lg">A</span>
-          </div>
+          <img
+            src="/afrisic-logo.png"
+            alt="Afrisinc Logo"
+            className="w-10 h-10 rounded-xl transition-transform duration-300 group-hover:scale-105 object-cover"
+          />
           <span className="text-xl font-bold text-foreground tracking-tight">
             Afrisinc
           </span>

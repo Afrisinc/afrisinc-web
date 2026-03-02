@@ -141,7 +141,7 @@ const ArticleDetail = () => {
               "name": "Afrisinc",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://afrisinc.com/logo.png"
+                "url": `${window.location.origin}/afrisic-logo.png`
               }
             },
             "description": article.summary
