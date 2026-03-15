@@ -119,16 +119,16 @@ const Products = () => {
               <Package className="w-4 h-4 mr-2" />
               Digital Products
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 animate-fade-up animation-delay-100">
+            <h1 className="heading-hero text-foreground mb-6 animate-fade-up animation-delay-100">
               Tools That Power
-              <span className="text-gradient-gold block">Modern Business</span>
+              <span className="text-gradient-primary block">Modern Business</span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-up animation-delay-200">
+            <p className="text-subtitle text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-up animation-delay-200">
               A suite of digital products designed to help businesses grow, 
               engage customers, and scale operations efficiently.
             </p>
             <div className="flex flex-wrap justify-center gap-4 animate-fade-up animation-delay-300">
-              <Button variant="gold" size="lg" asChild>
+              <Button variant="default" size="lg" asChild>
                 <Link to="/contact">Get Started</Link>
               </Button>
               <Button variant="outline" size="lg">
@@ -160,7 +160,7 @@ const Products = () => {
                       {product.status}
                     </Badge>
                   </div>
-                  <h2 className="text-3xl font-bold text-foreground mb-2">
+                  <h2 className="heading-subsection text-foreground mb-2">
                     {product.name}
                   </h2>
                   <p className="text-primary font-medium mb-4">{product.tagline}</p>
@@ -169,7 +169,7 @@ const Products = () => {
                     {product.pricing}
                   </p>
                   <div className="flex flex-wrap gap-3 mb-8">
-                    <Button variant="gold" asChild>
+                    <Button variant="default" asChild>
                       <Link to="/contact">Get Started</Link>
                     </Button>
                     <Button variant="outline">Learn More</Button>
@@ -198,7 +198,7 @@ const Products = () => {
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-foreground mb-4">
+            <h2 className="heading-section text-foreground mb-4">
               Seamless Integrations
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -229,7 +229,7 @@ const Products = () => {
       <section className="py-20">
         <div className="container mx-auto px-6">
           <div className="bg-charcoal rounded-3xl p-12 text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="heading-section mb-4">
               Ready to Get Started?
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto mb-8">
@@ -237,7 +237,7 @@ const Products = () => {
               products for additional savings.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button variant="gold" size="lg" asChild>
+              <Button variant="default" size="lg" asChild>
                 <Link to="/contact">Contact Sales</Link>
               </Button>
               <Button variant="outline" size="lg" className="border-white/20 hover:bg-white/10">

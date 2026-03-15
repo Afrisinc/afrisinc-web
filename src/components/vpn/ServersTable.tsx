@@ -154,7 +154,7 @@ export function ServersTable({ servers, isLoading }: ServersTableProps) {
             </div>
             <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="gold" size="sm">
+                <Button variant="default" size="sm">
                   <Plus className="h-4 w-4 mr-2" />
                   Add Server
                 </Button>
@@ -405,7 +405,7 @@ export function ServersTable({ servers, isLoading }: ServersTableProps) {
                       <Button variant="outline" onClick={() => setAddDialogOpen(false)} disabled={createServerMutation.isPending}>
                         Cancel
                       </Button>
-                      <Button variant="gold" type="submit" disabled={createServerMutation.isPending}>
+                      <Button variant="default" type="submit" disabled={createServerMutation.isPending}>
                         {createServerMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                         {createServerMutation.isPending ? "Creating..." : "Create Server"}
                       </Button>

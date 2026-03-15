@@ -117,15 +117,15 @@ const Careers = () => {
               <Briefcase className="w-4 h-4 mr-2" />
               Careers at Afrisinc
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 animate-fade-up animation-delay-100">
+            <h1 className="heading-hero text-foreground mb-6 animate-fade-up animation-delay-100">
               Build the Future of
-              <span className="text-gradient-gold block">African Technology</span>
+              <span className="text-gradient-primary block">African Technology</span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-up animation-delay-200">
+            <p className="text-subtitle text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-up animation-delay-200">
               Join a team of passionate innovators shaping the technology landscape. 
               We offer meaningful work, competitive compensation, and global opportunities.
             </p>
-            <Button variant="gold" size="lg" className="animate-fade-up animation-delay-300">
+            <Button variant="default" size="lg" className="animate-fade-up animation-delay-300">
               View Open Positions
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
@@ -151,7 +151,7 @@ const Careers = () => {
       <section className="py-20">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <h2 className="heading-section text-foreground mb-4">
               Why Work With Us
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -169,7 +169,7 @@ const Careers = () => {
                   <benefit.icon className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground mb-1">{benefit.title}</h3>
+                  <h3 className="heading-label text-foreground mb-1">{benefit.title}</h3>
                   <p className="text-sm text-muted-foreground">{benefit.description}</p>
                 </div>
               </div>
@@ -183,7 +183,7 @@ const Careers = () => {
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-12">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+              <h2 className="heading-section text-foreground mb-2">
                 Open Positions
               </h2>
               <p className="text-muted-foreground">
@@ -229,7 +229,7 @@ const Careers = () => {
                       </span>
                     </div>
                   </div>
-                  <Button variant="gold" className="lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button variant="default" className="lg:opacity-0 group-hover:opacity-100 transition-opacity">
                     Apply Now
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
@@ -248,12 +248,12 @@ const Careers = () => {
               <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-6">
                 <Globe className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold mb-3">Partner With Us</h3>
+              <h3 className="heading-subsection mb-3">Partner With Us</h3>
               <p className="text-white/70 mb-6">
                 Looking for technology partnerships or collaborations? 
                 Let's explore opportunities together.
               </p>
-              <Button variant="gold" asChild>
+              <Button variant="default" asChild>
                 <Link to="/contact">Become a Partner</Link>
               </Button>
             </div>
@@ -261,7 +261,7 @@ const Careers = () => {
               <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-6">
                 <Zap className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-3">Investment Opportunities</h3>
+              <h3 className="heading-subsection text-foreground mb-3">Investment Opportunities</h3>
               <p className="text-muted-foreground mb-6">
                 Interested in investing in Africa's technology future? 
                 We'd love to hear from you.

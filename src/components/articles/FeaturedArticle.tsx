@@ -104,7 +104,7 @@ export function FeaturedArticle({ article, isLoading }: FeaturedArticleProps) {
           </span>
         </div>
         
-        <Button variant="gold" asChild>
+        <Button variant="default" asChild>
           <Link to={`/media/articles/${article.slug}`}>
             Read Article
             <ArrowRight className="w-4 h-4 ml-2" />

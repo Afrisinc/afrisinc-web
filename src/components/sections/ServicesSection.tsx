@@ -32,7 +32,7 @@ const services = [
     description:
       "Exploring new frontiers in AI, blockchain, and emerging technologies to shape tomorrow.",
     features: ["AI Solutions", "Blockchain", "Innovation Labs", "R&D"],
-    color: "gold",
+    color: "primary",
   },
 ];
 
@@ -40,7 +40,6 @@ const colorClasses = {
   primary: "bg-primary/10 text-primary group-hover:bg-primary/20",
   forest: "bg-forest/10 text-forest group-hover:bg-forest/20",
   accent: "bg-accent/10 text-accent group-hover:bg-accent/20",
-  gold: "bg-gold/10 text-gold group-hover:bg-gold/20",
 };
 
 export const ServicesSection = () => {
@@ -58,11 +57,11 @@ export const ServicesSection = () => {
           <span className="text-primary font-semibold text-sm uppercase tracking-widest mb-4 block">
             Our Departments
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+          <h2 className="heading-section text-foreground mb-6">
             A Unified Ecosystem of
-            <span className="text-gradient-gold"> Innovation</span>
+            <span className="text-gradient-primary"> Innovation</span>
           </h2>
-          <p className="text-muted-foreground text-lg leading-relaxed">
+          <p className="text-muted-foreground text-subtitle">
             From compelling content to cutting-edge technology, our departments 
             work together to deliver comprehensive solutions.
           </p>
@@ -80,7 +79,7 @@ export const ServicesSection = () => {
                 <service.icon className="w-7 h-7" />
               </div>
 
-              <h3 className="text-2xl font-bold text-foreground mb-3">
+              <h3 className="heading-subsection text-foreground mb-3">
                 {service.title}
               </h3>
 

@@ -82,7 +82,7 @@ export function UsersTable({ users, servers, isLoading, onGenerateConfig }: User
               </div>
               <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button variant="gold" size="sm">
+                  <Button variant="default" size="sm">
                     <Plus className="h-4 w-4 mr-2" />
                     Add User
                   </Button>
@@ -129,7 +129,7 @@ export function UsersTable({ users, servers, isLoading, onGenerateConfig }: User
                     <Button variant="outline" onClick={() => setAddDialogOpen(false)}>
                       Cancel
                     </Button>
-                    <Button variant="gold" onClick={() => setAddDialogOpen(false)}>
+                    <Button variant="default" onClick={() => setAddDialogOpen(false)}>
                       Create User
                     </Button>
                   </DialogFooter>

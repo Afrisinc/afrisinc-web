@@ -8,7 +8,7 @@ export const HeroSection = () => {
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-float" />
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-forest/10 rounded-full blur-3xl animate-float animation-delay-200" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
       </div>
 
       {/* Grid Pattern */}
@@ -26,22 +26,22 @@ export const HeroSection = () => {
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight mb-6 animate-fade-up animation-delay-100">
+          <h1 className="heading-hero mb-6 animate-fade-up animation-delay-100">
             Building the Future of
-            <span className="block text-gradient-gold font-display italic mt-2">
+            <span className="block text-gradient-primary font-display italic mt-2">
               Technology & Media
             </span>
           </h1>
 
           {/* Subheading */}
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-up animation-delay-200">
+          <p className="text-subtitle text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-up animation-delay-200">
             Afrisinc is a multi-department parent company pioneering innovation 
             across technology, media, digital products, and global services.
           </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up animation-delay-300">
-            <Button variant="gold" size="xl" className="group">
+            <Button variant="default" size="xl" className="group">
               Explore Afrisinc
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
             </Button>

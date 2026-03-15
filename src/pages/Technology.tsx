@@ -98,16 +98,16 @@ const Technology = () => {
               <Code2 className="w-4 h-4 mr-2" />
               Technology & Software
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 animate-fade-up animation-delay-100">
+            <h1 className="heading-hero text-foreground mb-6 animate-fade-up animation-delay-100">
               Enterprise-Grade
-              <span className="text-gradient-gold block">Software Platforms</span>
+              <span className="text-gradient-primary block">Software Platforms</span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-up animation-delay-200">
+            <p className="text-subtitle text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-up animation-delay-200">
               World-class technology solutions built in Africa for the global market. 
               Scalable, secure, and designed for the modern enterprise.
             </p>
             <div className="flex flex-wrap justify-center gap-4 animate-fade-up animation-delay-300">
-              <Button variant="gold" size="lg" asChild>
+              <Button variant="default" size="lg" asChild>
                 <Link to="/contact">Request Demo</Link>
               </Button>
               <Button variant="outline" size="lg">
@@ -133,7 +133,7 @@ const Technology = () => {
                   <tech.icon className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">{tech.name}</h3>
+                  <h3 className="heading-label text-foreground">{tech.name}</h3>
                   <p className="text-sm text-muted-foreground">{tech.description}</p>
                 </div>
               </div>
@@ -146,7 +146,7 @@ const Technology = () => {
       <section className="py-20">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <h2 className="heading-section text-foreground mb-4">
               Our Platforms & Products
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -218,7 +218,7 @@ const Technology = () => {
       <section className="py-20">
         <div className="container mx-auto px-6">
           <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-3xl p-12 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <h2 className="heading-section text-foreground mb-4">
               Ready to Transform Your Business?
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
@@ -226,7 +226,7 @@ const Technology = () => {
               you find the perfect fit for your organization.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button variant="gold" size="lg" asChild>
+              <Button variant="default" size="lg" asChild>
                 <Link to="/contact">Contact Sales</Link>
               </Button>
               <Button variant="outline" size="lg" asChild>

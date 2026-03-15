@@ -44,11 +44,11 @@ const About = () => {
             <span className="inline-block px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-fade-up">
               About Afrisinc
             </span>
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 animate-fade-up animation-delay-100">
+            <h1 className="heading-hero text-foreground mb-6 animate-fade-up animation-delay-100">
               Building Africa's
-              <span className="text-gradient-gold block">Technology Future</span>
+              <span className="text-gradient-primary block">Technology Future</span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto animate-fade-up animation-delay-200">
+            <p className="text-subtitle text-muted-foreground max-w-2xl mx-auto animate-fade-up animation-delay-200">
               We are a technology-first company with deep African roots and global ambitions. 
               From enterprise software to digital media, we're shaping the future of innovation.
             </p>
@@ -64,7 +64,7 @@ const About = () => {
               <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
                 <Eye className="w-7 h-7 text-primary" />
               </div>
-              <h2 className="text-2xl font-bold text-foreground mb-4">Our Vision</h2>
+              <h2 className="heading-subsection text-foreground mb-4">Our Vision</h2>
               <p className="text-muted-foreground leading-relaxed">
                 To become Africa's leading technology conglomerate, setting global standards 
                 in software innovation, digital media, and enterprise solutions. We envision 
@@ -75,7 +75,7 @@ const About = () => {
               <div className="w-14 h-14 rounded-xl bg-secondary/10 flex items-center justify-center mb-6">
                 <Target className="w-7 h-7 text-secondary" />
               </div>
-              <h2 className="text-2xl font-bold text-foreground mb-4">Our Mission</h2>
+              <h2 className="heading-subsection text-foreground mb-4">Our Mission</h2>
               <p className="text-muted-foreground leading-relaxed">
                 To build world-class technology products and platforms that solve real problems, 
                 create value for businesses and individuals, and showcase African excellence 
@@ -90,7 +90,7 @@ const About = () => {
       <section className="py-20 bg-muted/30">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <h2 className="heading-section text-foreground mb-4">
               Our Core Values
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -107,7 +107,7 @@ const About = () => {
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
                   <value.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">{value.title}</h3>
+                <h3 className="heading-label text-foreground mb-2">{value.title}</h3>
                 <p className="text-sm text-muted-foreground">{value.description}</p>
               </div>
             ))}
@@ -119,7 +119,7 @@ const About = () => {
       <section className="py-20">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <h2 className="heading-section text-foreground mb-4">
               Our Journey
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -163,14 +163,14 @@ const About = () => {
       {/* CTA */}
       <section className="py-20 bg-charcoal text-white">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <h2 className="heading-section mb-6">
             Ready to Build the Future Together?
           </h2>
           <p className="text-white/70 max-w-2xl mx-auto mb-8">
             Whether you're looking to partner, invest, or join our team, we'd love to hear from you.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Button variant="gold" size="lg" asChild>
+            <Button variant="default" size="lg" asChild>
               <Link to="/contact">Get in Touch</Link>
             </Button>
             <Button variant="outline" size="lg" className="border-white/20 hover:bg-white/10" asChild>

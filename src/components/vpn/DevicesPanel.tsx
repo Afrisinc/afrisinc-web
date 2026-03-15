@@ -81,7 +81,7 @@ export function DevicesPanel({ devices, servers, isLoading, onGenerateConfig }: 
             </CardTitle>
             <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="gold" size="sm">
+                <Button variant="default" size="sm">
                   <Plus className="h-4 w-4 mr-2" />
                   Add Device
                 </Button>
@@ -133,7 +133,7 @@ export function DevicesPanel({ devices, servers, isLoading, onGenerateConfig }: 
                   <Button variant="outline" onClick={() => setAddDialogOpen(false)}>
                     Cancel
                   </Button>
-                  <Button variant="gold" onClick={() => setAddDialogOpen(false)}>
+                  <Button variant="default" onClick={() => setAddDialogOpen(false)}>
                     Add Device
                   </Button>
                 </DialogFooter>
@@ -256,7 +256,7 @@ export function DevicesPanel({ devices, servers, isLoading, onGenerateConfig }: 
             <Button variant="outline" onClick={() => setConfigDialogOpen(false)}>
               Cancel
             </Button>
-            <Button variant="gold" onClick={handleGenerateConfig} disabled={!selectedServer}>
+            <Button variant="default" onClick={handleGenerateConfig} disabled={!selectedServer}>
               <Download className="h-4 w-4 mr-2" />
               Generate & Download
             </Button>

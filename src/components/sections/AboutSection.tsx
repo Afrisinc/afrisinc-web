@@ -34,11 +34,11 @@ export const AboutSection = () => {
             <span className="text-primary font-semibold text-sm uppercase tracking-widest mb-4 block">
               About Afrisinc
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-6">
+            <h2 className="heading-section text-foreground leading-tight mb-6">
               African Excellence,
-              <span className="text-gradient-gold block">Global Standards</span>
+              <span className="text-gradient-primary block">Global Standards</span>
             </h2>
-            <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+            <p className="text-muted-foreground text-subtitle mb-8">
               Afrisinc is more than a company—it's a movement. We're building a 
               multi-department ecosystem that bridges the gap between African innovation 
               and global markets. From media to technology, we're crafting solutions 

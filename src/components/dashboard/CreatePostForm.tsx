@@ -53,7 +53,7 @@ const CreatePostForm = () => {
   if (topicsLoading) {
     return (
       <Card className="border-border/50 overflow-hidden">
-        <div className="h-1 bg-gradient-to-r from-primary via-gold to-primary animate-shimmer bg-[length:200%_100%]" />
+        <div className="h-1 bg-gradient-to-r from-primary via-primary-300 to-primary animate-shimmer bg-[length:200%_100%]" />
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center gap-2">
             <div className="p-2 rounded-lg bg-primary/10">
@@ -77,7 +77,7 @@ const CreatePostForm = () => {
 
   return (
     <Card className="border-border/50 overflow-hidden shadow-lg">
-      <div className="h-1 bg-gradient-to-r from-primary via-gold to-primary" />
+      <div className="h-1 bg-gradient-to-r from-primary via-primary-300 to-primary" />
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-2">
           <div className="p-2 rounded-lg bg-primary/10">
@@ -252,9 +252,9 @@ const CreatePostForm = () => {
               )}
             />
 
-            <Button 
-              type="submit" 
-              variant="gold" 
+            <Button
+              type="submit"
+              variant="default"
               className="w-full h-12 text-base font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
               disabled={generatePost.isPending}
             >

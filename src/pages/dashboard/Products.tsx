@@ -55,7 +55,7 @@ const DashboardProducts = () => {
           <h1 className="text-2xl md:text-3xl font-bold">Products</h1>
           <p className="text-muted-foreground">Manage your products and services</p>
         </div>
-        <Button variant="gold">
+        <Button variant="default">
           <Plus className="w-4 h-4 mr-2" />
           Add Product
         </Button>

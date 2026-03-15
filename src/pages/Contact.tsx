@@ -109,11 +109,11 @@ const Contact = () => {
               <MessageSquare className="w-4 h-4 mr-2" />
               Get in Touch
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 animate-fade-up animation-delay-100">
+            <h1 className="heading-hero text-foreground mb-6 animate-fade-up animation-delay-100">
               Let's Start a
-              <span className="text-gradient-gold block">Conversation</span>
+              <span className="text-gradient-primary block">Conversation</span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto animate-fade-up animation-delay-200">
+            <p className="text-subtitle text-muted-foreground max-w-2xl mx-auto animate-fade-up animation-delay-200">
               Have questions about our technology solutions? Want to partner with us? 
               We'd love to hear from you.
             </p>
@@ -134,7 +134,7 @@ const Contact = () => {
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
                   <info.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-1">{info.title}</h3>
+                <h3 className="heading-label text-foreground mb-1">{info.title}</h3>
                 <p className="text-primary font-medium mb-1">{info.value}</p>
                 <p className="text-sm text-muted-foreground">{info.description}</p>
               </div>
@@ -149,7 +149,7 @@ const Contact = () => {
           <div className="grid lg:grid-cols-2 gap-16">
             {/* Form */}
             <div className="animate-fade-up">
-              <h2 className="text-2xl font-bold text-foreground mb-6">Send Us a Message</h2>
+              <h2 className="heading-subsection text-foreground mb-6">Send Us a Message</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
@@ -221,7 +221,7 @@ const Contact = () => {
                     required
                   />
                 </div>
-                <Button type="submit" variant="gold" size="lg" disabled={isSubmitting}>
+                <Button type="submit" variant="default" size="lg" disabled={isSubmitting}>
                   {isSubmitting ? (
                     "Sending..."
                   ) : (
@@ -238,7 +238,7 @@ const Contact = () => {
             <div className="animate-fade-up animation-delay-200">
               {/* Offices */}
               <div className="mb-12">
-                <h2 className="text-2xl font-bold text-foreground mb-6">Our Offices</h2>
+                <h2 className="heading-subsection text-foreground mb-6">Our Offices</h2>
                 <div className="grid sm:grid-cols-2 gap-4">
                   {offices.map((office) => (
                     <div
@@ -257,7 +257,7 @@ const Contact = () => {
 
               {/* Social */}
               <div className="mb-12">
-                <h2 className="text-2xl font-bold text-foreground mb-6">Connect With Us</h2>
+                <h2 className="heading-subsection text-foreground mb-6">Connect With Us</h2>
                 <div className="flex gap-3">
                   {socialLinks.map((social) => (
                     <a

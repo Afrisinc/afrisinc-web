@@ -6,7 +6,7 @@ const DashboardMedia = () => (
   <div className="space-y-6">
     <div className="flex justify-between items-center">
       <div><h1 className="text-2xl font-bold">Media</h1><p className="text-muted-foreground">Manage articles, videos, and podcasts</p></div>
-      <Button variant="gold"><Plus className="w-4 h-4 mr-2" />Create Content</Button>
+      <Button variant="default"><Plus className="w-4 h-4 mr-2" />Create Content</Button>
     </div>
     <div className="grid sm:grid-cols-3 gap-6">
       <Card><CardHeader className="flex flex-row items-center gap-3"><FileText className="w-8 h-8 text-primary" /><div><CardTitle>Articles</CardTitle><p className="text-sm text-muted-foreground">24 published</p></div></CardHeader></Card>

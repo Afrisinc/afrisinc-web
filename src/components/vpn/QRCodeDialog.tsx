@@ -234,7 +234,7 @@ export function QRCodeGenerator({ servers, devices, isLoading, onGenerateConfig 
               </div>
 
               <Button 
-                variant="gold" 
+                variant="default" 
                 className="w-full mt-4"
                 onClick={handleGenerate}
                 disabled={!selectedDevice || !selectedServer || isGenerating}

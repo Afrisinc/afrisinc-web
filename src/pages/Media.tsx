@@ -73,11 +73,11 @@ const Media = () => {
               <Newspaper className="w-4 h-4 mr-2" />
               Afrisinc Media
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 animate-fade-up animation-delay-100">
+            <h1 className="heading-hero text-foreground mb-6 animate-fade-up animation-delay-100">
               Insights & Stories from the
-              <span className="text-gradient-gold block">Tech Frontier</span>
+              <span className="text-gradient-primary block">Tech Frontier</span>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto animate-fade-up animation-delay-200">
+            <p className="text-subtitle text-muted-foreground max-w-2xl mx-auto animate-fade-up animation-delay-200">
               Stay informed with the latest news, insights, and stories from 
               Africa's technology ecosystem and beyond.
             </p>
@@ -146,7 +146,7 @@ const Media = () => {
                 <Badge variant="outline" className="mb-4">
                   {featuredArticle.category.name}
                 </Badge>
-                <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+                <h2 className="heading-section text-foreground mb-4">
                   {featuredArticle.title}
                 </h2>
                 <p className="text-muted-foreground mb-6">
@@ -160,7 +160,7 @@ const Media = () => {
                     {featuredArticle.read_time} min read
                   </span>
                 </div>
-                <Button variant="gold" asChild>
+                <Button variant="default" asChild>
                   <Link to={`/media/articles/${featuredArticle.slug}`}>
                     Read Article
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -176,7 +176,7 @@ const Media = () => {
       <section className="py-12">
         <div className="container mx-auto px-6">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold text-foreground">Latest Articles</h2>
+            <h2 className="heading-subsection text-foreground">Latest Articles</h2>
             <Button variant="ghost" asChild>
               <Link to="/media/articles">
                 View All
@@ -221,7 +221,7 @@ const Media = () => {
               <div className="w-10 h-10 rounded-lg bg-destructive/10 flex items-center justify-center">
                 <Youtube className="w-5 h-5 text-destructive" />
               </div>
-              <h2 className="text-2xl font-bold text-foreground">Video Content</h2>
+              <h2 className="heading-subsection text-foreground">Video Content</h2>
             </div>
             <Button variant="ghost">
               View Channel
@@ -250,7 +250,7 @@ const Media = () => {
                     {video.duration}
                   </span>
                 </div>
-                <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="heading-label text-foreground group-hover:text-primary transition-colors">
                   {video.title}
                 </h3>
                 <p className="text-sm text-muted-foreground">{video.views}</p>
@@ -268,7 +268,7 @@ const Media = () => {
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                 <Mic className="w-5 h-5 text-primary" />
               </div>
-              <h2 className="text-2xl font-bold text-foreground">The Afrisinc Podcast</h2>
+              <h2 className="heading-subsection text-foreground">The Afrisinc Podcast</h2>
             </div>
             <Button variant="ghost">
               All Episodes
@@ -286,7 +286,7 @@ const Media = () => {
                   <Play className="w-6 h-6 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                  <h3 className="heading-label text-foreground group-hover:text-primary transition-colors">
                     {podcast.episode}
                   </h3>
                   <p className="text-sm text-muted-foreground">{podcast.guest}</p>
@@ -303,7 +303,7 @@ const Media = () => {
       {/* Newsletter CTA */}
       <section className="py-20 bg-charcoal">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary-foreground">
+          <h2 className="heading-section mb-4 text-primary-foreground">
             Stay Updated
           </h2>
           <p className="text-primary-foreground/70 max-w-xl mx-auto mb-8">
@@ -315,7 +315,7 @@ const Media = () => {
               placeholder="Enter your email"
               className="flex-1 px-4 py-3 rounded-lg bg-background/10 border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary"
             />
-            <Button variant="gold" size="lg">
+            <Button variant="default" size="lg">
               Subscribe
             </Button>
           </div>
