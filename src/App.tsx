@@ -90,6 +90,10 @@ const App = () => (
                 <Route path="users" element={<DashboardUsers />} />
                 <Route path="media" element={<DashboardMedia />} />
                 <Route path="notifications" element={<DashboardNotifications />} />
+                <Route path="notifications/overview" element={<DashboardNotifications />} />
+                <Route path="notifications/users" element={<DashboardNotifications />} />
+                <Route path="notifications/accounts" element={<DashboardNotifications />} />
+                <Route path="notifications/security" element={<DashboardNotifications />} />
                 <Route path="settings" element={<DashboardSettings />} />
 
                  {/* Platform Admin Routes */}
