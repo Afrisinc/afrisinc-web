@@ -45,11 +45,11 @@ export const ContactSection = () => {
             <span className="text-primary font-semibold text-sm uppercase tracking-widest mb-4 block">
               Get In Touch
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
+            <h2 className="heading-section text-foreground mb-6">
               Let's Build
-              <span className="text-gradient-gold block">Something Great</span>
+              <span className="text-gradient-primary block">Something Great</span>
             </h2>
-            <p className="text-muted-foreground text-lg leading-relaxed mb-10">
+            <p className="text-muted-foreground text-subtitle mb-10">
               Whether you have a question, a proposal, or just want to say hello, 
               we'd love to hear from you. Reach out and let's start a conversation.
             </p>
@@ -140,7 +140,7 @@ export const ContactSection = () => {
                 />
               </div>
 
-              <Button variant="gold" size="lg" className="w-full">
+              <Button variant="default" size="lg" className="w-full">
                 Send Message
               </Button>
             </form>

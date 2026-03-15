@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
   { name: "About", href: "/about" },
@@ -17,6 +18,7 @@ export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { user, token } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,12 +71,11 @@ export const Header = () => {
         {/* CTA Buttons */}
         <div className="hidden lg:flex items-center gap-3">
           <ThemeToggle />
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/login">Sign In</Link>
-          </Button>
-          <Button variant="gold" size="sm" asChild>
-            <Link to="/dashboard">Dashboard</Link>
-          </Button>
+          {user && token && (
+            <Button variant="default" size="sm" asChild>
+              <Link to="/dashboard">Dashboard</Link>
+            </Button>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -104,14 +105,13 @@ export const Header = () => {
                 {link.name}
               </Link>
             ))}
-            <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-border">
-              <Button variant="outline" size="lg" asChild>
-                <Link to="/login">Sign In</Link>
-              </Button>
-              <Button variant="gold" size="lg" asChild>
-                <Link to="/dashboard">Dashboard</Link>
-              </Button>
-            </div>
+            {user && token && (
+              <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-border">
+                <Button variant="default" size="lg" asChild>
+                  <Link to="/dashboard">Dashboard</Link>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}

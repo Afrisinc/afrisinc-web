@@ -61,11 +61,11 @@ const ArticlesPage = () => {
               <FileText className="w-4 h-4 mr-2" />
               Afrisinc Articles
             </Badge>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 animate-fade-up animation-delay-100 tracking-tight leading-[1.1]">
+            <h1 className="heading-hero text-foreground mb-6 animate-fade-up animation-delay-100 tracking-tight leading-[1.1]">
               Insights & Analysis from the
-              <span className="text-gradient-gold block mt-2">Tech Frontier</span>
+              <span className="text-gradient-primary block mt-2">Tech Frontier</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground animate-fade-up animation-delay-200 leading-relaxed">
+            <p className="text-subtitle text-muted-foreground animate-fade-up animation-delay-200 leading-relaxed">
               Original editorials, curated news, and expert opinions covering technology, 
               business, and innovation across Africa and beyond.
             </p>
@@ -89,7 +89,7 @@ const ArticlesPage = () => {
           {/* Header */}
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-8">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2 tracking-tight">Latest Articles</h2>
+              <h2 className="heading-subsection text-foreground mb-2 tracking-tight">Latest Articles</h2>
               <p className="text-muted-foreground text-base">
                 {articlesData?.total || 0} articles
               </p>
@@ -150,7 +150,7 @@ const ArticlesPage = () => {
       {/* Newsletter CTA */}
       <section className="py-20 bg-charcoal">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-tight">
+          <h2 className="heading-section font-bold text-white mb-4 tracking-tight">
             Never Miss a Story
           </h2>
           <p className="text-white/70 max-w-xl mx-auto mb-8 text-base md:text-lg leading-relaxed">
@@ -162,7 +162,7 @@ const ArticlesPage = () => {
               placeholder="Enter your email"
               className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-primary text-base"
             />
-            <Button variant="gold" size="lg" className="font-medium">
+            <Button variant="default" size="lg" className="font-medium">
               Subscribe
             </Button>
           </div>

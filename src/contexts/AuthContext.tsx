@@ -36,11 +36,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Check for stored custom user and token
     const storedUser = localStorage.getItem("user");
     const storedToken = localStorage.getItem("token");
+    const tokenExpiresAt = localStorage.getItem("token_expires_at");
 
     if (storedUser && storedToken) {
       try {
-        setUser(JSON.parse(storedUser));
-        setToken(storedToken);
+        // Check if token has expired
+        if (tokenExpiresAt && Date.now() > parseInt(tokenExpiresAt)) {
+          // Token expired, clear storage
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
+          localStorage.removeItem("token_type");
+          localStorage.removeItem("token_expires_at");
+        } else {
+          setUser(JSON.parse(storedUser));
+          setToken(storedToken);
+        }
       } catch (error) {
         console.error("Failed to parse stored user data", error);
       }
@@ -104,6 +114,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setToken(data.data.token);
         localStorage.setItem("user", JSON.stringify(customUser));
         localStorage.setItem("token", data.data.token);
+
+        // Store token metadata
+        if (data.data.token_type) {
+          localStorage.setItem("token_type", data.data.token_type);
+        }
+        if (data.data.expires_in) {
+          localStorage.setItem("token_expires_at", String(Date.now() + data.data.expires_in * 1000));
+        }
+
         return { error: null };
       }
 
@@ -118,6 +137,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("token_type");
+    localStorage.removeItem("token_expires_at");
   };
 
   const resetPassword = async (email: string) => {

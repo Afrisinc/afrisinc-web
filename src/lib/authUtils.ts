@@ -9,7 +9,10 @@ import { TokenPayload } from '@/types/shared';
 
 export const logoutHandler = (route?: string): void => {
     localStorage.removeItem("token");
-    window.location.href = route || "/signin";
+    localStorage.removeItem("user");
+    localStorage.removeItem("token_type");
+    localStorage.removeItem("token_expires_at");
+    window.location.href = route || "/";
 };
 
 export const onError = (error: AxiosErrorResponse) => {

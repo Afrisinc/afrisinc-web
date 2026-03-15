@@ -23,7 +23,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   if (!user && !token) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    // Redirect to external auth service
+    window.location.href = `http://localhost:8098/login?redirect=${encodeURIComponent(window.location.href)}`;
+    return null;
   }
 
   return <>{children}</>;

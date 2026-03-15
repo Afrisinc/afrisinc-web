@@ -121,7 +121,7 @@ const Login = () => {
                 Forgot password?
               </Link>
             </div>
-            <Button variant="gold" className="w-full" type="submit" disabled={isPending}>
+            <Button variant="default" className="w-full" type="submit" disabled={isPending}>
               {isPending ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />

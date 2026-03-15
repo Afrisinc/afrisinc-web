@@ -38,9 +38,9 @@ export const MediaSection = () => {
             <span className="text-primary font-semibold text-sm uppercase tracking-widest mb-4 block">
               Media Hub
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
+            <h2 className="heading-section text-foreground">
               Stories That
-              <span className="text-gradient-gold"> Inspire</span>
+              <span className="text-gradient-primary"> Inspire</span>
             </h2>
           </div>
           <Button variant="hero-outline" className="self-start md:self-auto">
@@ -58,7 +58,7 @@ export const MediaSection = () => {
             >
               {/* Thumbnail Placeholder */}
               <div className="relative aspect-video bg-muted overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-forest/20 to-gold/20" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-forest/20 to-primary-200/20" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   {item.type === "Video" || item.type === "Podcast" ? (
                     <div className="w-16 h-16 rounded-full bg-background/90 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">

@@ -350,7 +350,7 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                   </p>
                   <Dialog open={addDeviceOpen} onOpenChange={setAddDeviceOpen}>
                     <DialogTrigger asChild>
-                      <Button variant="gold" size="sm">
+                      <Button variant="default" size="sm">
                         <Plus className="h-4 w-4 mr-2" />
                         Add Device
                       </Button>
@@ -416,7 +416,7 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                           Cancel
                         </Button>
                         <Button
-                          variant="gold"
+                          variant="default"
                           onClick={handleAddDevice}
                           disabled={createDeviceMutation.isPending || !deviceName.trim()}
                         >
@@ -655,7 +655,7 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
             <Button variant="outline" onClick={() => setConfigDialogOpen(false)}>
               Cancel
             </Button>
-            <Button variant="gold" onClick={handleGenerateConfig} disabled={!selectedServer}>
+            <Button variant="default" onClick={handleGenerateConfig} disabled={!selectedServer}>
               <Download className="h-4 w-4 mr-2" />
               Generate & Download
             </Button>
@@ -693,7 +693,7 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
             <Button variant="outline" onClick={() => setDeviceConfigDialogOpen(false)} disabled={deviceConfigMutation.isPending}>
               Cancel
             </Button>
-            <Button variant="gold" onClick={handleDownloadDeviceConfig} disabled={!selectedServer || deviceConfigMutation.isPending}>
+            <Button variant="default" onClick={handleDownloadDeviceConfig} disabled={!selectedServer || deviceConfigMutation.isPending}>
               <Download className="h-4 w-4 mr-2" />
               {deviceConfigMutation.isPending ? "Downloading..." : "Download"}
             </Button>

@@ -162,7 +162,7 @@ export function ConfigGenerator({ servers, devices, isLoading }: ConfigGenerator
           </div>
 
           <Button 
-            variant="gold" 
+            variant="default" 
             onClick={handleGenerate} 
             disabled={!selectedDevice || !selectedServer || generateConfigMutation.isPending}
             className="w-full sm:w-auto"

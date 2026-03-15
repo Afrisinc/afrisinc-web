@@ -36,7 +36,8 @@ export const DashboardSidebar = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate("/login");
+    // Redirect to landing page
+    window.location.href = "/";
   };
 
   return (

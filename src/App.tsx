@@ -20,9 +20,7 @@ import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
 
 // Auth Pages
-import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
-import ForgotPassword from "./pages/auth/ForgotPassword";
+import Callback from "./pages/auth/Callback";
 
 // Dashboard Pages
 import DashboardLayout from "./components/dashboard/DashboardLayout";
@@ -74,9 +72,7 @@ const App = () => (
                 <Route path="/contact" element={<Contact />} />
               
               {/* Auth Routes */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/auth/callback" element={<Callback />} />
 
               {/* Test Component Route */}
               <Route path="/testcomponent" element={<TestComponent />} />

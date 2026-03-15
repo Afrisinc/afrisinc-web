@@ -320,7 +320,7 @@ const ArticleDetail = () => {
                 <p className="text-muted-foreground mb-4">
                   Want to read the full original article?
                 </p>
-                <Button variant="gold" asChild>
+                <Button variant="default" asChild>
                   <a href={article.source.url} target="_blank" rel="noopener noreferrer">
                     Visit {article.source.name}
                     <ExternalLink className="w-4 h-4 ml-2" />

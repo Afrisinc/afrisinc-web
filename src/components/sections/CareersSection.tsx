@@ -35,14 +35,14 @@ export const CareersSection = () => {
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-gold font-semibold text-sm uppercase tracking-widest mb-4 block">
+          <span className="text-primary font-semibold text-sm uppercase tracking-widest mb-4 block">
             Work With Us
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+          <h2 className="heading-section mb-6">
             Be Part of the
-            <span className="text-gradient-gold block">Afrisinc Story</span>
+            <span className="text-gradient-primary block">Afrisinc Story</span>
           </h2>
-          <p className="text-cream/70 text-lg leading-relaxed">
+          <p className="text-cream/70 text-subtitle">
             Whether you're looking to build your career, partner on projects, 
             or invest in innovation—there's a place for you at Afrisinc.
           </p>
@@ -53,13 +53,13 @@ export const CareersSection = () => {
           {opportunities.map((opportunity) => (
             <div
               key={opportunity.title}
-              className="group bg-cream/5 backdrop-blur-sm rounded-2xl p-8 border border-cream/10 hover:border-gold/30 transition-all duration-500 hover:-translate-y-1"
+              className="group bg-cream/5 backdrop-blur-sm rounded-2xl p-8 border border-cream/10 hover:border-primary/30 transition-all duration-500 hover:-translate-y-1"
             >
-              <div className="w-14 h-14 rounded-xl bg-gold/20 flex items-center justify-center mb-6 group-hover:bg-gold/30 transition-colors duration-300">
-                <opportunity.icon className="w-7 h-7 text-gold" />
+              <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center mb-6 group-hover:bg-primary/30 transition-colors duration-300">
+                <opportunity.icon className="w-7 h-7 text-primary" />
               </div>
 
-              <h3 className="text-2xl font-bold text-cream mb-3">
+              <h3 className="heading-subsection text-cream mb-3">
                 {opportunity.title}
               </h3>
 
@@ -67,7 +67,7 @@ export const CareersSection = () => {
                 {opportunity.description}
               </p>
 
-              <Button variant="ghost" className="text-gold hover:text-gold-light hover:bg-gold/10 p-0 h-auto font-medium">
+              <Button variant="ghost" className="text-primary hover:text-primary-400 hover:bg-primary/10 p-0 h-auto font-medium">
                 {opportunity.cta} →
               </Button>
             </div>

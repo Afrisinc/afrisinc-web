@@ -11,7 +11,7 @@ const DashboardSettings = () => (
         <CardContent className="space-y-4">
           <div><label className="text-sm font-medium">Full Name</label><Input defaultValue="John Doe" className="mt-1" /></div>
           <div><label className="text-sm font-medium">Email</label><Input defaultValue="john@afrisinc.com" className="mt-1" /></div>
-          <Button variant="gold">Save Changes</Button>
+          <Button variant="default">Save Changes</Button>
         </CardContent>
       </Card>
       <Card>
