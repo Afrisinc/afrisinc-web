@@ -3,60 +3,59 @@ import { PublicLayout } from "@/components/layout/PublicLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  MessageSquare, 
-  Clock, 
-  Send,
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+  ArrowUpRight,
   Linkedin,
   Twitter,
   Youtube,
-  Github
+  Github,
 } from "lucide-react";
 
-const contactInfo = [
+const contactMeta = [
   {
     icon: Mail,
-    title: "Email Us",
+    label: "Email",
     value: "hello@afrisinc.com",
-    description: "For general inquiries",
-  },
-  {
-    icon: Phone,
-    title: "Call Us",
-    value: "+234 800 123 4567",
-    description: "Mon-Fri 9am-6pm WAT",
+    href: "mailto:hello@afrisinc.com",
   },
   {
     icon: MapPin,
-    title: "Visit Us",
-    value: "Lagos, Nigeria",
-    description: "Tech Hub, Victoria Island",
+    label: "Headquarters",
+    value: "Kigali, Rwanda",
+    href: null,
   },
   {
     icon: Clock,
-    title: "Response Time",
+    label: "Response Time",
     value: "Within 24 hours",
-    description: "For business inquiries",
+    href: null,
   },
 ];
 
 const offices = [
-  { city: "Lagos", country: "Nigeria", type: "Headquarters" },
-  { city: "Nairobi", country: "Kenya", type: "Regional Office" },
-  { city: "Johannesburg", country: "South Africa", type: "Regional Office" },
-  { city: "London", country: "United Kingdom", type: "International Office" },
+  { city: "Kigali",       country: "Rwanda",         type: "Headquarters"       },
+  { city: "Nairobi",      country: "Kenya",          type: "Regional Office"    },
+  { city: "Johannesburg", country: "South Africa",   type: "Regional Office"    },
+  { city: "London",       country: "United Kingdom", type: "International Office"},
 ];
 
 const socialLinks = [
-  { name: "LinkedIn", icon: Linkedin, href: "#" },
-  { name: "Twitter", icon: Twitter, href: "#" },
-  { name: "YouTube", icon: Youtube, href: "#" },
-  { name: "GitHub", icon: Github, href: "#" },
+  { name: "LinkedIn",  icon: Linkedin, href: "#" },
+  { name: "Twitter",   icon: Twitter,  href: "#" },
+  { name: "YouTube",   icon: Youtube,  href: "#" },
+  { name: "GitHub",    icon: Github,   href: "#" },
+];
+
+const quickLinks = [
+  { name: "Schedule a Demo",       href: "#" },
+  { name: "Support Documentation", href: "#" },
+  { name: "Partner Program",       href: "#" },
+  { name: "Investor Relations",    href: "#" },
 ];
 
 const Contact = () => {
@@ -71,237 +70,274 @@ const Contact = () => {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    
     toast({
       title: "Message Sent!",
       description: "We'll get back to you within 24 hours.",
     });
-    
-    setFormData({
-      name: "",
-      email: "",
-      company: "",
-      subject: "",
-      message: "",
-    });
+    setFormData({ name: "", email: "", company: "", subject: "", message: "" });
     setIsSubmitting(false);
   };
 
   return (
     <PublicLayout>
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 bg-gradient-hero">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge variant="outline" className="mb-6 animate-fade-up">
-              <MessageSquare className="w-4 h-4 mr-2" />
-              Get in Touch
-            </Badge>
-            <h1 className="heading-hero text-foreground mb-6 animate-fade-up animation-delay-100">
-              Let's Start a
-              <span className="text-gradient-primary block">Conversation</span>
-            </h1>
-            <p className="text-subtitle text-muted-foreground max-w-2xl mx-auto animate-fade-up animation-delay-200">
-              Have questions about our technology solutions? Want to partner with us? 
-              We'd love to hear from you.
-            </p>
-          </div>
-        </div>
-      </section>
 
-      {/* Contact Cards */}
-      <section className="py-12 border-b border-border">
-        <div className="container mx-auto px-6">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {contactInfo.map((info, index) => (
-              <div
-                key={info.title}
-                className="bg-card rounded-xl p-6 shadow-card text-center animate-fade-up"
-                style={{ animationDelay: `${index * 100}ms` }}
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="relative min-h-[55vh] flex items-center overflow-hidden bg-background dot-grid grain">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background/80 pointer-events-none" />
+
+        <div className="container mx-auto px-6 pt-36 pb-24 relative z-10">
+          <div className="max-w-4xl">
+
+            <p className="line-accent mb-12 animate-fade-in">Get In Touch</p>
+
+            <h1 className="animate-fade-up animation-delay-100" style={{ lineHeight: 1 }}>
+              <span
+                className="block font-bold tracking-[-0.03em] text-foreground font-sans"
+                style={{ fontSize: "clamp(28px, 6.5vw, 76px)", lineHeight: 0.92 }}
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                  <info.icon className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="heading-label text-foreground mb-1">{info.title}</h3>
-                <p className="text-primary font-medium mb-1">{info.value}</p>
-                <p className="text-sm text-muted-foreground">{info.description}</p>
-              </div>
-            ))}
+                Let's Start a
+              </span>
+              <span
+                className="block font-display italic font-bold tracking-[-0.02em] text-gradient-primary"
+                style={{ fontSize: "clamp(28px, 6.5vw, 76px)", lineHeight: 1.02 }}
+              >
+                Conversation.
+              </span>
+            </h1>
+
+            <p className="text-lg text-muted-foreground leading-[1.75] max-w-lg mt-10 animate-fade-up animation-delay-200">
+              A question, a half-formed idea, or a proper proposal — send it over.
+              We respond to every message within 24 hours.
+            </p>
+
           </div>
         </div>
       </section>
 
-      {/* Contact Form & Info */}
-      <section className="py-20">
+      {/* ── Contact Form + Info ───────────────────────────────────────────── */}
+      <section className="py-28 md:py-36 bg-background">
         <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16">
-            {/* Form */}
-            <div className="animate-fade-up">
-              <h2 className="heading-subsection text-foreground mb-6">Send Us a Message</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                      Full Name *
-                    </label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="John Doe"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                      Email Address *
-                    </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="john@example.com"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="company" className="block text-sm font-medium text-foreground mb-2">
-                      Company
-                    </label>
-                    <Input
-                      id="company"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleChange}
-                      placeholder="Your company"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
-                      Subject *
-                    </label>
-                    <Input
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      placeholder="How can we help?"
-                      required
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
-                    Message *
-                  </label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder="Tell us more about your inquiry..."
-                    rows={5}
-                    required
-                  />
-                </div>
-                <Button type="submit" variant="default" size="lg" disabled={isSubmitting}>
-                  {isSubmitting ? (
-                    "Sending..."
-                  ) : (
-                    <>
-                      Send Message
-                      <Send className="w-4 h-4 ml-2" />
-                    </>
-                  )}
-                </Button>
-              </form>
-            </div>
 
-            {/* Info */}
-            <div className="animate-fade-up animation-delay-200">
-              {/* Offices */}
-              <div className="mb-12">
-                <h2 className="heading-subsection text-foreground mb-6">Our Offices</h2>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {offices.map((office) => (
+          {/* Section header */}
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
+            <div>
+              <p className="line-accent">Contact</p>
+            </div>
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
+                We Read{" "}
+                <span className="font-display italic text-gradient-primary">Every Message.</span>
+              </h2>
+            </div>
+          </div>
+
+          {/* Two-column: info left, form right */}
+          <div className="grid lg:grid-cols-[5fr_7fr] gap-10 lg:gap-16">
+
+            {/* ── Left panel ── */}
+            <div className="space-y-10">
+
+              {/* Contact meta */}
+              <div className="space-y-5">
+                {contactMeta.map((info) => (
+                  <div key={info.label} className="flex items-start gap-4">
                     <div
-                      key={office.city}
-                      className="bg-muted/50 rounded-xl p-4 hover:bg-muted transition-colors"
+                      className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
+                      style={{
+                        background: "hsl(var(--terra) / 0.08)",
+                        border: "1px solid hsl(var(--terra) / 0.18)",
+                      }}
                     >
-                      <p className="font-semibold text-foreground">{office.city}</p>
-                      <p className="text-sm text-muted-foreground">{office.country}</p>
-                      <Badge variant="outline" className="mt-2 text-xs">
+                      <info.icon className="w-4 h-4" style={{ color: "hsl(var(--terra))" }} />
+                    </div>
+                    <div>
+                      <span className="block text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-0.5">
+                        {info.label}
+                      </span>
+                      {info.href ? (
+                        <a
+                          href={info.href}
+                          className="text-foreground font-medium text-sm hover:text-primary transition-colors duration-200"
+                        >
+                          {info.value}
+                        </a>
+                      ) : (
+                        <span className="text-foreground font-medium text-sm">{info.value}</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Kente strip */}
+              <div className="kente-border rounded-full overflow-hidden opacity-65" />
+
+              {/* Social pills */}
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-4">Follow</p>
+                <div className="flex flex-wrap gap-2.5">
+                  {socialLinks.map((social) => (
+                    <a
+                      key={social.name}
+                      href={social.href}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-border text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all duration-200"
+                    >
+                      {social.name}
+                      <ArrowUpRight className="w-3 h-3" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              {/* Offices */}
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-4">Our Offices</p>
+                <div className="divide-y divide-border">
+                  {offices.map((office) => (
+                    <div key={office.city} className="flex items-center justify-between py-3">
+                      <div>
+                        <span className="text-sm font-semibold text-foreground">{office.city}</span>
+                        <span className="text-sm text-muted-foreground ml-2">{office.country}</span>
+                      </div>
+                      <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground/55 text-right">
                         {office.type}
-                      </Badge>
+                      </span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Social */}
-              <div className="mb-12">
-                <h2 className="heading-subsection text-foreground mb-6">Connect With Us</h2>
-                <div className="flex gap-3">
-                  {socialLinks.map((social) => (
-                    <a
-                      key={social.name}
-                      href={social.href}
-                      className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
-                      aria-label={social.name}
-                    >
-                      <social.icon className="w-5 h-5" />
-                    </a>
-                  ))}
+              {/* Quick links — dark card */}
+              <div className="rounded-2xl bg-foreground text-background grain relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 kente-border opacity-55" />
+                <div className="p-8 relative z-10">
+                  <p className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-background/40 before:block before:w-6 before:h-px before:bg-background/40 before:flex-shrink-0">
+                    Quick Links
+                  </p>
+                  <ul className="mt-6 space-y-3">
+                    {quickLinks.map((link) => (
+                      <li key={link.name}>
+                        <a
+                          href={link.href}
+                          className="inline-flex items-center gap-2 text-sm font-semibold text-background/65 hover:text-background transition-colors duration-200"
+                        >
+                          {link.name}
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
 
-              {/* Quick Links */}
-              <div className="bg-charcoal rounded-2xl p-8 text-white">
-                <h3 className="text-xl font-bold mb-4">Quick Links</h3>
-                <ul className="space-y-3">
-                  <li>
-                    <a href="#" className="text-white/70 hover:text-white transition-colors flex items-center gap-2">
-                      → Schedule a Demo
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-white/70 hover:text-white transition-colors flex items-center gap-2">
-                      → Support Documentation
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-white/70 hover:text-white transition-colors flex items-center gap-2">
-                      → Partner Program
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-white/70 hover:text-white transition-colors flex items-center gap-2">
-                      → Investor Relations
-                    </a>
-                  </li>
-                </ul>
-              </div>
             </div>
+
+            {/* ── Right panel: Form ── */}
+            <form onSubmit={handleSubmit} className="space-y-5">
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">
+                    Full Name *
+                  </label>
+                  <Input
+                    name="name"
+                    placeholder="Your name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="h-12 bg-muted/30 border-border/60 focus:border-primary/40 transition-colors"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">
+                    Email Address *
+                  </label>
+                  <Input
+                    name="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="h-12 bg-muted/30 border-border/60 focus:border-primary/40 transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">
+                    Company
+                  </label>
+                  <Input
+                    name="company"
+                    placeholder="Your company"
+                    value={formData.company}
+                    onChange={handleChange}
+                    className="h-12 bg-muted/30 border-border/60 focus:border-primary/40 transition-colors"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">
+                    Subject *
+                  </label>
+                  <Input
+                    name="subject"
+                    placeholder="What's on your mind?"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    className="h-12 bg-muted/30 border-border/60 focus:border-primary/40 transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">
+                  Message *
+                </label>
+                <Textarea
+                  name="message"
+                  placeholder="Give us the details — or just say hi. We'll figure it out from there."
+                  rows={7}
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  className="bg-muted/30 border-border/60 focus:border-primary/40 resize-none transition-colors"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                variant="default"
+                size="lg"
+                disabled={isSubmitting}
+                className="w-full group shadow-primary"
+              >
+                {isSubmitting ? (
+                  "Sending..."
+                ) : (
+                  <>
+                    Send It
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+                  </>
+                )}
+              </Button>
+
+            </form>
+
           </div>
         </div>
       </section>
+
     </PublicLayout>
   );
 };

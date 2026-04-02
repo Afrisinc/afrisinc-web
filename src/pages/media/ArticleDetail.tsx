@@ -1,23 +1,23 @@
 import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "react-router-dom";
 import { PublicLayout } from "@/components/layout/PublicLayout";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useArticle, useArticles } from "@/hooks/useArticles";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 import { formatDistanceToNow, format } from "date-fns";
-import { 
-  ArrowLeft, 
-  Clock, 
-  Calendar, 
-  ExternalLink, 
+import {
+  ArrowLeft,
+  Clock,
+  Calendar,
+  ExternalLink,
   Share2,
   Twitter,
   Linkedin,
   Facebook,
   Link2,
-  RefreshCw
+  RefreshCw,
+  ArrowUpRight,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -28,44 +28,38 @@ import {
 import { toast } from "sonner";
 import { getCategoryPlaceholderImage } from "@/services/articlesService";
 
-const typeStyles = {
-  news: "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/30",
-  editorial: "bg-primary/10 text-primary border-primary/30",
-  opinion: "bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/30",
-};
-
-const typeLabels = {
-  news: "News",
-  editorial: "Afrisinc Editorial",
-  opinion: "Opinion",
+const typeColors: Record<string, { bg: string; text: string; border: string }> = {
+  Documentary: { bg: "hsl(22 88% 52% / 0.1)",  text: "hsl(22 82% 46%)",  border: "hsl(22 88% 52% / 0.25)" },
+  News:        { bg: "hsl(158 42% 26% / 0.1)", text: "hsl(158 42% 32%)", border: "hsl(158 42% 26% / 0.25)" },
+  Podcast:     { bg: "hsl(43 95% 52% / 0.1)",  text: "hsl(38 80% 38%)",  border: "hsl(43 95% 52% / 0.25)" },
 };
 
 const ArticleDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: article, isLoading, error } = useArticle(slug || "");
-  const { data: relatedData } = useArticles({ 
-    category: article?.category[0], 
-    per_page: 3 
+  const { data: relatedData } = useArticles({
+    category: article?.category[0],
+    per_page: 3,
   });
-  
+
   const relatedArticles = relatedData?.articles.filter(a => a.id !== article?.id).slice(0, 3) || [];
-  
+
   const handleShare = (platform: string) => {
     const url = window.location.href;
     const title = article?.title || "";
-    
+
     const urls: Record<string, string> = {
       twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
     };
-    
+
     if (platform === "copy") {
       navigator.clipboard.writeText(url);
       toast.success("Link copied to clipboard");
       return;
     }
-    
+
     window.open(urls[platform], "_blank", "width=600,height=400");
   };
 
@@ -92,16 +86,16 @@ const ArticleDetail = () => {
   if (error || !article) {
     return (
       <PublicLayout>
-        <div className="pt-32 pb-20">
+        <div className="py-28 md:py-36">
           <div className="container mx-auto px-6 text-center">
             <h1 className="text-3xl font-bold text-foreground mb-4">Article Not Found</h1>
             <p className="text-muted-foreground mb-8">
               The article you're looking for doesn't exist or has been removed.
             </p>
-            <Button asChild>
-              <Link to="/media/articles">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Articles
+            <Button variant="outline" size="lg" className="group" asChild>
+              <Link to="/media">
+                <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                Back to Media
               </Link>
             </Button>
           </div>
@@ -113,6 +107,7 @@ const ArticleDetail = () => {
   const publishedDate = new Date(article.published_at);
   const updatedDate = new Date(article.updated_at);
   const wasUpdated = updatedDate.getTime() !== publishedDate.getTime();
+  const categoryColor = typeColors[article.category] || typeColors["News"];
 
   return (
     <PublicLayout>
@@ -134,26 +129,27 @@ const ArticleDetail = () => {
             "dateModified": article.updated_at,
             "author": article.author ? {
               "@type": "Person",
-              "name": article.author.name
+              "name": article.author.name,
             } : undefined,
             "publisher": {
               "@type": "Organization",
               "name": "Afrisinc",
               "logo": {
                 "@type": "ImageObject",
-                "url": `${window.location.origin}/afrisic-logo.png`
-              }
+                "url": `${window.location.origin}/afrisic-logo.png`,
+              },
             },
-            "description": article.summary
+            "description": article.summary,
           })}
         </script>
       </Helmet>
 
-      {/* Article Header */}
-      <section className="pt-32 pb-8 bg-gradient-hero">
+      {/* ── Hero Header ───────────────────────────────────────────────────── */}
+      <section className="py-28 md:py-36 bg-background">
         <div className="container mx-auto px-6">
+
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8 animate-fade-in">
             <Link to="/media" className="hover:text-foreground transition-colors">
               Media
             </Link>
@@ -164,38 +160,47 @@ const ArticleDetail = () => {
             <span>/</span>
             <span className="text-foreground truncate max-w-[200px]">{article.title}</span>
           </div>
-          
-          {/* Badges */}
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <Badge variant="outline">{article.category}</Badge>
-            <Badge variant="outline" className={typeStyles[article.type]}>
-              {typeLabels[article.type]}
-            </Badge>
+
+          {/* Category + Type badges */}
+          <div className="flex flex-wrap items-center gap-3 mb-8 animate-fade-up animation-delay-100">
+            <span
+              className="px-3 py-1 text-xs font-semibold rounded-full"
+              style={{
+                background: categoryColor.bg,
+                color: categoryColor.text,
+                border: `1px solid ${categoryColor.border}`,
+              }}
+            >
+              {article.category}
+            </span>
             {article.source && (
-              <Badge variant="outline" className="bg-muted">
-                <ExternalLink className="w-3 h-3 mr-1" />
+              <span className="px-3 py-1 text-xs font-semibold rounded-full bg-muted text-muted-foreground border border-border flex items-center gap-1.5">
+                <ExternalLink className="w-3 h-3" />
                 {article.source.name}
-              </Badge>
+              </span>
             )}
           </div>
-          
+
           {/* Title */}
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6 max-w-4xl leading-[1.1] tracking-tight">
+          <h1
+            className="font-bold tracking-tight text-foreground leading-[1.0] mb-6 animate-fade-up animation-delay-200"
+            style={{ fontSize: "clamp(32px, 5vw, 56px)", lineHeight: 1.1 }}
+          >
             {article.title}
           </h1>
-          
+
           {/* Summary */}
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mb-8 leading-relaxed">
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mb-8 animate-fade-up animation-delay-300">
             {article.summary}
           </p>
-          
-          {/* Meta Info */}
-          <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
+
+          {/* Meta row */}
+          <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground pt-8 border-t border-border animate-fade-up animation-delay-400">
             {article.author && (
               <div className="flex items-center gap-3">
                 {article.author.avatar && (
-                  <img 
-                    src={article.author.avatar} 
+                  <img
+                    src={article.author.avatar}
                     alt={article.author.name}
                     className="w-10 h-10 rounded-full object-cover"
                   />
@@ -208,28 +213,28 @@ const ArticleDetail = () => {
                 </div>
               </div>
             )}
-            
+
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
               <span>{format(publishedDate, "MMM d, yyyy")}</span>
             </div>
-            
+
             {wasUpdated && (
               <div className="flex items-center gap-1 text-primary">
                 <RefreshCw className="w-4 h-4" />
                 <span>Updated {formatDistanceToNow(updatedDate, { addSuffix: true })}</span>
               </div>
             )}
-            
+
             <div className="flex items-center gap-1">
               <Clock className="w-4 h-4" />
               <span>{article.read_time} min read</span>
             </div>
-            
-            {/* Share */}
+
+            {/* Share menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="rounded-full">
+                <Button variant="outline" size="sm" className="group rounded-full">
                   <Share2 className="w-4 h-4 mr-2" />
                   Share
                 </Button>
@@ -254,13 +259,14 @@ const ArticleDetail = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
+
         </div>
       </section>
 
-      {/* Featured Image */}
-      <section className="py-8">
+      {/* ── Featured Image ───────────────────────────────────────────────── */}
+      <section className="py-12 bg-background">
         <div className="container mx-auto px-6">
-          <div className="rounded-2xl overflow-hidden shadow-xl">
+          <div className="rounded-2xl overflow-hidden border border-border shadow-card">
             <img
               src={article.featured_image}
               alt={article.title}
@@ -270,18 +276,19 @@ const ArticleDetail = () => {
         </div>
       </section>
 
-      {/* Article Content */}
-      <section className="py-12">
+      {/* ── Article Content ────────────────────────────────────────────────── */}
+      <section className="py-20">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto">
-            {/* Source Attribution for News */}
+
+            {/* Source Attribution */}
             {article.source && (
-              <div className="bg-muted/50 border border-border rounded-lg p-4 mb-8">
+              <div className="bg-muted/50 border border-border rounded-2xl p-6 mb-10">
                 <p className="text-sm text-muted-foreground">
                   This article is summarized from{" "}
-                  <a 
-                    href={article.source.url} 
-                    target="_blank" 
+                  <a
+                    href={article.source.url}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary hover:underline inline-flex items-center gap-1"
                   >
@@ -292,10 +299,10 @@ const ArticleDetail = () => {
                 </p>
               </div>
             )}
-            
+
             {/* Content */}
-            <article 
-              className="prose prose-lg dark:prose-invert max-w-none 
+            <article
+              className="prose prose-lg dark:prose-invert max-w-none
                 prose-headings:font-bold prose-headings:text-foreground prose-headings:tracking-tight
                 prose-p:text-foreground/80 prose-p:leading-relaxed
                 prose-a:text-primary prose-a:no-underline hover:prose-a:underline
@@ -304,42 +311,59 @@ const ArticleDetail = () => {
                 prose-li:text-foreground/80"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
-            
+
             {/* Tags */}
-            <div className="flex flex-wrap gap-2 mt-12 pt-8 border-t border-border">
+            <div className="flex flex-wrap gap-2 mt-16 pt-8 border-t border-border">
               {article.tags.map((tag) => (
-                <Badge key={tag} variant="outline" className="rounded-full">
+                <a
+                  key={tag}
+                  href={`/media/articles?tag=${encodeURIComponent(tag)}`}
+                  className="px-3 py-1 text-xs font-medium rounded-full bg-muted text-muted-foreground border border-border hover:border-primary/30 hover:bg-primary/5 transition-all duration-200"
+                >
                   #{tag}
-                </Badge>
+                </a>
               ))}
             </div>
-            
-            {/* Read Original (for aggregated) */}
+
+            {/* Read Original */}
             {article.source && (
-              <div className="mt-8 p-6 bg-muted/30 rounded-xl border border-border text-center">
-                <p className="text-muted-foreground mb-4">
+              <div className="mt-12 p-8 rounded-2xl bg-muted/30 border border-border text-center">
+                <p className="text-muted-foreground mb-6 text-sm">
                   Want to read the full original article?
                 </p>
-                <Button variant="default" asChild>
+                <Button variant="default" size="lg" className="group shadow-primary" asChild>
                   <a href={article.source.url} target="_blank" rel="noopener noreferrer">
                     Visit {article.source.name}
-                    <ExternalLink className="w-4 h-4 ml-2" />
+                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </a>
                 </Button>
               </div>
             )}
+
           </div>
         </div>
       </section>
 
-      {/* Related Articles */}
+      {/* ── Related Articles ───────────────────────────────────────────────── */}
       {relatedArticles.length > 0 && (
-        <section className="py-12 bg-muted/30">
+        <section className="py-28 md:py-36 bg-muted/30">
           <div className="container mx-auto px-6">
-            <h2 className="text-2xl font-bold text-foreground mb-8">Related Articles</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
+              <div>
+                <p className="line-accent">Related</p>
+              </div>
+              <div>
+                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
+                  More from{" "}
+                  <span className="font-display italic text-gradient-primary">Afrisinc.</span>
+                </h2>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {relatedArticles.map((related, index) => (
-                <div 
+                <div
                   key={related.id}
                   className="animate-fade-up"
                   style={{ animationDelay: `${index * 100}ms` }}
@@ -352,17 +376,20 @@ const ArticleDetail = () => {
         </section>
       )}
 
-      {/* Back to Articles */}
-      <section className="py-12">
-        <div className="container mx-auto px-6 text-center">
-          <Button variant="outline" size="lg" asChild>
-            <Link to="/media/articles">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to All Articles
-            </Link>
-          </Button>
+      {/* ── Back CTA ──────────────────────────────────────────────────────── */}
+      <section className="py-20 bg-background">
+        <div className="container mx-auto px-6">
+          <div className="text-center">
+            <Button variant="outline" size="lg" className="group" asChild>
+              <Link to="/media">
+                <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
+                Back to Media
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
+
     </PublicLayout>
   );
 };

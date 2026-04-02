@@ -1,21 +1,28 @@
 import { PublicLayout } from "@/components/layout/PublicLayout";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  Newspaper, 
-  Youtube, 
-  Mic, 
-  FileText, 
+import {
+  Newspaper,
+  Youtube,
+  Mic,
+  FileText,
   Play,
   Clock,
   ArrowRight,
-  TrendingUp
+  ArrowUpRight,
+  TrendingUp,
 } from "lucide-react";
 import { useFeaturedArticle, useArticles } from "@/hooks/useArticles";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 import { formatDistanceToNow } from "date-fns";
+
+const typeColors: Record<string, { bg: string; text: string; border: string }> = {
+  Documentary: { bg: "hsl(22 88% 52% / 0.1)",  text: "hsl(22 82% 46%)",  border: "hsl(22 88% 52% / 0.25)" },
+  News:        { bg: "hsl(158 42% 26% / 0.1)", text: "hsl(158 42% 32%)", border: "hsl(158 42% 26% / 0.25)" },
+  Podcast:     { bg: "hsl(43 95% 52% / 0.1)",  text: "hsl(38 80% 38%)",  border: "hsl(43 95% 52% / 0.25)" },
+};
 
 const videos = [
   {
@@ -65,56 +72,56 @@ const Media = () => {
 
   return (
     <PublicLayout>
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 bg-gradient-hero">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge variant="outline" className="mb-6 animate-fade-up">
-              <Newspaper className="w-4 h-4 mr-2" />
-              Afrisinc Media
-            </Badge>
-            <h1 className="heading-hero text-foreground mb-6 animate-fade-up animation-delay-100">
-              Insights & Stories from the
-              <span className="text-gradient-primary block">Tech Frontier</span>
+
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-background dot-grid grain">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background/80 pointer-events-none" />
+
+        <div className="container mx-auto px-6 pt-36 pb-24 relative z-10">
+          <div className="max-w-4xl">
+
+            <p className="line-accent mb-12 animate-fade-in">Media Hub</p>
+
+            <h1 className="animate-fade-up animation-delay-100" style={{ lineHeight: 1 }}>
+              <span
+                className="block font-bold tracking-[-0.03em] text-foreground font-sans"
+                style={{ fontSize: "clamp(28px, 6.5vw, 76px)", lineHeight: 0.92 }}
+              >
+                Stories That
+              </span>
+              <span
+                className="block font-display italic font-bold tracking-[-0.02em] text-gradient-primary"
+                style={{ fontSize: "clamp(28px, 6.5vw, 76px)", lineHeight: 1.02 }}
+              >
+                Matter.
+              </span>
             </h1>
-            <p className="text-subtitle text-muted-foreground max-w-2xl mx-auto animate-fade-up animation-delay-200">
-              Stay informed with the latest news, insights, and stories from 
-              Africa's technology ecosystem and beyond.
+
+            <p className="text-lg text-muted-foreground leading-[1.75] max-w-lg mt-10 animate-fade-up animation-delay-200">
+              News, insights, and stories from Africa's technology ecosystem and beyond.
+              Stay informed on what's shaping the future.
             </p>
+
           </div>
         </div>
       </section>
 
-      {/* Content Tabs */}
-      <section className="py-8 border-b border-border sticky top-[72px] bg-background z-40">
+      {/* ── Featured Article ─────────────────────────────────────────────── */}
+      <section className="py-28 md:py-36 bg-background">
         <div className="container mx-auto px-6">
-          <div className="flex gap-8 overflow-x-auto">
-            <button className="flex items-center gap-2 pb-4 border-b-2 border-primary text-foreground font-medium whitespace-nowrap">
-              <TrendingUp className="w-4 h-4" />
-              All
-            </button>
-            <Link 
-              to="/media/articles" 
-              className="flex items-center gap-2 pb-4 border-b-2 border-transparent hover:border-primary text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-            >
-              <FileText className="w-4 h-4" />
-              Articles
-            </Link>
-            <button className="flex items-center gap-2 pb-4 border-b-2 border-transparent hover:border-primary text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
-              <Youtube className="w-4 h-4" />
-              Videos
-            </button>
-            <button className="flex items-center gap-2 pb-4 border-b-2 border-transparent hover:border-primary text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
-              <Mic className="w-4 h-4" />
-              Podcasts
-            </button>
-          </div>
-        </div>
-      </section>
 
-      {/* Featured Article */}
-      <section className="py-12">
-        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
+            <div>
+              <p className="line-accent">Featured</p>
+            </div>
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
+                Latest from{" "}
+                <span className="font-display italic text-gradient-primary">Afrisinc.</span>
+              </h2>
+            </div>
+          </div>
+
           {isLoadingFeatured ? (
             <div className="grid lg:grid-cols-2 gap-8 items-center">
               <Skeleton className="aspect-video rounded-2xl" />
@@ -127,32 +134,42 @@ const Media = () => {
               </div>
             </div>
           ) : featuredArticle ? (
-            <div className="grid lg:grid-cols-2 gap-8 items-center">
-              <Link 
+            <div className="grid lg:grid-cols-2 gap-8 items-start animate-fade-up">
+              <Link
                 to={`/media/articles/${featuredArticle.slug}`}
-                className="relative rounded-2xl overflow-hidden aspect-video animate-fade-up group"
+                className="group relative rounded-2xl overflow-hidden border border-border bg-card hover:border-primary/25 transition-all duration-300"
               >
-                <img
-                  src={featuredArticle.featured_image}
-                  alt={featuredArticle.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground">
-                  Featured
-                </Badge>
+                <div className="relative aspect-video overflow-hidden">
+                  <img
+                    src={featuredArticle.featured_image}
+                    alt={featuredArticle.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent pointer-events-none" />
+                </div>
               </Link>
+
               <div className="animate-fade-up animation-delay-100">
-                <Badge variant="outline" className="mb-4">
+                <span
+                  className="px-3 py-1 text-xs font-semibold rounded-full inline-block mb-4"
+                  style={{
+                    background: typeColors[featuredArticle.category.name]?.bg || "hsl(var(--primary) / 0.15)",
+                    color: typeColors[featuredArticle.category.name]?.text || "hsl(var(--primary))",
+                    border: `1px solid ${typeColors[featuredArticle.category.name]?.border || "hsl(var(--primary) / 0.25)"}`,
+                  }}
+                >
                   {featuredArticle.category.name}
-                </Badge>
-                <h2 className="heading-section text-foreground mb-4">
+                </span>
+
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground leading-[1.1] mb-6">
                   {featuredArticle.title}
                 </h2>
-                <p className="text-muted-foreground mb-6">
+
+                <p className="text-muted-foreground leading-relaxed mb-6">
                   {featuredArticle.summary}
                 </p>
-                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+
+                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-8">
                   <span>{formatDistanceToNow(new Date(featuredArticle.published_at), { addSuffix: true })}</span>
                   <span>•</span>
                   <span className="flex items-center gap-1">
@@ -160,10 +177,11 @@ const Media = () => {
                     {featuredArticle.read_time} min read
                   </span>
                 </div>
-                <Button variant="default" asChild>
+
+                <Button variant="default" size="lg" className="group shadow-primary" asChild>
                   <Link to={`/media/articles/${featuredArticle.slug}`}>
                     Read Article
-                    <ArrowRight className="w-4 h-4 ml-2" />
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </Link>
                 </Button>
               </div>
@@ -172,24 +190,34 @@ const Media = () => {
         </div>
       </section>
 
-      {/* Latest Articles */}
-      <section className="py-12">
+      {/* ── Latest Articles ──────────────────────────────────────────────── */}
+      <section className="py-28 md:py-36 bg-muted/30">
         <div className="container mx-auto px-6">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="heading-subsection text-foreground">Latest Articles</h2>
-            <Button variant="ghost" asChild>
-              <Link to="/media/articles">
-                View All
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
-            </Button>
+
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
+            <div>
+              <p className="line-accent">Articles</p>
+            </div>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
+                Deep Dives and{" "}
+                <span className="font-display italic text-gradient-primary">Analysis.</span>
+              </h2>
+              <Button variant="outline" size="lg" className="group flex-shrink-0" asChild>
+                <Link to="/media/articles">
+                  View All
+                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </Link>
+              </Button>
+            </div>
           </div>
+
           {isLoadingArticles ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="bg-card rounded-xl overflow-hidden">
+                <div key={i} className="bg-card rounded-2xl overflow-hidden border border-border">
                   <Skeleton className="aspect-[16/10] w-full" />
-                  <div className="p-5 space-y-3">
+                  <div className="p-6 space-y-3">
                     <Skeleton className="h-4 w-20" />
                     <Skeleton className="h-5 w-full" />
                     <Skeleton className="h-4 w-3/4" />
@@ -198,7 +226,7 @@ const Media = () => {
               ))}
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {articlesData?.articles.slice(0, 4).map((article, index) => (
                 <div
                   key={article.id}
@@ -213,85 +241,114 @@ const Media = () => {
         </div>
       </section>
 
-      {/* Videos */}
-      <section className="py-12 bg-muted/30">
+      {/* ── Videos ───────────────────────────────────────────────────────── */}
+      <section className="py-28 md:py-36 bg-background">
         <div className="container mx-auto px-6">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-destructive/10 flex items-center justify-center">
-                <Youtube className="w-5 h-5 text-destructive" />
-              </div>
-              <h2 className="heading-subsection text-foreground">Video Content</h2>
+
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
+            <div>
+              <p className="line-accent">Video</p>
             </div>
-            <Button variant="ghost">
-              View Channel
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
+                Watch Our{" "}
+                <span className="font-display italic text-gradient-primary">Latest Videos.</span>
+              </h2>
+              <Button variant="outline" size="lg" className="group flex-shrink-0" asChild>
+                <a href="#" target="_blank" rel="noopener noreferrer">
+                  Visit Channel
+                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </a>
+              </Button>
+            </div>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {videos.map((video, index) => (
               <div
                 key={video.title}
-                className="group cursor-pointer animate-fade-up"
+                className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/25 hover:shadow-card-hover transition-all duration-300 cursor-pointer animate-fade-up"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="relative rounded-xl overflow-hidden aspect-video mb-4">
+                <div className="relative aspect-video overflow-hidden">
                   <img
                     src={video.thumbnail}
                     alt={video.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-14 h-14 rounded-full bg-background flex items-center justify-center">
-                      <Play className="w-6 h-6 text-foreground fill-current ml-1" />
+
+                  {/* Play button overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors duration-300">
+                    <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
+                      <Play className="w-6 h-6 text-primary-foreground ml-0.5" />
                     </div>
                   </div>
-                  <span className="absolute bottom-2 right-2 px-2 py-1 bg-charcoal text-primary-foreground text-xs rounded">
+
+                  {/* Duration badge */}
+                  <span className="absolute bottom-3 right-3 px-3 py-1 text-xs font-medium rounded-full bg-foreground/50 text-background backdrop-blur-sm">
                     {video.duration}
                   </span>
                 </div>
-                <h3 className="heading-label text-foreground group-hover:text-primary transition-colors">
-                  {video.title}
-                </h3>
-                <p className="text-sm text-muted-foreground">{video.views}</p>
+
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                    {video.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm">{video.views}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Podcasts */}
-      <section className="py-12">
+      {/* ── Podcasts ─────────────────────────────────────────────────────── */}
+      <section className="py-28 md:py-36 bg-muted/30">
         <div className="container mx-auto px-6">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Mic className="w-5 h-5 text-primary" />
-              </div>
-              <h2 className="heading-subsection text-foreground">The Afrisinc Podcast</h2>
+
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
+            <div>
+              <p className="line-accent">Podcast</p>
             </div>
-            <Button variant="ghost">
-              All Episodes
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
+                The Afrisinc{" "}
+                <span className="font-display italic text-gradient-primary">Podcast.</span>
+              </h2>
+              <Button variant="outline" size="lg" className="group flex-shrink-0" asChild>
+                <a href="#" target="_blank" rel="noopener noreferrer">
+                  All Episodes
+                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                </a>
+              </Button>
+            </div>
           </div>
-          <div className="space-y-4">
+
+          <div className="divide-y divide-border">
             {podcasts.map((podcast, index) => (
               <div
                 key={podcast.episode}
-                className="group flex items-center gap-6 bg-card rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all cursor-pointer animate-fade-up"
+                className="group relative flex gap-8 py-8 hover:bg-background/50 -mx-4 px-4 transition-all duration-300 rounded-xl animate-fade-up"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                  <Play className="w-6 h-6 text-primary" />
+                {/* Left accent bar */}
+                <div className="absolute left-0 top-3 bottom-3 w-[3px] scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-center rounded-full bg-primary" />
+
+                {/* Play icon */}
+                <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
+                  <Play className="w-5 h-5 text-primary ml-0.5" />
                 </div>
+
+                {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="heading-label text-foreground group-hover:text-primary transition-colors">
+                  <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
                     {podcast.episode}
                   </h3>
-                  <p className="text-sm text-muted-foreground">{podcast.guest}</p>
+                  <p className="text-muted-foreground text-sm">{podcast.guest}</p>
                 </div>
-                <div className="text-sm text-muted-foreground hidden sm:block">
+
+                {/* Duration — right side on desktop */}
+                <div className="text-sm font-medium text-muted-foreground whitespace-nowrap hidden sm:block">
                   {podcast.duration}
                 </div>
               </div>
@@ -300,27 +357,50 @@ const Media = () => {
         </div>
       </section>
 
-      {/* Newsletter CTA */}
-      <section className="py-20 bg-charcoal">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="heading-section mb-4 text-primary-foreground">
-            Stay Updated
-          </h2>
-          <p className="text-primary-foreground/70 max-w-xl mx-auto mb-8">
-            Get the latest insights, news, and updates delivered directly to your inbox.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg bg-background/10 border border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <Button variant="default" size="lg">
-              Subscribe
-            </Button>
+      {/* ── Newsletter CTA ───────────────────────────────────────────────── */}
+      <section className="py-28 md:py-36 bg-foreground text-background grain relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 kente-border opacity-55" />
+
+        <div className="container mx-auto px-6 relative z-10">
+
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-background/10">
+            <div>
+              <p className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-background/40 before:block before:w-6 before:h-px before:bg-background/40 before:flex-shrink-0">
+                Stay Updated
+              </p>
+            </div>
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-background leading-[1.0]">
+                Get the Latest{" "}
+                <span className="font-display italic text-gradient-primary">Insights.</span>
+              </h2>
+            </div>
           </div>
+
+          <p className="text-background/50 text-sm leading-relaxed max-w-sm mb-8">
+            Delivered directly to your inbox. News, analysis, and stories from Afrisinc.
+          </p>
+
+          <form className="flex flex-col sm:flex-row gap-3 max-w-md">
+            <Input
+              type="email"
+              placeholder="your@email.com"
+              className="h-12 bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40"
+            />
+            <Button
+              type="submit"
+              variant="default"
+              size="lg"
+              className="group shadow-primary flex-shrink-0"
+            >
+              Subscribe
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </form>
+
         </div>
       </section>
+
     </PublicLayout>
   );
 };

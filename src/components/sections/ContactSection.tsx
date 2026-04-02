@@ -2,149 +2,164 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight, Mail, Globe, Phone } from "lucide-react";
 
-const contactInfo = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: "hello@afrisinc.com",
-  },
-  {
-    icon: MapPin,
-    label: "Global Presence",
-    value: "Africa • Europe • Americas",
-  },
-  {
-    icon: Phone,
-    label: "Phone",
-    value: "+1 (555) 123-4567",
-  },
+const contactMeta = [
+  { label: "Email",           value: "hello@afrisinc.com",       href: "mailto:hello@afrisinc.com", icon: Mail  },
+  { label: "Global Presence", value: "Africa · Europe · Americas", href: null,                       icon: Globe },
+  // { label: "Phone",           value: "+1 (555) 123-4567",         href: "tel:+15551234567",          icon: Phone },
+];
+
+const socials = [
+  { name: "Twitter",   href: "#" },
+  { name: "LinkedIn",  href: "#" },
+  { name: "YouTube",   href: "#" },
+  { name: "Instagram", href: "#" },
 ];
 
 export const ContactSection = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
     console.log("Form submitted:", formData);
   };
 
   return (
-    <section id="contact" className="py-24 md:py-32 bg-muted/30 relative">
+    <section id="contact" className="py-28 md:py-36 bg-background">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16">
-          {/* Left - Contact Info */}
+
+        {/* Header */}
+        <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
           <div>
-            <span className="text-primary font-semibold text-sm uppercase tracking-widest mb-4 block">
-              Get In Touch
-            </span>
-            <h2 className="heading-section text-foreground mb-6">
-              Let's Build
-              <span className="text-gradient-primary block">Something Great</span>
+            <p className="line-accent">Get In Touch</p>
+          </div>
+          <div>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
+              We Read{" "}
+              <span className="font-display italic text-gradient-primary">
+                Every Message.
+              </span>
             </h2>
-            <p className="text-muted-foreground text-subtitle mb-10">
-              Whether you have a question, a proposal, or just want to say hello, 
-              we'd love to hear from you. Reach out and let's start a conversation.
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-[5fr_7fr] gap-10 lg:gap-16">
+
+          {/* Left — contact info */}
+          <div className="space-y-10">
+            <p className="text-muted-foreground leading-relaxed text-sm">
+              A question, a half-formed idea, or a proper proposal — send it over.
+              We respond to every message within 24 hours.
             </p>
 
-            {/* Contact Details */}
-            <div className="space-y-6">
-              {contactInfo.map((info) => (
-                <div key={info.label} className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <info.icon className="w-5 h-5 text-primary" />
+            <div className="space-y-5">
+              {contactMeta.map((info) => (
+                <div key={info.label} className="flex items-start gap-4">
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
+                    style={{
+                      background: "hsl(var(--terra) / 0.08)",
+                      border: "1px solid hsl(var(--terra) / 0.18)",
+                    }}
+                  >
+                    <info.icon className="w-4 h-4" style={{ color: "hsl(var(--terra))" }} />
                   </div>
                   <div>
-                    <div className="text-sm text-muted-foreground">{info.label}</div>
-                    <div className="text-foreground font-medium">{info.value}</div>
+                    <span className="block text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-0.5">
+                      {info.label}
+                    </span>
+                    {info.href ? (
+                      <a
+                        href={info.href}
+                        className="text-foreground font-medium text-sm hover:text-primary transition-colors duration-200"
+                      >
+                        {info.value}
+                      </a>
+                    ) : (
+                      <span className="text-foreground font-medium text-sm">{info.value}</span>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Social Links */}
-            <div className="mt-10 pt-10 border-t border-border">
-              <p className="text-sm text-muted-foreground mb-4">Follow us</p>
-              <div className="flex gap-4">
-                {["Twitter", "LinkedIn", "YouTube", "Instagram"].map((social) => (
+            {/* Kente decorative strip */}
+            <div className="kente-border rounded-full overflow-hidden opacity-65" />
+
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-4">Follow</p>
+              <div className="flex flex-wrap gap-2.5">
+                {socials.map((social) => (
                   <a
-                    key={social}
-                    href="#"
-                    className="px-4 py-2 rounded-lg bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
+                    key={social.name}
+                    href={social.href}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-border text-xs font-semibold text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all duration-200"
                   >
-                    {social}
+                    {social.name}
+                    <ArrowUpRight className="w-3 h-3" />
                   </a>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Right - Contact Form */}
-          <div className="bg-card rounded-2xl p-8 shadow-card border border-border/50">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">
-                    Name
-                  </label>
-                  <Input
-                    placeholder="Your name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="h-12 rounded-xl"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-foreground mb-2 block">
-                    Email
-                  </label>
-                  <Input
-                    type="email"
-                    placeholder="you@example.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="h-12 rounded-xl"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-foreground mb-2 block">
-                  Subject
-                </label>
+          {/* Right — form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">Name</label>
                 <Input
-                  placeholder="How can we help?"
-                  value={formData.subject}
-                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  className="h-12 rounded-xl"
+                  placeholder="Your name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="h-12 bg-muted/30 border-border/60 focus:border-primary/40 transition-colors"
                 />
               </div>
-
-              <div>
-                <label className="text-sm font-medium text-foreground mb-2 block">
-                  Message
-                </label>
-                <Textarea
-                  placeholder="Tell us more about your inquiry..."
-                  rows={5}
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="rounded-xl resize-none"
+              <div className="space-y-1.5">
+                <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">Email</label>
+                <Input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="h-12 bg-muted/30 border-border/60 focus:border-primary/40 transition-colors"
                 />
               </div>
+            </div>
 
-              <Button variant="default" size="lg" className="w-full">
-                Send Message
-              </Button>
-            </form>
-          </div>
+            <div className="space-y-1.5">
+              <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">Subject</label>
+              <Input
+                placeholder="What's on your mind?"
+                value={formData.subject}
+                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                className="h-12 bg-muted/30 border-border/60 focus:border-primary/40 transition-colors"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">Message</label>
+              <Textarea
+                placeholder="Give us the details — or just say hi. We'll figure it out from there."
+                rows={6}
+                value={formData.message}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                className="bg-muted/30 border-border/60 focus:border-primary/40 resize-none transition-colors"
+              />
+            </div>
+
+            <Button
+              variant="default"
+              size="lg"
+              className="w-full group shadow-primary"
+              type="submit"
+            >
+              Send It
+              <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+            </Button>
+          </form>
+
         </div>
       </div>
     </section>
