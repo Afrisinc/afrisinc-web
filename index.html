@@ -19,6 +19,16 @@
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/afrisic-logo.png" />
+
+    <!-- Prevent flash of wrong theme (FOUT) -->
+    <script>
+      (function() {
+        var stored = localStorage.getItem('theme');
+        var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        var theme  = stored || system;
+        if (theme === 'dark') document.documentElement.classList.add('dark');
+      })();
+    </script>
   </head>
 
   <body>
