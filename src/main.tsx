@@ -7,9 +7,8 @@ loadRuntimeConfig().then(() => {
   createRoot(document.getElementById("root")!).render(
     <App />
   );
-}).catch((error) => {
-  console.error("Failed to load runtime configuration:", error);
-  // Still render the app, but log the error
+}).catch(() => {
+  // Still render the app even if config fails to load
   // Configuration will fall back to build-time env vars
   createRoot(document.getElementById("root")!).render(
     <App />

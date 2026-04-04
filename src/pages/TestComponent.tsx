@@ -104,7 +104,6 @@ export default function TestComponent() {
 
   const handleExport = (format: "csv" | "excel" | "pdf") => {
     toast.success(`Exporting ${total} records as ${format.toUpperCase()}`);
-    console.log("Export data:", { format, query, data });
   };
 
   const handleRowClick = (user: TestUser) => {

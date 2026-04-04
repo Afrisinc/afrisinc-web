@@ -31,6 +31,9 @@ jobs:
         run: |
           docker build \
             --build-arg VITE_API_URL=${{ secrets.VITE_API_URL }} \
+            --build-arg VITE_NOTIFY_URL=${{ secrets.VITE_NOTIFY_URL }} \
+            --build-arg VITE_NOTIFY_APP_ID=${{ secrets.VITE_NOTIFY_APP_ID }} \
+
             -t ghcr.io/${{ secrets.GHCR_OWNER }}/afrisinc-web:latest .
 
       # Step 4: Push Docker image to GHCR

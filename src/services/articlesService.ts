@@ -96,16 +96,6 @@ async function mapBackendArticle(backendArticle: any): Promise<Article> {
     ? backendArticle.image_url.trim()
     : placeholderImage;
 
-  // Debug logging
-  console.log('[Article Mapping]', {
-    title: backendArticle.source_headline,
-    category: parsedCategories,
-    hasValidImageUrl: isValidImageUrl(backendArticle.image_url),
-    imageUrl: backendArticle.image_url,
-    placeholderImage,
-    featuredImage,
-    is_featured: backendArticle.is_featured
-  });
 
   return {
     id: backendArticle.id,
@@ -182,7 +172,6 @@ export async function fetchArticles(filters: ArticleFilters = {}): Promise<Artic
       total_pages: data.data?.pagination?.totalPages || 0,
     };
   } catch (error) {
-    console.error('[Articles API] Error fetching articles:', error);
     throw error;
   }
 }
@@ -231,8 +220,8 @@ export async function fetchArticlesByCategory(
       per_page: data.data?.pagination?.limit || limit,
       total_pages: data.data?.pagination?.totalPages || 0,
     };
-  } catch (error) {
-    console.error('[Articles API] Error fetching articles by category:', error);
+  } catch {
+    // Error Error fetching articles by category:', error);
     throw error;
   }
 }
@@ -262,8 +251,8 @@ export async function fetchArticleById(id: string): Promise<Article | null> {
 
     const data = await response.json();
     return mapBackendArticle(data.data);
-  } catch (error) {
-    console.error('[Articles API] Error fetching article by ID:', error);
+  } catch {
+    // Error Error fetching article by ID:', error);
     throw error;
   }
 }
@@ -330,8 +319,8 @@ export async function fetchCategories(): Promise<ArticleCategory[]> {
 
     categoriesCache = Array.from(categoryMap.values());
     return categoriesCache;
-  } catch (error) {
-    console.error('[Articles API] Error fetching categories:', error);
+  } catch {
+    // Error Error fetching categories:', error);
     // Return empty array as fallback
     return [];
   }
@@ -346,8 +335,8 @@ export async function fetchFeaturedArticle(): Promise<Article | null> {
 
     const featured = response.articles.find(a => a.is_featured);
     return featured || response.articles[0] || null;
-  } catch (error) {
-    console.error('[Articles API] Error fetching featured article:', error);
+  } catch {
+    // Error Error fetching featured article:', error);
     return null;
   }
 }

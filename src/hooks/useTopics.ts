@@ -65,7 +65,6 @@ export const useTopics = () => {
           .order("name");
 
         if (error) {
-          console.warn("Failed to fetch topics from database, using defaults:", error);
           return DEFAULT_TOPICS;
         }
 
@@ -75,8 +74,7 @@ export const useTopics = () => {
         }
 
         return data as Topic[];
-      } catch (error) {
-        console.warn("Error fetching topics, using defaults:", error);
+      } catch {
         return DEFAULT_TOPICS;
       }
     },

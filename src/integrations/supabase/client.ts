@@ -21,7 +21,6 @@ if (SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY) {
   });
 } else {
   // Create a stub client that won't be used - prevents errors
-  console.warn('Supabase credentials not configured. Using custom API backend.');
   supabase = createClient<Database>('https://stub.supabase.co', 'stub-key', {
     auth: {
       storage: localStorage,

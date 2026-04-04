@@ -51,8 +51,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(JSON.parse(storedUser));
           setToken(storedToken);
         }
-      } catch (error) {
-        console.error("Failed to parse stored user data", error);
+      } catch {
+        // Failed to parse stored user data
       }
     }
 

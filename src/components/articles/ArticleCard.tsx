@@ -94,8 +94,8 @@ export function ArticleCard({ article, variant = "default" }: ArticleCardProps) 
         {/* Content */}
         <div className="p-5 flex flex-col flex-1">
           <div className="flex flex-wrap gap-1.5 mb-3">
-            {categories.map((cat) => (
-              <Badge key={cat} variant="outline" className="text-xs font-medium bg-primary/5 text-primary border-primary/30">
+            {categories.map((cat, idx) => (
+              <Badge key={`${article.id}-${idx}-${cat}`} variant="outline" className="text-xs font-medium bg-primary/5 text-primary border-primary/30">
                 {cat}
               </Badge>
             ))}

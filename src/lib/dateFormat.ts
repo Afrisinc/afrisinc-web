@@ -37,8 +37,7 @@ export const formatDateProfessional = (
       default:
         return formatRelativeTime(dateObj);
     }
-  } catch (error) {
-    console.error("Error formatting date:", error);
+  } catch {
     return "Invalid date";
   }
 };
@@ -106,8 +105,7 @@ export const formatDateShort = (date: string | Date): string => {
     }
 
     return format(dateObj, "MMM d");
-  } catch (error) {
-    console.error("Error formatting date:", error);
+  } catch {
     return "—";
   }
 };
@@ -125,8 +123,7 @@ export const formatDateDetailed = (date: string | Date): string => {
     }
 
     return format(dateObj, "EEEE, MMMM d, yyyy 'at' h:mm:ss a");
-  } catch (error) {
-    console.error("Error formatting date:", error);
+  } catch {
     return "Invalid date";
   }
 };

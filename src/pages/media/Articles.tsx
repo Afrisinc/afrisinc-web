@@ -11,23 +11,49 @@ import { ArticlePagination } from "@/components/articles/ArticlePagination";
 import { AggregatedDisclaimer } from "@/components/articles/AggregatedDisclaimer";
 import { useArticles, useFeaturedArticle } from "@/hooks/useArticles";
 import type { ArticleFilters } from "@/types/article";
-import { 
-  FileText, 
+import {
+  FileText,
   ArrowLeft,
   LayoutGrid,
   LayoutList
 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { subscribeNewsletter } from "@/services/notifyService";
 
 const ArticlesPage = () => {
+  const { toast } = useToast();
   const [filters, setFilters] = useState<ArticleFilters>({ page: 1, per_page: 9 });
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
   const { data: articlesData, isLoading: isLoadingArticles } = useArticles(filters);
   const { data: featuredArticle, isLoading: isLoadingFeatured } = useFeaturedArticle();
-  
+
   const handlePageChange = (page: number) => {
     setFilters(prev => ({ ...prev, page }));
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubscribing(true);
+    try {
+      await subscribeNewsletter(email);
+      toast({
+        title: "You're subscribed!",
+        description: "Thank you for subscribing.",
+      });
+      setEmail("");
+    } catch {
+      toast({
+        title: "Failed to subscribe",
+        description: "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubscribing(false);
+    }
   };
 
   return (
@@ -156,16 +182,25 @@ const ArticlesPage = () => {
           <p className="text-white/70 max-w-xl mx-auto mb-8 text-base md:text-lg leading-relaxed">
             Get the latest articles, insights, and analysis delivered directly to your inbox.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <input
               type="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
               className="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-primary text-base"
             />
-            <Button variant="default" size="lg" className="font-medium">
-              Subscribe
+            <Button
+              variant="default"
+              size="lg"
+              className="font-medium"
+              type="submit"
+              disabled={isSubscribing}
+            >
+              {isSubscribing ? "Subscribing..." : "Subscribe"}
             </Button>
-          </div>
+          </form>
         </div>
       </section>
     </PublicLayout>

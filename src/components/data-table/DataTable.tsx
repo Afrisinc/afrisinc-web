@@ -85,7 +85,6 @@ export function DataTable<T extends Record<string, any>>({
   const handleExport = async (format: "csv" | "excel" | "pdf") => {
     // This should be implemented by the parent component
     // You can expose an onExport prop if needed
-    console.log(`Exporting as ${format} with query:`, query);
   };
 
   const totalPages = Math.ceil(total / query.limit);

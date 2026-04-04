@@ -28,8 +28,8 @@ export const decodeUserToken = (): TokenPayload => {
         try {
             const decoded: TokenPayload = jwtDecode(token);
             user = decoded;
-        } catch (error) {
-            console.error("Invalid Token", error);
+        } catch {
+            // Invalid token
         }
     }
 

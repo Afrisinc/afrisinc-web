@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { PublicLayout } from "@/components/layout/PublicLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +18,8 @@ import {
 import { useFeaturedArticle, useArticles } from "@/hooks/useArticles";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 import { formatDistanceToNow } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
+import { subscribeNewsletter } from "@/services/notifyService";
 
 const typeColors: Record<string, { bg: string; text: string; border: string }> = {
   Documentary: { bg: "hsl(22 88% 52% / 0.1)",  text: "hsl(22 82% 46%)",  border: "hsl(22 88% 52% / 0.25)" },
@@ -67,8 +70,32 @@ const podcasts = [
 ];
 
 const Media = () => {
+  const { toast } = useToast();
+  const [email, setEmail] = useState("");
+  const [isSubscribing, setIsSubscribing] = useState(false);
   const { data: featuredArticle, isLoading: isLoadingFeatured } = useFeaturedArticle();
   const { data: articlesData, isLoading: isLoadingArticles } = useArticles({ per_page: 4 });
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubscribing(true);
+    try {
+      await subscribeNewsletter(email);
+      toast({
+        title: "You're subscribed!",
+        description: "Thank you for subscribing.",
+      });
+      setEmail("");
+    } catch {
+      toast({
+        title: "Failed to subscribe",
+        description: "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
 
   return (
     <PublicLayout>
@@ -381,10 +408,13 @@ const Media = () => {
             Delivered directly to your inbox. News, analysis, and stories from Afrisinc.
           </p>
 
-          <form className="flex flex-col sm:flex-row gap-3 max-w-md">
+          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md">
             <Input
               type="email"
               placeholder="your@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
               className="h-12 bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40"
             />
             <Button
@@ -392,8 +422,9 @@ const Media = () => {
               variant="default"
               size="lg"
               className="group shadow-primary flex-shrink-0"
+              disabled={isSubscribing}
             >
-              Subscribe
+              {isSubscribing ? "Subscribing..." : "Subscribe"}
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </form>

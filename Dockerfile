@@ -16,7 +16,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Build the Vite app with API URL
-RUN VITE_API_URL=${VITE_API_URL} pnpm build
+RUN VITE_API_URL=${VITE_API_URL} VITE_NOTIFY_URL=${VITE_NOTIFY_URL} VITE_NOTIFY_APP_ID=${VITE_NOTIFY_APP_ID} pnpm build
 
 # ---------- Serve ----------
 FROM nginx:alpine

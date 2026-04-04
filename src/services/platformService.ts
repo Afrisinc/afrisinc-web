@@ -46,7 +46,6 @@ export async function fetchPlatformOverview(): Promise<PlatformOverview> {
       ],
     };
   } catch (error) {
-    console.error("[Platform API] Error fetching platform overview:", error);
     throw error;
   }
 }
@@ -105,8 +104,8 @@ export async function fetchPlatformUsers(params: {
         total: pagination.totalItems,
       },
     };
-  } catch (error) {
-    console.error("[Platform API] Error fetching users:", error);
+  } catch {
+    // Error Error fetching users:", error);
     throw error;
   }
 }
@@ -128,8 +127,8 @@ export async function fetchPlatformUserAccounts(user_id: string): Promise<UserAc
         products: (account.products as AccountProduct[]) || [],
       })),
     };
-  } catch (error) {
-    console.error("[Platform API] Error fetching user accounts:", error);
+  } catch {
+    // Error Error fetching user accounts:", error);
     throw error;
   }
 }
@@ -203,8 +202,8 @@ export async function fetchPlatformAccounts(params: {
         total: pagination.totalItems,
       },
     };
-  } catch (error) {
-    console.error("[Platform API] Error fetching accounts:", error);
+  } catch {
+    // Error Error fetching accounts:", error);
     throw error;
   }
 }
@@ -231,8 +230,8 @@ export async function enrollAccountInProduct(
       status: data.data.status,
       plan: data.data.plan,
     };
-  } catch (error) {
-    console.error("[Platform API] Error enrolling account in product:", error);
+  } catch {
+    // Error Error enrolling account in product:", error);
     throw error;
   }
 }
@@ -281,8 +280,8 @@ export async function fetchPlatformOrganizations(params: {
         total: pagination.totalItems,
       },
     };
-  } catch (error) {
-    console.error("[Platform API] Error fetching organizations:", error);
+  } catch {
+    // Error Error fetching organizations:", error);
     throw error;
   }
 }
@@ -311,8 +310,8 @@ export async function fetchPlatformOrganizationDetails(
       createdAt: data.data.createdAt,
       updatedAt: data.data.updatedAt,
     };
-  } catch (error) {
-    console.error("[Platform API] Error fetching organization details:", error);
+  } catch {
+    // Error Error fetching organization details:", error);
     throw error;
   }
 }
@@ -339,8 +338,8 @@ export async function createPlatformOrganization(organizationData: {
       account_id: data.data.account_id,
       name: data.data.name,
     };
-  } catch (error) {
-    console.error("[Platform API] Error creating organization:", error);
+  } catch {
+    // Error Error creating organization:", error);
     throw error;
   }
 }
@@ -381,8 +380,8 @@ export async function updatePlatformOrganization(
       createdAt: data.data.createdAt,
       updatedAt: data.data.updatedAt,
     };
-  } catch (error) {
-    console.error("[Platform API] Error updating organization:", error);
+  } catch {
+    // Error Error updating organization:", error);
     throw error;
   }
 }
@@ -411,8 +410,8 @@ export async function fetchPlatformOrganizationMembers(
     }));
 
     return { members };
-  } catch (error) {
-    console.error("[Platform API] Error fetching organization members:", error);
+  } catch {
+    // Error Error fetching organization members:", error);
     throw error;
   }
 }
@@ -433,8 +432,8 @@ export async function addPlatformOrganizationMember(
     }
 
     return data.data;
-  } catch (error) {
-    console.error("[Platform API] Error adding organization member:", error);
+  } catch {
+    // Error Error adding organization member:", error);
     throw error;
   }
 }
@@ -452,8 +451,8 @@ export async function removePlatformOrganizationMember(
     if (!data.success) {
       throw new Error("Invalid API response format");
     }
-  } catch (error) {
-    console.error("[Platform API] Error removing organization member:", error);
+  } catch {
+    // Error Error removing organization member:", error);
     throw error;
   }
 }
@@ -481,8 +480,8 @@ export async function fetchProductEnrollments(): Promise<ProductEnrollment[]> {
     }));
 
     return products;
-  } catch (error) {
-    console.error("[Platform API] Error fetching product enrollments:", error);
+  } catch {
+    // Error Error fetching product enrollments:", error);
     throw error;
   }
 }
@@ -522,8 +521,8 @@ export async function fetchProductAccounts(productId: string): Promise<PlatformA
     });
 
     return accounts;
-  } catch (error) {
-    console.error("[Platform API] Error fetching product accounts:", error);
+  } catch {
+    // Error Error fetching product accounts:", error);
     throw error;
   }
 }
@@ -549,8 +548,8 @@ export async function createProduct(productData: {
       createdAt: String(data.data.createdAt || ''),
       updatedAt: String(data.data.updatedAt || ''),
     };
-  } catch (error) {
-    console.error("[Platform API] Error creating product:", error);
+  } catch {
+    // Error Error creating product:", error);
     throw error;
   }
 }
@@ -605,8 +604,8 @@ export async function fetchGrowthData(range: "7d" | "30d" | "90d"): Promise<Grow
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     return growthData;
-  } catch (error) {
-    console.error("[Platform API] Error fetching growth data:", error);
+  } catch {
+    // Error Error fetching growth data:", error);
     throw error;
   }
 }
@@ -639,8 +638,8 @@ export async function fetchSecurityOverview(): Promise<SecurityOverview> {
         })
       ),
     };
-  } catch (error) {
-    console.error("[Platform API] Error fetching security overview:", error);
+  } catch {
+    // Error Error fetching security overview:", error);
     throw error;
   }
 }
@@ -652,8 +651,8 @@ export async function suspendUser(userId: string): Promise<void> {
     if (!data.success) {
       throw new Error("Failed to suspend user");
     }
-  } catch (error) {
-    console.error("[Platform API] Error suspending user:", error);
+  } catch {
+    // Error Error suspending user:", error);
     throw error;
   }
 }
@@ -665,8 +664,8 @@ export async function reactivateUser(userId: string): Promise<void> {
     if (!data.success) {
       throw new Error("Failed to reactivate user");
     }
-  } catch (error) {
-    console.error("[Platform API] Error reactivating user:", error);
+  } catch {
+    // Error Error reactivating user:", error);
     throw error;
   }
 }
@@ -678,8 +677,8 @@ export async function suspendAccount(accountId: string): Promise<void> {
     if (!data.success) {
       throw new Error("Failed to suspend account");
     }
-  } catch (error) {
-    console.error("[Platform API] Error suspending account:", error);
+  } catch {
+    // Error Error suspending account:", error);
     throw error;
   }
 }
@@ -713,8 +712,8 @@ export async function LoginEvents(params?: QueryParams): Promise<PaginatedRespon
         total: pagination.total,
       },
     };
-  } catch (error) {
-    console.error("[Platform API] Error fetching login events:", error);
+  } catch {
+    // Error Error fetching login events:", error);
     throw error;
   }
 }

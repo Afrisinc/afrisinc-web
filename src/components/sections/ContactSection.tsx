@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowUpRight, Mail, Globe, Phone } from "lucide-react";
+import { ArrowUpRight, Mail, Globe } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { submitContactForm } from "@/services/notifyService";
 
 const contactMeta = [
   { label: "Email",           value: "hello@afrisinc.com",       href: "mailto:hello@afrisinc.com", icon: Mail  },
@@ -18,11 +20,34 @@ const socials = [
 ];
 
 export const ContactSection = () => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setIsSubmitting(true);
+    try {
+      await submitContactForm({
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+      });
+      toast({
+        title: "Message Sent!",
+        description: "We'll get back to you within 24 hours.",
+      });
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch {
+      toast({
+        title: "Something went wrong",
+        description: "Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -154,8 +179,9 @@ export const ContactSection = () => {
               size="lg"
               className="w-full group shadow-primary"
               type="submit"
+              disabled={isSubmitting}
             >
-              Send It
+              {isSubmitting ? "Sending..." : "Send It"}
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
             </Button>
           </form>

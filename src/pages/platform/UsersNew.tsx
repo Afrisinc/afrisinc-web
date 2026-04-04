@@ -56,7 +56,6 @@ export default function UsersNew() {
     // Implement export logic here
     // This should call an API endpoint with current query params
     toast.success(`Exporting as ${format.toUpperCase()}...`);
-    console.log("Export params:", { format, query });
   };
 
   // Define columns

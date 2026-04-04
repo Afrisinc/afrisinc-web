@@ -11,7 +11,6 @@ const Callback = () => {
   useEffect(() => {
     const exchangeCodeForToken = async () => {
       const code = searchParams.get("code");
-      console.log("Received authorization code:", code);
 
       if (!code) {
         toast({
@@ -35,7 +34,6 @@ const Callback = () => {
 
         if (!response.ok) {
           const errorData = await response.json();
-          console.error("OAuth exchange error:", errorData);
           toast({
             title: "Authorization Failed",
             description: errorData.resp_msg || "Failed to exchange code for token.",
@@ -73,7 +71,6 @@ const Callback = () => {
           // Redirect to dashboard with full page reload to update AuthContext
           window.location.href = "/dashboard";
         } else {
-          console.error("OAuth exchange response error:", data);
           toast({
             title: "Authorization Failed",
             description: data.resp_msg || "Failed to exchange code for token.",
@@ -82,7 +79,6 @@ const Callback = () => {
           navigate("/login");
         }
       } catch (error) {
-        console.error("OAuth exchange exception:", error);
         toast({
           title: "Authorization Failed",
           description:
