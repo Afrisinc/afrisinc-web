@@ -77,7 +77,7 @@ const CreatePostForm = () => {
 
   return (
     <Card className="border-border/50 overflow-hidden shadow-lg">
-      <div className="h-1 bg-gradient-to-r from-primary via-primary-300 to-primary" />
+      <div className="h-1 bg-primary" />
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-2">
           <div className="p-2 rounded-lg bg-primary/10">

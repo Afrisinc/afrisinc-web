@@ -53,8 +53,8 @@ const DashboardNotifications = () => {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold">Notifications Product</h1>
-        <p className="text-muted-foreground">Monitor and manage notification analytics and security events</p>
+        <h1 className="heading-section">Notifications Product</h1>
+        <p className="text-secondary">Monitor and manage notification analytics and security events</p>
       </div>
 
       {/* Analytics Overview */}

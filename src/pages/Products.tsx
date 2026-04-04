@@ -23,83 +23,83 @@ const accentColors = {
 };
 
 const products = [
-  {
-    icon: Globe,
-    name: "Afrisinc Commerce",
-    tagline: "Complete e-commerce platform",
-    description: "Full-featured e-commerce solution with payment processing, inventory management, and analytics built for African markets.",
-    status: "Live",
-    pricing: "From $49/month",
-    features: [
-      "Multi-currency support",
-      "Local payment gateways",
-      "Inventory management",
-      "Order tracking",
-      "Analytics dashboard",
-      "Mobile-first design",
-    ],
-    accent: "terra",
-  },
-  {
-    icon: MessageSquare,
-    name: "Afrisinc Connect",
-    tagline: "Customer engagement platform",
-    description: "Unified communication platform for businesses to engage with customers across WhatsApp, SMS, email, and social media.",
-    status: "Live",
-    pricing: "From $29/month",
-    features: [
-      "Omnichannel messaging",
-      "AI-powered chatbots",
-      "Campaign management",
-      "Customer analytics",
-      "Team collaboration",
-      "API integrations",
-    ],
-    accent: "indigo",
-  },
-  {
-    icon: CreditCard,
-    name: "Afrisinc Pay",
-    tagline: "Payment infrastructure",
-    description: "Accept payments from anywhere in Africa with support for mobile money, cards, bank transfers, and crypto.",
-    status: "Beta",
-    pricing: "2.5% + $0.25 per transaction",
-    features: [
-      "Mobile money integration",
-      "Card processing",
-      "Bank transfers",
-      "Recurring payments",
-      "Fraud detection",
-      "Instant settlements",
-    ],
-    accent: "gold",
-  },
-  {
-    icon: Calendar,
-    name: "Afrisinc Schedule",
-    tagline: "Booking & scheduling tool",
-    description: "Smart scheduling solution for businesses. Manage appointments, meetings, and resources effortlessly.",
-    status: "Coming Soon",
-    pricing: "From $19/month",
-    features: [
-      "Online booking",
-      "Calendar sync",
-      "Automated reminders",
-      "Resource management",
-      "Customer portal",
-      "Payment collection",
-    ],
-    accent: "forest",
-  },
+  // {
+  //   icon: Globe,
+  //   name: "Afrisinc Commerce",
+  //   tagline: "Complete e-commerce platform",
+  //   description: "Full-featured e-commerce solution with payment processing, inventory management, and analytics built for African markets.",
+  //   status: "Live",
+  //   pricing: "From $49/month",
+  //   features: [
+  //     "Multi-currency support",
+  //     "Local payment gateways",
+  //     "Inventory management",
+  //     "Order tracking",
+  //     "Analytics dashboard",
+  //     "Mobile-first design",
+  //   ],
+  //   accent: "terra",
+  // },
+  // {
+  //   icon: MessageSquare,
+  //   name: "Afrisinc Connect",
+  //   tagline: "Customer engagement platform",
+  //   description: "Unified communication platform for businesses to engage with customers across WhatsApp, SMS, email, and social media.",
+  //   status: "Live",
+  //   pricing: "From $29/month",
+  //   features: [
+  //     "Omnichannel messaging",
+  //     "AI-powered chatbots",
+  //     "Campaign management",
+  //     "Customer analytics",
+  //     "Team collaboration",
+  //     "API integrations",
+  //   ],
+  //   accent: "indigo",
+  // },
+  // {
+  //   icon: CreditCard,
+  //   name: "Afrisinc Pay",
+  //   tagline: "Payment infrastructure",
+  //   description: "Accept payments from anywhere in Africa with support for mobile money, cards, bank transfers, and crypto.",
+  //   status: "Beta",
+  //   pricing: "2.5% + $0.25 per transaction",
+  //   features: [
+  //     "Mobile money integration",
+  //     "Card processing",
+  //     "Bank transfers",
+  //     "Recurring payments",
+  //     "Fraud detection",
+  //     "Instant settlements",
+  //   ],
+  //   accent: "gold",
+  // },
+  // {
+  //   icon: Calendar,
+  //   name: "Afrisinc Schedule",
+  //   tagline: "Booking & scheduling tool",
+  //   description: "Smart scheduling solution for businesses. Manage appointments, meetings, and resources effortlessly.",
+  //   status: "Coming Soon",
+  //   pricing: "From $19/month",
+  //   features: [
+  //     "Online booking",
+  //     "Calendar sync",
+  //     "Automated reminders",
+  //     "Resource management",
+  //     "Customer portal",
+  //     "Payment collection",
+  //   ],
+  //   accent: "forest",
+  // },
 ];
 
 const integrations = [
-  { name: "Stripe", logo: "💳" },
-  { name: "Flutterwave", logo: "🌊" },
-  { name: "Paystack", logo: "📦" },
-  { name: "Slack", logo: "💬" },
-  { name: "Shopify", logo: "🛒" },
-  { name: "Zapier", logo: "⚡" },
+  // { name: "Stripe", logo: "💳" },
+  // { name: "Flutterwave", logo: "🌊" },
+  // { name: "Paystack", logo: "📦" },
+  // { name: "Slack", logo: "💬" },
+  // { name: "Shopify", logo: "🛒" },
+  // { name: "Zapier", logo: "⚡" },
 ];
 
 const Products = () => {
@@ -177,14 +177,47 @@ const Products = () => {
             </div>
             <div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                Powerful Solutions{" "}
-                <span className="font-display italic text-gradient-primary">for Every Need.</span>
+                {products.length === 0 ? (
+                  <>
+                    Currently Under{" "}
+                    <span className="font-display italic text-gradient-primary">Development.</span>
+                  </>
+                ) : (
+                  <>
+                    Powerful Solutions{" "}
+                    <span className="font-display italic text-gradient-primary">for Every Need.</span>
+                  </>
+                )}
               </h2>
+              {products.length === 0 && (
+                <p className="text-lg text-muted-foreground leading-relaxed mt-6 max-w-lg">
+                  We're crafting powerful tools to solve real business challenges.
+                  Get notified when our first products launch by reaching out to our team.
+                </p>
+              )}
             </div>
           </div>
 
-          <div className="space-y-20">
-            {products.map((product, index) => {
+          {products.length === 0 ? (
+            <div className="text-center py-24">
+              <div className="mb-8">
+                <Package className="w-16 h-16 text-muted-foreground mx-auto opacity-30 mb-6" />
+              </div>
+              <h3 className="text-2xl font-bold text-foreground mb-3">Coming Soon</h3>
+              <p className="text-muted-foreground mb-8 max-w-md mx-auto">
+                We're building transformative products to empower businesses worldwide.
+                Exciting announcements are on the horizon.
+              </p>
+              <Button variant="default" size="lg" className="group shadow-primary" asChild>
+                <Link to="/contact">
+                  Get Early Access
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-20">
+              {products.map((product, index) => {
               const colors = accentColors[product.accent as keyof typeof accentColors];
               return (
                 <div
@@ -264,49 +297,52 @@ const Products = () => {
                 </div>
               );
             })}
-          </div>
+            </div>
+          )}
         </div>
       </section>
 
       {/* ── Integrations ──────────────────────────────────────────────────── */}
-      <section className="py-28 md:py-36 bg-muted/30">
-        <div className="container mx-auto px-6">
+      {integrations.length > 0 && (
+        <section className="py-28 md:py-36 bg-muted/30">
+          <div className="container mx-auto px-6">
 
-          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
-            <div>
-              <p className="line-accent">Integrations</p>
-            </div>
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                Seamless{" "}
-                <span className="font-display italic text-gradient-primary">Connections.</span>
-              </h2>
-            </div>
-          </div>
-
-          <p className="text-muted-foreground leading-relaxed max-w-xl mb-12">
-            Connect with the tools you already use. Our products integrate with popular platforms
-            to streamline your workflow.
-          </p>
-
-          <div className="flex flex-wrap gap-4">
-            {integrations.map((integration, index) => (
-              <div
-                key={integration.name}
-                className="flex items-center gap-3 px-5 py-3 rounded-full border border-border bg-card hover:border-primary/30 hover:shadow-card-hover transition-all duration-300 animate-fade-up"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <span className="text-2xl">{integration.logo}</span>
-                <span className="font-medium text-foreground">{integration.name}</span>
+            <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
+              <div>
+                <p className="line-accent">Integrations</p>
               </div>
-            ))}
-            <div className="flex items-center gap-2 px-5 py-3 text-muted-foreground text-sm">
-              <Sparkles className="w-4 h-4" />
-              <span>+ 100 more</span>
+              <div>
+                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
+                  Seamless{" "}
+                  <span className="font-display italic text-gradient-primary">Connections.</span>
+                </h2>
+              </div>
+            </div>
+
+            <p className="text-muted-foreground leading-relaxed max-w-xl mb-12">
+              Connect with the tools you already use. Our products integrate with popular platforms
+              to streamline your workflow.
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+              {integrations.map((integration, index) => (
+                <div
+                  key={integration.name}
+                  className="flex items-center gap-3 px-5 py-3 rounded-full border border-border bg-card hover:border-primary/30 hover:shadow-card-hover transition-all duration-300 animate-fade-up"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <span className="text-2xl">{integration.logo}</span>
+                  <span className="font-medium text-foreground">{integration.name}</span>
+                </div>
+              ))}
+              <div className="flex items-center gap-2 px-5 py-3 text-muted-foreground text-sm">
+                <Sparkles className="w-4 h-4" />
+                <span>+ 100 more</span>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-foreground text-background grain relative overflow-hidden">

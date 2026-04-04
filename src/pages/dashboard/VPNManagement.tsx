@@ -51,8 +51,8 @@ export default function VPNManagement() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl md:text-3xl font-bold">VPN Management</h1>
-        <p className="text-muted-foreground">
+        <h1 className="heading-section">VPN Management</h1>
+        <p className="text-secondary">
           Manage servers, users, and connections for your VPN infrastructure
         </p>
       </div>

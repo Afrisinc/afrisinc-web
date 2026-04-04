@@ -536,7 +536,14 @@ export async function createProduct(productData: {
   try {
     const { data } = await apiClient().post('/products', productData);
 
-    if (!data.success || !data.data) {
+    if (!data.success) {
+      const errorMessage = data.resp_msg || "Failed to create product";
+      const error = new Error(errorMessage);
+      (error as any).resp_code = data.resp_code;
+      throw error;
+    }
+
+    if (!data.data) {
       throw new Error("Invalid API response format");
     }
 
@@ -548,8 +555,15 @@ export async function createProduct(productData: {
       createdAt: String(data.data.createdAt || ''),
       updatedAt: String(data.data.updatedAt || ''),
     };
-  } catch {
-    // Error Error creating product:", error);
+  } catch (error: any) {
+    // Handle Axios error responses
+    if (error.response?.data?.resp_msg) {
+      const err = new Error(error.response.data.resp_msg);
+      (err as any).resp_code = error.response.data.resp_code;
+      throw err;
+    }
+
+    // Re-throw other errors
     throw error;
   }
 }
@@ -714,6 +728,73 @@ export async function LoginEvents(params?: QueryParams): Promise<PaginatedRespon
     };
   } catch {
     // Error Error fetching login events:", error);
+    throw error;
+  }
+}
+
+// Get product by ID
+export async function getProductById(productId: string): Promise<{ id: string; name: string; code: string; description?: string; status: string; createdAt: string; updatedAt: string }> {
+  try {
+    const { data } = await apiClient().get(`/products/${productId}`);
+
+    if (!data.success || !data.data) {
+      throw new Error("Failed to fetch product details");
+    }
+
+    return {
+      id: String(data.data.id || ''),
+      name: String(data.data.name || ''),
+      code: String(data.data.code || ''),
+      description: data.data.description ? String(data.data.description) : undefined,
+      status: String(data.data.status || 'ACTIVE'),
+      createdAt: String(data.data.createdAt || ''),
+      updatedAt: String(data.data.updatedAt || ''),
+    };
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Update product
+export async function updateProduct(
+  productId: string,
+  updateData: {
+    name?: string;
+    description?: string;
+    status?: string;
+  }
+): Promise<{ id: string; name: string; code: string; description?: string; status: string; updatedAt: string }> {
+  try {
+    const { data } = await apiClient().put(`/products/${productId}`, updateData);
+
+    if (!data.success) {
+      const errorMessage = data.resp_msg || "Failed to update product";
+      const error = new Error(errorMessage);
+      (error as any).resp_code = data.resp_code;
+      throw error;
+    }
+
+    if (!data.data) {
+      throw new Error("Invalid API response format");
+    }
+
+    return {
+      id: String(data.data.id || ''),
+      name: String(data.data.name || ''),
+      code: String(data.data.code || ''),
+      description: data.data.description ? String(data.data.description) : undefined,
+      status: String(data.data.status || 'ACTIVE'),
+      updatedAt: String(data.data.updatedAt || ''),
+    };
+  } catch (error: any) {
+    // Handle Axios error responses
+    if (error.response?.data?.resp_msg) {
+      const err = new Error(error.response.data.resp_msg);
+      (err as any).resp_code = error.response.data.resp_code;
+      throw err;
+    }
+
+    // Re-throw other errors
     throw error;
   }
 }

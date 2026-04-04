@@ -20,6 +20,8 @@ import {
   suspendAccount,
   enrollAccountInProduct,
   createProduct,
+  getProductById,
+  updateProduct,
   LoginEvents,
 } from "@/services/platformService";
 import { QueryParams } from "@/types/shared";
@@ -165,6 +167,30 @@ export const useCreateProduct = () => {
     mutationFn: (productData: { name: string; code: string; description?: string }) =>
       createProduct(productData),
     onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["platform", "products"] });
+    },
+  });
+};
+
+export const useProductById = (productId: string | null) =>
+  useQuery({
+    queryKey: ["platform", "product-details", productId],
+    queryFn: () => getProductById(productId!),
+    enabled: !!productId,
+  });
+
+export const useUpdateProduct = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      productId,
+      updateData,
+    }: {
+      productId: string;
+      updateData: { name?: string; description?: string; status?: string };
+    }) => updateProduct(productId, updateData),
+    onSuccess: (_, { productId }) => {
+      qc.invalidateQueries({ queryKey: ["platform", "product-details", productId] });
       qc.invalidateQueries({ queryKey: ["platform", "products"] });
     },
   });

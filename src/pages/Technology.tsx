@@ -26,54 +26,54 @@ const accentColors = {
 };
 
 const platforms = [
-  {
-    icon: Cloud,
-    name: "Afrisinc Cloud",
-    description: "Enterprise-grade cloud infrastructure designed for African businesses. Scalable, secure, and optimized for regional compliance.",
-    status: "Live",
-    features: ["Auto-scaling", "Multi-region", "99.99% Uptime", "GDPR Compliant"],
-    accent: "terra",
-  },
-  {
-    icon: BarChart3,
-    name: "Analytics Suite",
-    description: "Real-time business intelligence and data analytics platform. Transform your data into actionable insights.",
-    status: "Live",
-    features: ["Real-time Dashboards", "Custom Reports", "Predictive Analytics", "API Access"],
-    accent: "indigo",
-  },
-  {
-    icon: Workflow,
-    name: "WorkFlow Pro",
-    description: "Enterprise workflow automation and process management. Streamline operations across your organization.",
-    status: "Beta",
-    features: ["Visual Builder", "500+ Integrations", "Custom Triggers", "Audit Logs"],
-    accent: "forest",
-  },
-  {
-    icon: Shield,
-    name: "SecureID",
-    description: "Identity and access management solution with biometric authentication for enhanced security.",
-    status: "Live",
-    features: ["Biometric Auth", "SSO Integration", "Role Management", "Compliance Tools"],
-    accent: "gold",
-  },
-  {
-    icon: Database,
-    name: "DataVault",
-    description: "Managed database service with automatic backups, scaling, and enterprise-grade security.",
-    status: "Beta",
-    features: ["Multi-DB Support", "Auto Backups", "Read Replicas", "Encryption"],
-    accent: "terra",
-  },
-  {
-    icon: Layers,
-    name: "API Gateway",
-    description: "Unified API management platform for building, deploying, and monitoring APIs at scale.",
-    status: "Coming Soon",
-    features: ["Rate Limiting", "Analytics", "Developer Portal", "SDK Generation"],
-    accent: "indigo",
-  },
+  // {
+  //   icon: Cloud,
+  //   name: "Afrisinc Cloud",
+  //   description: "Enterprise-grade cloud infrastructure designed for African businesses. Scalable, secure, and optimized for regional compliance.",
+  //   status: "Live",
+  //   features: ["Auto-scaling", "Multi-region", "99.99% Uptime", "GDPR Compliant"],
+  //   accent: "terra",
+  // },
+  // {
+  //   icon: BarChart3,
+  //   name: "Analytics Suite",
+  //   description: "Real-time business intelligence and data analytics platform. Transform your data into actionable insights.",
+  //   status: "Live",
+  //   features: ["Real-time Dashboards", "Custom Reports", "Predictive Analytics", "API Access"],
+  //   accent: "indigo",
+  // },
+  // {
+  //   icon: Workflow,
+  //   name: "WorkFlow Pro",
+  //   description: "Enterprise workflow automation and process management. Streamline operations across your organization.",
+  //   status: "Beta",
+  //   features: ["Visual Builder", "500+ Integrations", "Custom Triggers", "Audit Logs"],
+  //   accent: "forest",
+  // },
+  // {
+  //   icon: Shield,
+  //   name: "SecureID",
+  //   description: "Identity and access management solution with biometric authentication for enhanced security.",
+  //   status: "Live",
+  //   features: ["Biometric Auth", "SSO Integration", "Role Management", "Compliance Tools"],
+  //   accent: "gold",
+  // },
+  // {
+  //   icon: Database,
+  //   name: "DataVault",
+  //   description: "Managed database service with automatic backups, scaling, and enterprise-grade security.",
+  //   status: "Beta",
+  //   features: ["Multi-DB Support", "Auto Backups", "Read Replicas", "Encryption"],
+  //   accent: "terra",
+  // },
+  // {
+  //   icon: Layers,
+  //   name: "API Gateway",
+  //   description: "Unified API management platform for building, deploying, and monitoring APIs at scale.",
+  //   status: "Coming Soon",
+  //   features: ["Rate Limiting", "Analytics", "Developer Portal", "SDK Generation"],
+  //   accent: "indigo",
+  // },
 ];
 
 const stats = [
@@ -149,23 +149,48 @@ const Technology = () => {
       </section>
 
       {/* ── Products Grid ─────────────────────────────────────────────────── */}
-      <section id="platforms" className="py-28 md:py-36 bg-background">
-        <div className="container mx-auto px-6">
-
-          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
-            <div>
-              <p className="line-accent">Platforms & Products</p>
-            </div>
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                Comprehensive{" "}
-                <span className="font-display italic text-gradient-primary">Suite of Solutions.</span>
+      {platforms.length === 0 ? (
+        <section id="platforms" className="py-28 md:py-36 bg-background">
+          <div className="container mx-auto px-6">
+            <div className="text-center py-24">
+              <div className="mb-8">
+                <Layers className="w-16 h-16 text-muted-foreground mx-auto opacity-30 mb-6" />
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0] mb-6">
+                Advanced Platforms{" "}
+                <span className="font-display italic text-gradient-primary">Coming Soon.</span>
               </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-lg mx-auto mb-8">
+                We're building powerful enterprise platforms engineered for scale, security, and reliability.
+                Early access available for qualified partners.
+              </p>
+              <Button variant="default" size="lg" className="group shadow-primary" asChild>
+                <Link to="/contact">
+                  Request Early Access
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
             </div>
           </div>
+        </section>
+      ) : (
+        <section id="platforms" className="py-28 md:py-36 bg-background">
+          <div className="container mx-auto px-6">
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {platforms.map((platform, index) => {
+            <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
+              <div>
+                <p className="line-accent">Platforms & Products</p>
+              </div>
+              <div>
+                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
+                  Comprehensive{" "}
+                  <span className="font-display italic text-gradient-primary">Suite of Solutions.</span>
+                </h2>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {platforms.map((platform, index) => {
               const colors = accentColors[platform.accent as keyof typeof accentColors];
               return (
                 <div
@@ -223,11 +248,12 @@ const Technology = () => {
                   </a>
                 </div>
               );
-            })}
-          </div>
+              })}
+            </div>
 
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* ── Stats ────────────────────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-muted/30">

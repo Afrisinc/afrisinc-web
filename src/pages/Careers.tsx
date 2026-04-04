@@ -34,62 +34,62 @@ const benefits = [
 ];
 
 const openings = [
-  {
-    title: "Senior Backend Engineer",
-    department: "Engineering",
-    location: "Remote (Africa)",
-    type: "Full-time",
-    level: "Senior",
-  },
-  {
-    title: "Product Manager",
-    department: "Product",
-    location: "Kigali, Rwanda",
-    type: "Full-time",
-    level: "Mid-Level",
-  },
-  {
-    title: "Senior Frontend Engineer",
-    department: "Engineering",
-    location: "Remote (Global)",
-    type: "Full-time",
-    level: "Senior",
-  },
-  {
-    title: "DevOps Engineer",
-    department: "Infrastructure",
-    location: "Remote (Africa)",
-    type: "Full-time",
-    level: "Mid-Level",
-  },
-  {
-    title: "UX Designer",
-    department: "Design",
-    location: "Nairobi, Kenya",
-    type: "Full-time",
-    level: "Mid-Level",
-  },
-  {
-    title: "Content Writer",
-    department: "Media",
-    location: "Remote (Global)",
-    type: "Full-time",
-    level: "Junior",
-  },
-  {
-    title: "Sales Development Representative",
-    department: "Sales",
-    location: "Johannesburg, SA",
-    type: "Full-time",
-    level: "Entry Level",
-  },
-  {
-    title: "Data Analyst",
-    department: "Analytics",
-    location: "Remote (Africa)",
-    type: "Full-time",
-    level: "Mid-Level",
-  },
+  // {
+  //   title: "Senior Backend Engineer",
+  //   department: "Engineering",
+  //   location: "Remote (Africa)",
+  //   type: "Full-time",
+  //   level: "Senior",
+  // },
+  // {
+  //   title: "Product Manager",
+  //   department: "Product",
+  //   location: "Kigali, Rwanda",
+  //   type: "Full-time",
+  //   level: "Mid-Level",
+  // },
+  // {
+  //   title: "Senior Frontend Engineer",
+  //   department: "Engineering",
+  //   location: "Remote (Global)",
+  //   type: "Full-time",
+  //   level: "Senior",
+  // },
+  // {
+  //   title: "DevOps Engineer",
+  //   department: "Infrastructure",
+  //   location: "Remote (Africa)",
+  //   type: "Full-time",
+  //   level: "Mid-Level",
+  // },
+  // {
+  //   title: "UX Designer",
+  //   department: "Design",
+  //   location: "Nairobi, Kenya",
+  //   type: "Full-time",
+  //   level: "Mid-Level",
+  // },
+  // {
+  //   title: "Content Writer",
+  //   department: "Media",
+  //   location: "Remote (Global)",
+  //   type: "Full-time",
+  //   level: "Junior",
+  // },
+  // {
+  //   title: "Sales Development Representative",
+  //   department: "Sales",
+  //   location: "Johannesburg, SA",
+  //   type: "Full-time",
+  //   level: "Entry Level",
+  // },
+  // {
+  //   title: "Data Analyst",
+  //   department: "Analytics",
+  //   location: "Remote (Africa)",
+  //   type: "Full-time",
+  //   level: "Mid-Level",
+  // },
 ];
 
 const stats = [
@@ -238,10 +238,35 @@ const Careers = () => {
               <p className="line-accent">Open Roles</p>
             </div>
             <div>
+              <div className="mb-4">
+                <span className={`inline-block px-4 py-2 rounded-full border ${
+                  openings.length === 0
+                    ? "bg-muted border-border text-muted-foreground"
+                    : "bg-primary/10 border-primary/20 text-primary"
+                }`}>
+                  <span className="text-sm font-semibold">{openings.length} Opportunities Available</span>
+                </span>
+              </div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                {openings.length} Opportunities{" "}
-                <span className="font-display italic text-gradient-primary">Available.</span>
+                {openings.length === 0 ? (
+                  <>
+                    We're{" "}
+                    <span className="font-display italic text-gradient-primary">Hiring Soon.</span>
+                  </>
+                ) : (
+                  <>
+                    Join Our{" "}
+                    <span className="font-display italic text-gradient-primary">Growing Team.</span>
+                  </>
+                )}
               </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mt-6 max-w-lg">
+                {openings.length === 0 ? (
+                  "We're preparing exciting new roles across our teams. Check back soon or reach out to express your interest."
+                ) : (
+                  "We're actively hiring across engineering, design, product, and operations. Find the role that's perfect for you."
+                )}
+              </p>
             </div>
           </div>
 
