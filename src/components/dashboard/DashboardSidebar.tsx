@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { LayoutDashboard, Package, Users, Newspaper, Settings, Globe, Sparkles, LogOut, Shield, TrendingUp, Building2, Layers, CreditCard, BarChart3, ShieldAlert } from "lucide-react";
+import { LayoutDashboard, Package, Users, Newspaper, Settings, Globe, Sparkles, LogOut, Shield, TrendingUp, Building2, Layers, CreditCard, BarChart3, ShieldAlert, Lock, Bell } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,11 +12,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+const productIcons: Record<string, React.ReactNode> = {
+  vpn: <Lock className="w-4 h-4" />,
+  notify: <Bell className="w-4 h-4" />,
+  articles: <Newspaper className="w-4 h-4" />,
+  platform: <BarChart3 className="w-4 h-4" />,
+};
+
 const products = [
-  { id: "vpn", name: "VPN", icon: "🔒" },
-  { id: "notify", name: "Notify", icon: "🔔" },
-  { id: "articles", name: "Articles", icon: "📰" },
-  { id: "platform", name: "Platform", icon: "⚙️" },
+  { id: "vpn", name: "VPN" },
+  { id: "notify", name: "Notify" },
+  { id: "articles", name: "Articles" },
+  { id: "platform", name: "Platform" },
 ];
 
 const mainItems = [
@@ -100,29 +107,32 @@ export const DashboardSidebar = () => {
   };
 
   return (
-    <Sidebar className="border-r border-border">
-      <div className="p-4 border-b border-border">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-bold">A</span>
+    <Sidebar className="border-r border-border bg-background">
+      <div className="px-4 py-6 border-b border-border/50">
+        <Link to="/" className="group flex items-center gap-3 hover:opacity-80 transition-opacity duration-200">
+          <img src="/afrisic-logo.png" alt="Afrisinc" className="w-10 h-10 object-contain" />
+          <div className="flex flex-col">
+            <span className="font-bold text-foreground text-sm leading-tight">Afrisinc</span>
+            <span className="text-xs text-muted-foreground">Dashboard</span>
           </div>
-          <span className="font-bold text-foreground">Afrisinc</span>
         </Link>
       </div>
       <SidebarContent>
         {/* Product Selector */}
-        <SidebarGroup className="px-0">
-          <div className="px-4 py-2 mb-2">
-            <label className="text-xs font-semibold text-muted-foreground block mb-2">SELECT PRODUCT</label>
+        <SidebarGroup className="px-0 py-3">
+          <div className="px-4">
+            <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-3">Product</p>
             <Select value={selectedProduct} onValueChange={handleProductChange}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full h-9 border-border/50 bg-background hover:border-border/80 transition-colors text-sm font-medium">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="w-[--radix-select-trigger-width]">
                 {products.map((product) => (
-                  <SelectItem key={product.id} value={product.id}>
-                    <span className="mr-2">{product.icon}</span>
-                    {product.name}
+                  <SelectItem key={product.id} value={product.id} className="text-sm">
+                    <div className="flex items-center gap-2">
+                      {productIcons[product.id]}
+                      {product.name}
+                    </div>
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -132,13 +142,23 @@ export const DashboardSidebar = () => {
 
         {/* Dashboard */}
         <SidebarGroup>
-          <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60">Overview</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-1">
               {mainItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className={isActive(item.url) ? "bg-primary/10 text-primary" : ""}>
-                    <Link to={item.url}><item.icon className="w-4 h-4 mr-2" />{item.title}</Link>
+                  <SidebarMenuButton
+                    asChild
+                    className={`transition-all duration-200 ${
+                      isActive(item.url)
+                        ? "bg-primary/15 text-primary font-semibold"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                    }`}
+                  >
+                    <Link to={item.url} className="flex items-center gap-3">
+                      <item.icon className="w-4 h-4 flex-shrink-0" />
+                      <span className="text-sm">{item.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -149,25 +169,45 @@ export const DashboardSidebar = () => {
         {/* Product-Specific Platform Routes */}
         {(selectedProduct === "platform" || selectedProduct === "notify") && (
         <SidebarGroup>
-          <SidebarGroupLabel className="flex items-center gap-1.5">
+          <SidebarGroupLabel className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 flex items-center gap-2">
             <Shield className="w-3.5 h-3.5" />
-            {selectedProduct === "platform" ? "Platform" : "Notify"} Management
+            {selectedProduct === "platform" ? "Platform" : "Notify"}
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-1">
               {selectedProduct === "platform" ? (
                 platformItems.map((item) => (
                   <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton asChild className={isActive(item.url) ? "bg-primary/10 text-primary" : ""}>
-                      <Link to={item.url}><item.icon className="w-4 h-4 mr-2" />{item.title}</Link>
+                    <SidebarMenuButton
+                      asChild
+                      className={`transition-all duration-200 ${
+                        isActive(item.url)
+                          ? "bg-primary/15 text-primary font-semibold"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                      }`}
+                    >
+                      <Link to={item.url} className="flex items-center gap-3">
+                        <item.icon className="w-4 h-4 flex-shrink-0" />
+                        <span className="text-sm">{item.title}</span>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))
               ) : (
                 getProductPlatformRoutes(selectedProduct).map((item) => (
                   <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton asChild className={isActive(item.url) ? "bg-primary/10 text-primary" : ""}>
-                      <Link to={item.url}><item.icon className="w-4 h-4 mr-2" />{item.title}</Link>
+                    <SidebarMenuButton
+                      asChild
+                      className={`transition-all duration-200 ${
+                        isActive(item.url)
+                          ? "bg-primary/15 text-primary font-semibold"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                      }`}
+                    >
+                      <Link to={item.url} className="flex items-center gap-3">
+                        <item.icon className="w-4 h-4 flex-shrink-0" />
+                        <span className="text-sm">{item.title}</span>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))
@@ -180,11 +220,21 @@ export const DashboardSidebar = () => {
         {/* Settings */}
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-1">
               {bottomItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className={isActive(item.url) ? "bg-primary/10 text-primary" : ""}>
-                    <Link to={item.url}><item.icon className="w-4 h-4 mr-2" />{item.title}</Link>
+                  <SidebarMenuButton
+                    asChild
+                    className={`transition-all duration-200 ${
+                      isActive(item.url)
+                        ? "bg-primary/15 text-primary font-semibold"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                    }`}
+                  >
+                    <Link to={item.url} className="flex items-center gap-3">
+                      <item.icon className="w-4 h-4 flex-shrink-0" />
+                      <span className="text-sm">{item.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -192,17 +242,22 @@ export const DashboardSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <div className="mt-auto p-4 border-t border-border space-y-2">
-        <Link to="/" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
-          <Globe className="w-4 h-4" /> Back to Website
+      <div className="mt-auto px-4 py-5 border-t border-border/50 space-y-3">
+        <Link
+          to="/"
+          className="group flex items-center gap-2.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors duration-200 px-2 py-2"
+        >
+          <Globe className="w-4 h-4 flex-shrink-0" />
+          Website
         </Link>
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="w-full justify-start text-muted-foreground hover:text-destructive"
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start text-xs font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200 px-2 py-2 h-auto"
           onClick={handleSignOut}
         >
-          <LogOut className="w-4 h-4 mr-2" /> Sign Out
+          <LogOut className="w-4 h-4 mr-2 flex-shrink-0" />
+          Sign Out
         </Button>
       </div>
     </Sidebar>

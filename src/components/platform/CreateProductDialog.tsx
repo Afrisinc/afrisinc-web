@@ -38,8 +38,11 @@ export function CreateProductDialog({ isOpen, onClose }: CreateProductDialogProp
       toast.success("Product created successfully");
       setFormData({ name: "", code: "", description: "" });
       onClose();
-    } catch {
-      toast.error("Failed to create product");
+    } catch (error: any) {
+      console.error("Error creating product:", error);
+
+      const errorMessage = error?.message || error?.resp_msg || "Failed to create product";
+      toast.error(errorMessage);
     }
   };
 

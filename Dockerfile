@@ -2,9 +2,9 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-ARG VITE_API_URL
-ARG VITE_NOTIFY_URL
-ARG VITE_NOTIFY_APP_ID
+ARG VITE_API_URL=http://localhost:8091
+ARG VITE_NOTIFY_URL=""
+ARG VITE_NOTIFY_APP_ID=""
 
 # Enable pnpm via Corepack
 RUN corepack enable && corepack prepare pnpm@latest --activate

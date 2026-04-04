@@ -42,6 +42,7 @@ import PlatformUsers from "./pages/platform/Users";
 import PlatformAccounts from "./pages/platform/Accounts";
 import PlatformOrganizations from "./pages/platform/Organizations";
 import PlatformProducts from "./pages/platform/Products";
+import ProductDetail from "./pages/platform/ProductDetail";
 import PlatformGrowth from "./pages/platform/Growth";
 import PlatformSecurity from "./pages/platform/Security";
 
@@ -104,6 +105,7 @@ const App = () => (
                 <Route path="platform/accounts" element={<PlatformAccounts />} />
                 <Route path="platform/organizations" element={<PlatformOrganizations />} />
                 <Route path="platform/products" element={<PlatformProducts />} />
+                <Route path="platform/products/:productId" element={<ProductDetail />} />
                 <Route path="platform/growth" element={<PlatformGrowth />} />
                 <Route path="platform/security" element={<PlatformSecurity />} />
               </Route>
