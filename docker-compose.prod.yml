@@ -5,7 +5,7 @@ services:
     env_file:
       - .env
     ports:
-      - "8080:8090"
+      - "8085:8090"
     restart: unless-stopped
     environment:
       - VITE_API_URL=${VITE_API_URL}
