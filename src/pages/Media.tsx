@@ -20,6 +20,7 @@ import { ArticleCard } from "@/components/articles/ArticleCard";
 import { formatDistanceToNow } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { subscribeNewsletter } from "@/services/notifyService";
+import { useTrackForm } from "@/hooks/useTrackForm";
 
 const typeColors: Record<string, { bg: string; text: string; border: string }> = {
   Documentary: { bg: "hsl(22 88% 52% / 0.1)",  text: "hsl(22 82% 46%)",  border: "hsl(22 88% 52% / 0.25)" },
@@ -75,18 +76,22 @@ const Media = () => {
   const [isSubscribing, setIsSubscribing] = useState(false);
   const { data: featuredArticle, isLoading: isLoadingFeatured } = useFeaturedArticle();
   const { data: articlesData, isLoading: isLoadingArticles } = useArticles({ per_page: 4 });
+  const { onStart, onSubmit: trackSubmit, onError } = useTrackForm('newsletter_form', 'Newsletter Signup');
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
+    onStart(); // Track form start
     setIsSubscribing(true);
     try {
       await subscribeNewsletter(email);
+      trackSubmit(); // Track successful subscription
       toast({
         title: "You're subscribed!",
         description: "Thank you for subscribing.",
       });
       setEmail("");
     } catch {
+      onError('email', 'server'); // Track error
       toast({
         title: "Failed to subscribe",
         description: "Please try again.",
