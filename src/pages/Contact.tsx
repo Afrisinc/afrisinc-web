@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { submitContactForm } from "@/services/notifyService";
+import { useTrackForm } from "@/hooks/useTrackForm";
 import {
   Mail,
   Phone,
@@ -70,12 +71,15 @@ const Contact = () => {
     message: "",
   });
 
+  const { onStart, onSubmit: trackSubmit, onError } = useTrackForm('contact_form', 'Contact Us');
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    onStart(); // Track form submission start
     setIsSubmitting(true);
     try {
       await submitContactForm({
@@ -85,12 +89,14 @@ const Contact = () => {
         subject: formData.subject,
         message: formData.message,
       });
+      trackSubmit(); // Track successful submission
       toast({
         title: "Message Sent!",
         description: "We'll get back to you within 24 hours.",
       });
       setFormData({ name: "", email: "", company: "", subject: "", message: "" });
-    } catch {
+    } catch (err) {
+      onError('message', 'server'); // Track error
       toast({
         title: "Something went wrong",
         description: "Please try again.",
