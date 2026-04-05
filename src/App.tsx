@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +9,8 @@ import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { AnalyticsProvider } from "@/components/AnalyticsProvider";
+import { CookieBanner } from "@/components/CookieBanner";
 
 // Public Pages
 import Index from "./pages/Index";
@@ -19,6 +22,7 @@ import ArticleDetail from "./pages/media/ArticleDetail";
 import Products from "./pages/Products";
 import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
+import Privacy from "./pages/Privacy";
 
 // Auth Pages
 import Callback from "./pages/auth/Callback";
@@ -52,7 +56,50 @@ import TestComponent from "./pages/TestComponent";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+// Inject GA4 script
+function injectGAScript() {
+  const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+  const debug = import.meta.env.VITE_GA_DEBUG === 'true';
+  const isProd = import.meta.env.MODE === 'production';
+
+  // Only load GA4 in production or when debug is enabled
+  if (!gaId || (!isProd && !debug)) {
+    return;
+  }
+
+  // Inject dataLayer and gtag function
+  (window as any).dataLayer = (window as any).dataLayer || [];
+  function gtag(...args: unknown[]) {
+    (window as any).dataLayer.push(arguments);
+  }
+  (window as any).gtag = gtag;
+
+  gtag('js', new Date());
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    analytics_storage: 'denied',
+    wait_for_update: 500,
+  });
+  gtag('config', gaId, {
+    page_path: window.location.pathname,
+    debug_mode: debug,
+    send_page_view: false,
+  });
+
+  // Load GA4 script
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+  document.head.appendChild(script);
+}
+
+const App = () => {
+  // Inject GA4 script on component mount
+  useEffect(() => {
+    injectGAScript();
+  }, []);
+
+  return (
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
@@ -60,8 +107,9 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <ScrollToTop />
-            <AuthProvider>
+            <AnalyticsProvider>
+              <ScrollToTop />
+              <AuthProvider>
               <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<Index />} />
@@ -73,6 +121,7 @@ const App = () => (
                 <Route path="/products" element={<Products />} />
                 <Route path="/careers" element={<Careers />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/privacy" element={<Privacy />} />
               
               {/* Auth Routes */}
               <Route path="/auth/callback" element={<Callback />} />
@@ -113,12 +162,15 @@ const App = () => (
               {/* Catch-all */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <CookieBanner />
           </AuthProvider>
+            </AnalyticsProvider>
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
   </HelmetProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

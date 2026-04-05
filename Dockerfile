@@ -5,6 +5,8 @@ WORKDIR /app
 ARG VITE_API_URL=http://localhost:8091
 ARG VITE_NOTIFY_URL=""
 ARG VITE_NOTIFY_APP_ID=""
+ARG VITE_GA_MEASUREMENT_ID=""
+ARG VITE_GA_DEBUG=false
 
 # Enable pnpm via Corepack
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -16,8 +18,8 @@ RUN pnpm install --frozen-lockfile
 # Copy source code
 COPY . .
 
-# Build the Vite app with API URL
-RUN VITE_API_URL=${VITE_API_URL} VITE_NOTIFY_URL=${VITE_NOTIFY_URL} VITE_NOTIFY_APP_ID=${VITE_NOTIFY_APP_ID} pnpm build
+# Build the Vite app with API URL and GA4
+RUN VITE_API_URL=${VITE_API_URL} VITE_NOTIFY_URL=${VITE_NOTIFY_URL} VITE_NOTIFY_APP_ID=${VITE_NOTIFY_APP_ID} VITE_GA_MEASUREMENT_ID=${VITE_GA_MEASUREMENT_ID} VITE_GA_DEBUG=${VITE_GA_DEBUG} pnpm build
 
 # ---------- Serve ----------
 FROM nginx:alpine
