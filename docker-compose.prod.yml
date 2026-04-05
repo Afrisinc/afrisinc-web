@@ -19,4 +19,4 @@ services:
 
 networks:
   afrisinc_net:
-    driver: bridge
+    external: true
