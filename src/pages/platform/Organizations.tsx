@@ -89,15 +89,13 @@ export default function PlatformOrganizations() {
         { label: "Active", value: "ACTIVE" },
         { label: "Suspended", value: "SUSPENDED" },
       ],
-      render: (value) => (
-        <Badge variant={statusVariant(value)}>{value || "ACTIVE"}</Badge>
-      ),
+      render: (value) => <Badge variant={statusVariant(value)}>{value || "ACTIVE"}</Badge>,
     },
     {
       key: "createdAt",
       label: "Created",
       sortable: true,
-      render: (value) => value ? new Date(value).toLocaleDateString() : "—",
+      render: (value) => (value ? new Date(value).toLocaleDateString() : "—"),
     },
     {
       key: "actions",
@@ -158,10 +156,7 @@ export default function PlatformOrganizations() {
       />
 
       {/* Create Organization Dialog */}
-      <CreateOrganizationDialog
-        isOpen={createDialogOpen}
-        onClose={() => setCreateDialogOpen(false)}
-      />
+      <CreateOrganizationDialog isOpen={createDialogOpen} onClose={() => setCreateDialogOpen(false)} />
 
       {/* Add Member Dialog */}
       <AddMemberDialog

@@ -6,7 +6,15 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Plus, Users, ChevronRight, Smartphone } from "lucide-react";
@@ -18,7 +26,11 @@ interface UsersTableProps {
   users?: VPNUser[];
   servers?: VPNServer[];
   isLoading: boolean;
-  onGenerateConfig?: (deviceId: string, serverId: string, protocol: 'wireguard' | 'openvpn' | 'ikev2') => void;
+  onGenerateConfig?: (
+    deviceId: string,
+    serverId: string,
+    protocol: "wireguard" | "openvpn" | "ikev2"
+  ) => void;
 }
 
 const statusColors = {
@@ -153,10 +165,10 @@ export function UsersTable({ users, servers, isLoading, onGenerateConfig }: User
               </TableHeader>
               <TableBody>
                 {filteredUsers?.map((user) => {
-                  const connectedDevices = user.devices.filter(d => d.isConnected).length;
+                  const connectedDevices = user.devices.filter((d) => d.isConnected).length;
                   return (
-                    <TableRow 
-                      key={user.id} 
+                    <TableRow
+                      key={user.id}
                       className="cursor-pointer hover:bg-muted/50"
                       onClick={() => handleUserClick(user)}
                     >
@@ -186,29 +198,30 @@ export function UsersTable({ users, servers, isLoading, onGenerateConfig }: User
                         <div className="w-32">
                           <div className="flex items-center justify-between mb-1">
                             <span className="text-xs">
-                              {user.dataUsed.toFixed(1)} / {user.dataLimit ? `${user.dataLimit} GB` : '∞'}
+                              {user.dataUsed.toFixed(1)} / {user.dataLimit ? `${user.dataLimit} GB` : "∞"}
                             </span>
                           </div>
                           {user.dataLimit && (
-                            <Progress 
-                              value={(user.dataUsed / user.dataLimit) * 100} 
+                            <Progress
+                              value={(user.dataUsed / user.dataLimit) * 100}
                               className="h-1.5"
-                              indicatorClassName={user.dataUsed > user.dataLimit ? "bg-destructive" : "bg-primary"}
+                              indicatorClassName={
+                                user.dataUsed > user.dataLimit ? "bg-destructive" : "bg-primary"
+                              }
                             />
                           )}
                         </div>
                       </TableCell>
                       <TableCell className="hidden lg:table-cell">
                         <span className="text-sm text-muted-foreground">
-                          {user.lastConnection 
+                          {user.lastConnection
                             ? formatDistanceToNow(new Date(user.lastConnection), { addSuffix: true })
-                            : 'Never'
-                          }
+                            : "Never"}
                         </span>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button 
-                          variant="ghost" 
+                        <Button
+                          variant="ghost"
                           size="sm"
                           className="gap-1"
                           onClick={(e) => {

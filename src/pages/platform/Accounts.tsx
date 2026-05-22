@@ -80,7 +80,9 @@ export default function PlatformAccounts() {
                 title={`${p.product?.name || "Unknown"} (${p.product?.code || p.product_id})`}
               >
                 <span className="font-medium">{p.product?.name || "Unknown"}</span>
-                <Badge variant="outline" className="text-xs">{p.plan}</Badge>
+                <Badge variant="outline" className="text-xs">
+                  {p.plan}
+                </Badge>
               </div>
             ))
           ) : (
@@ -93,7 +95,7 @@ export default function PlatformAccounts() {
       key: "createdAt",
       label: "Created",
       sortable: true,
-      render: (value) => value ? new Date(value).toLocaleDateString() : "—",
+      render: (value) => (value ? new Date(value).toLocaleDateString() : "—"),
     },
     {
       key: "actions",

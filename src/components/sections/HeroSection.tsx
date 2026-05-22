@@ -3,21 +3,27 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 const stats = [
-  { value: "4",    label: "Departments" },
-  { value: "10+",  label: "Live Products" },
-  { value: "15+",  label: "Countries" },
+  { value: "4", label: "Departments" },
+  { value: "10+", label: "Live Products" },
+  { value: "15+", label: "Countries" },
   { value: "2020", label: "Founded" },
 ];
 
 const marqueeItems = [
-  "Technology", "Media", "Innovation", "Worldwide", "Digital Products",
-  "Global Scale", "SaaS", "Ventures", "Est. 2020",
+  "Technology",
+  "Media",
+  "Innovation",
+  "Worldwide",
+  "Digital Products",
+  "Global Scale",
+  "SaaS",
+  "Ventures",
+  "Est. 2020",
 ];
 
 export const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden bg-background dot-grid grain">
-
       {/* Warm overlay over dot grid */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background/80 pointer-events-none" />
 
@@ -29,27 +35,37 @@ export const HeroSection = () => {
           xmlns="http://www.w3.org/2000/svg"
           className="w-full h-full animate-spin-slow"
         >
-          <circle cx="250" cy="250" r="240" stroke="hsl(22 88% 52% / 0.07)"  strokeWidth="1"/>
-          <circle cx="250" cy="250" r="200" stroke="hsl(22 88% 52% / 0.09)"  strokeWidth="1"/>
-          <circle cx="250" cy="250" r="160" stroke="hsl(22 88% 52% / 0.11)"  strokeWidth="1"/>
-          <circle cx="250" cy="250" r="120" stroke="hsl(22 88% 52% / 0.09)"  strokeWidth="1"/>
-          <circle cx="250" cy="250" r="80"  stroke="hsl(22 88% 52% / 0.07)"  strokeWidth="1"/>
-          <polygon points="250,10 490,250 250,490 10,250"  stroke="hsl(43 95% 52% / 0.07)" strokeWidth="1" fill="none"/>
-          <polygon points="250,50 450,250 250,450 50,250"  stroke="hsl(43 95% 52% / 0.05)" strokeWidth="1" fill="none"/>
-          <line x1="10"  y1="250" x2="490" y2="250" stroke="hsl(22 88% 52% / 0.05)" strokeWidth="1"/>
-          <line x1="250" y1="10"  x2="250" y2="490" stroke="hsl(22 88% 52% / 0.05)" strokeWidth="1"/>
-          <line x1="73"  y1="73"  x2="427" y2="427" stroke="hsl(22 88% 52% / 0.04)" strokeWidth="1"/>
-          <line x1="427" y1="73"  x2="73"  y2="427" stroke="hsl(22 88% 52% / 0.04)" strokeWidth="1"/>
-          <circle cx="250" cy="10"  r="3.5" fill="hsl(22 88% 52% / 0.28)"/>
-          <circle cx="490" cy="250" r="3.5" fill="hsl(22 88% 52% / 0.28)"/>
-          <circle cx="250" cy="490" r="3.5" fill="hsl(22 88% 52% / 0.28)"/>
-          <circle cx="10"  cy="250" r="3.5" fill="hsl(22 88% 52% / 0.28)"/>
-          <circle cx="420" cy="80"  r="5"   fill="hsl(43 95% 52% / 0.22)"/>
-          <circle cx="80"  cy="420" r="5"   fill="hsl(43 95% 52% / 0.22)"/>
-          <circle cx="80"  cy="80"  r="5"   fill="hsl(158 42% 26% / 0.18)"/>
-          <circle cx="420" cy="420" r="5"   fill="hsl(158 42% 26% / 0.18)"/>
-          <circle cx="250" cy="250" r="14"  fill="hsl(22 88% 52% / 0.12)"/>
-          <circle cx="250" cy="250" r="6"   fill="hsl(22 88% 52% / 0.28)"/>
+          <circle cx="250" cy="250" r="240" stroke="hsl(22 88% 52% / 0.07)" strokeWidth="1" />
+          <circle cx="250" cy="250" r="200" stroke="hsl(22 88% 52% / 0.09)" strokeWidth="1" />
+          <circle cx="250" cy="250" r="160" stroke="hsl(22 88% 52% / 0.11)" strokeWidth="1" />
+          <circle cx="250" cy="250" r="120" stroke="hsl(22 88% 52% / 0.09)" strokeWidth="1" />
+          <circle cx="250" cy="250" r="80" stroke="hsl(22 88% 52% / 0.07)" strokeWidth="1" />
+          <polygon
+            points="250,10 490,250 250,490 10,250"
+            stroke="hsl(43 95% 52% / 0.07)"
+            strokeWidth="1"
+            fill="none"
+          />
+          <polygon
+            points="250,50 450,250 250,450 50,250"
+            stroke="hsl(43 95% 52% / 0.05)"
+            strokeWidth="1"
+            fill="none"
+          />
+          <line x1="10" y1="250" x2="490" y2="250" stroke="hsl(22 88% 52% / 0.05)" strokeWidth="1" />
+          <line x1="250" y1="10" x2="250" y2="490" stroke="hsl(22 88% 52% / 0.05)" strokeWidth="1" />
+          <line x1="73" y1="73" x2="427" y2="427" stroke="hsl(22 88% 52% / 0.04)" strokeWidth="1" />
+          <line x1="427" y1="73" x2="73" y2="427" stroke="hsl(22 88% 52% / 0.04)" strokeWidth="1" />
+          <circle cx="250" cy="10" r="3.5" fill="hsl(22 88% 52% / 0.28)" />
+          <circle cx="490" cy="250" r="3.5" fill="hsl(22 88% 52% / 0.28)" />
+          <circle cx="250" cy="490" r="3.5" fill="hsl(22 88% 52% / 0.28)" />
+          <circle cx="10" cy="250" r="3.5" fill="hsl(22 88% 52% / 0.28)" />
+          <circle cx="420" cy="80" r="5" fill="hsl(43 95% 52% / 0.22)" />
+          <circle cx="80" cy="420" r="5" fill="hsl(43 95% 52% / 0.22)" />
+          <circle cx="80" cy="80" r="5" fill="hsl(158 42% 26% / 0.18)" />
+          <circle cx="420" cy="420" r="5" fill="hsl(158 42% 26% / 0.18)" />
+          <circle cx="250" cy="250" r="14" fill="hsl(22 88% 52% / 0.12)" />
+          <circle cx="250" cy="250" r="6" fill="hsl(22 88% 52% / 0.28)" />
         </svg>
       </div>
 
@@ -67,11 +83,8 @@ export const HeroSection = () => {
 
       <div className="container mx-auto px-6 pt-28 md:pt-40 pb-24 md:pb-32 relative z-10">
         <div className="max-w-5xl">
-
           {/* Eyebrow */}
-          <p className="line-accent mb-12 animate-fade-in">
-            Technology · Media · Digital Products
-          </p>
+          <p className="line-accent mb-12 animate-fade-in">Technology · Media · Digital Products</p>
 
           {/* Main heading */}
           <div className="animate-fade-up animation-delay-100">
@@ -100,8 +113,8 @@ export const HeroSection = () => {
           {/* Description + CTA */}
           <div className="mt-14 grid md:grid-cols-2 gap-10 items-end animate-fade-up animation-delay-200">
             <p className="text-lg text-muted-foreground leading-[1.75] max-w-md">
-              One company. Four departments. 10+ live products used by
-              people across 15 countries — and we're just getting started.
+              One company. Four departments. 10+ live products used by people across 15 countries — and we're
+              just getting started.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button variant="default" size="lg" className="group shadow-primary" asChild>
@@ -137,7 +150,6 @@ export const HeroSection = () => {
               ))}
             </div>
           </div>
-
         </div>
       </div>
 
@@ -157,7 +169,6 @@ export const HeroSection = () => {
           </div>
         </div>
       </div>
-
     </section>
   );
 };

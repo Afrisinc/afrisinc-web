@@ -17,11 +17,13 @@ import apiClient from "./apiClient";
 import { QueryParams } from "@/types/shared";
 import { LoginEventResponse } from "@/types/auth.security";
 
+/* eslint-disable @typescript-eslint/no-explicit-any, no-useless-catch */
+
 // Service functions
 
 export async function fetchPlatformOverview(): Promise<PlatformOverview> {
   try {
-    const { data } = await apiClient().get('/platform/analytics/overview');
+    const { data } = await apiClient().get("/platform/analytics/overview");
 
     if (!data.success || !data.data) {
       throw new Error("Invalid API response format");
@@ -36,10 +38,12 @@ export async function fetchPlatformOverview(): Promise<PlatformOverview> {
       totalEnrollments: Number(apiData.total_enrollments || 0),
       activeUsers: Number(apiData.active_enrollments || 0),
       suspendedUsers: Number(apiData.suspended_enrollments || 0),
-      enrollmentsByProduct: (Array.isArray(apiData.products) ? apiData.products : []).map((p: Record<string, unknown>) => ({
-        product: String(p.product_code || '').toUpperCase(),
-        count: Number(p.total_enrollments || 0),
-      })),
+      enrollmentsByProduct: (Array.isArray(apiData.products) ? apiData.products : []).map(
+        (p: Record<string, unknown>) => ({
+          product: String(p.product_code || "").toUpperCase(),
+          count: Number(p.total_enrollments || 0),
+        })
+      ),
       accountTypeSplit: [
         { type: "Individual", count: Number(apiData.individual_accounts || 0) },
         { type: "Organization", count: Number(apiData.organization_accounts || 0) },
@@ -54,7 +58,7 @@ export async function fetchPlatformUsers(params: {
   search?: string;
   status?: string;
   limit?: number;
-  offset?: number
+  offset?: number;
 }): Promise<PaginatedResponse<PlatformUser>> {
   try {
     const { limit = 10, offset = 0, search, status } = params;
@@ -63,13 +67,13 @@ export async function fetchPlatformUsers(params: {
     const page = Math.floor(offset / limit) + 1;
 
     // Call API
-    const { data } = await apiClient().get('/users', {
+    const { data } = await apiClient().get("/users", {
       params: {
         page,
         limit,
         ...(search && { search }),
-        ...(status && status !== 'ALL' && { status }),
-      }
+        ...(status && status !== "ALL" && { status }),
+      },
     });
 
     // Validate response structure
@@ -78,7 +82,7 @@ export async function fetchPlatformUsers(params: {
     }
 
     // Map API response to PlatformUser interface
-    const users: PlatformUser[] = data.data.data.map((user: Omit<PlatformUser, 'fullName'>) => ({
+    const users: PlatformUser[] = data.data.data.map((user: Omit<PlatformUser, "fullName">) => ({
       id: user.id,
       email: user.email,
       firstName: user.firstName,
@@ -142,7 +146,7 @@ export async function fetchPlatformAccounts(params: {
     const { limit = 10, offset = 0 } = params;
     const page = Math.floor(offset / limit) + 1;
 
-    const { data } = await apiClient().get('/accounts/all', {
+    const { data } = await apiClient().get("/accounts/all", {
       params: {
         page,
         limit,
@@ -157,35 +161,37 @@ export async function fetchPlatformAccounts(params: {
       // Extract owner details
       const ownerData = (account.owner as Record<string, unknown>) || {};
       const owner = {
-        id: String(ownerData.id || ''),
-        email: String(ownerData.email || ''),
+        id: String(ownerData.id || ""),
+        email: String(ownerData.email || ""),
         firstName: ownerData.firstName ? String(ownerData.firstName) : undefined,
         lastName: ownerData.lastName ? String(ownerData.lastName) : undefined,
       };
 
       // Extract products
-      const products = (Array.isArray(account.products) ? account.products : []).map((product: Record<string, unknown>) => {
-        const productData = (product.product as Record<string, unknown>) || {};
-        return {
-          id: String(product.id || ''),
-          account_id: String(product.account_id || ''),
-          product_id: String(product.product_id || ''),
-          status: (product.status || 'ACTIVE') as "ACTIVE" | "SUSPENDED" | "PENDING",
-          plan: (product.plan || 'FREE') as "FREE" | "PRO" | "ENTERPRISE",
-          product: {
-            id: String(productData.id || ''),
-            name: String(productData.name || ''),
-            code: String(productData.code || ''),
-          },
-        };
-      });
+      const products = (Array.isArray(account.products) ? account.products : []).map(
+        (product: Record<string, unknown>) => {
+          const productData = (product.product as Record<string, unknown>) || {};
+          return {
+            id: String(product.id || ""),
+            account_id: String(product.account_id || ""),
+            product_id: String(product.product_id || ""),
+            status: (product.status || "ACTIVE") as "ACTIVE" | "SUSPENDED" | "PENDING",
+            plan: (product.plan || "FREE") as "FREE" | "PRO" | "ENTERPRISE",
+            product: {
+              id: String(productData.id || ""),
+              name: String(productData.name || ""),
+              code: String(productData.code || ""),
+            },
+          };
+        }
+      );
 
       return {
-        id: String(account.id || ''),
-        type: (account.type || 'INDIVIDUAL') as "INDIVIDUAL" | "ORGANIZATION",
-        owner_user_id: String(account.owner_user_id || ''),
+        id: String(account.id || ""),
+        type: (account.type || "INDIVIDUAL") as "INDIVIDUAL" | "ORGANIZATION",
+        owner_user_id: String(account.owner_user_id || ""),
         organization_id: account.organization_id ? String(account.organization_id) : null,
-        createdAt: String(account.createdAt || ''),
+        createdAt: String(account.createdAt || ""),
         updatedAt: account.updatedAt ? String(account.updatedAt) : undefined,
         owner,
         products,
@@ -214,10 +220,7 @@ export async function enrollAccountInProduct(
   productData: { product_code: string; plan: "FREE" | "PRO" | "ENTERPRISE" }
 ): Promise<AccountProductEnrollment> {
   try {
-    const { data } = await apiClient().post(
-      `/accounts/${accountId}/enroll-product`,
-      productData
-    );
+    const { data } = await apiClient().post(`/accounts/${accountId}/enroll-product`, productData);
 
     if (!data.success || !data.data) {
       throw new Error("Invalid API response format");
@@ -245,7 +248,7 @@ export async function fetchPlatformOrganizations(params: {
     const { limit = 10, offset = 0 } = params;
     const page = Math.floor(offset / limit) + 1;
 
-    const { data } = await apiClient().get('/organizations', {
+    const { data } = await apiClient().get("/organizations", {
       params: {
         page,
         limit,
@@ -327,7 +330,7 @@ export async function createPlatformOrganization(organizationData: {
   location: string;
 }): Promise<{ organization_id: string; account_id: string; name: string }> {
   try {
-    const { data } = await apiClient().post('/organizations', organizationData);
+    const { data } = await apiClient().post("/organizations", organizationData);
 
     if (!data.success || !data.data) {
       throw new Error("Invalid API response format");
@@ -358,10 +361,7 @@ export async function updatePlatformOrganization(
   }>
 ): Promise<PlatformOrganization> {
   try {
-    const { data } = await apiClient().put(
-      `/organizations/${organizationId}`,
-      updateData
-    );
+    const { data } = await apiClient().put(`/organizations/${organizationId}`, updateData);
 
     if (!data.success || !data.data) {
       throw new Error("Invalid API response format");
@@ -422,10 +422,7 @@ export async function addPlatformOrganizationMember(
   memberData: { user_id: string; role: "OWNER" | "ADMIN" | "MEMBER" }
 ): Promise<OrganizationMember> {
   try {
-    const { data } = await apiClient().post(
-      `/organizations/${organizationId}/members`,
-      memberData
-    );
+    const { data } = await apiClient().post(`/organizations/${organizationId}/members`, memberData);
 
     if (!data.success) {
       throw new Error("Invalid API response format");
@@ -444,9 +441,7 @@ export async function removePlatformOrganizationMember(
   userId: string
 ): Promise<void> {
   try {
-    const { data } = await apiClient().delete(
-      `/organizations/${organizationId}/members/${userId}`
-    );
+    const { data } = await apiClient().delete(`/organizations/${organizationId}/members/${userId}`);
 
     if (!data.success) {
       throw new Error("Invalid API response format");
@@ -459,7 +454,7 @@ export async function removePlatformOrganizationMember(
 
 export async function fetchProductEnrollments(): Promise<ProductEnrollment[]> {
   try {
-    const { data } = await apiClient().get('/products/enrollments');
+    const { data } = await apiClient().get("/products/enrollments");
 
     if (!data.success || !Array.isArray(data.data)) {
       throw new Error("Invalid API response format");
@@ -467,8 +462,8 @@ export async function fetchProductEnrollments(): Promise<ProductEnrollment[]> {
 
     // Map API response to ProductEnrollment interface
     const products: ProductEnrollment[] = data.data.map((product: Record<string, unknown>) => ({
-      productId: String(product.productId || ''),
-      productName: String(product.productName || ''),
+      productId: String(product.productId || ""),
+      productName: String(product.productName || ""),
       totalEnrollments: Number(product.totalEnrollments || 0),
       active: Number(product.active || 0),
       suspended: Number(product.suspended || 0),
@@ -499,23 +494,21 @@ export async function fetchProductAccounts(productId: string): Promise<PlatformA
       const ownerData = (account.owner as Record<string, unknown>) || {};
 
       return {
-        id: String(account.id || ''),
-        type: (account.type || 'INDIVIDUAL') as "INDIVIDUAL" | "ORGANIZATION",
-        owner_user_id: String(account.owner_user_id || ''),
+        id: String(account.id || ""),
+        type: (account.type || "INDIVIDUAL") as "INDIVIDUAL" | "ORGANIZATION",
+        owner_user_id: String(account.owner_user_id || ""),
         organization_id: account.organization_id ? String(account.organization_id) : null,
-        createdAt: String(account.createdAt || ''),
+        createdAt: String(account.createdAt || ""),
         updatedAt: account.updatedAt ? String(account.updatedAt) : undefined,
         owner: {
-          id: String(ownerData.id || ''),
-          email: String(ownerData.email || ''),
+          id: String(ownerData.id || ""),
+          email: String(ownerData.email || ""),
           firstName: ownerData.firstName ? String(ownerData.firstName) : undefined,
           lastName: ownerData.lastName ? String(ownerData.lastName) : undefined,
         },
         // Include backward compatibility field for ownerName
-        ownerName: [ownerData.firstName, ownerData.lastName]
-          .filter(Boolean)
-          .join(" ") || undefined,
-        status: (account.status || 'ACTIVE') as "ACTIVE" | "SUSPENDED",
+        ownerName: [ownerData.firstName, ownerData.lastName].filter(Boolean).join(" ") || undefined,
+        status: (account.status || "ACTIVE") as "ACTIVE" | "SUSPENDED",
         products: undefined, // Not needed for drill-down view
       };
     });
@@ -532,9 +525,16 @@ export async function createProduct(productData: {
   name: string;
   code: string;
   description?: string;
-}): Promise<{ id: string; name: string; code: string; description?: string; createdAt: string; updatedAt: string }> {
+}): Promise<{
+  id: string;
+  name: string;
+  code: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+}> {
   try {
-    const { data } = await apiClient().post('/products', productData);
+    const { data } = await apiClient().post("/products", productData);
 
     if (!data.success) {
       const errorMessage = data.resp_msg || "Failed to create product";
@@ -548,12 +548,12 @@ export async function createProduct(productData: {
     }
 
     return {
-      id: String(data.data.id || ''),
-      name: String(data.data.name || ''),
-      code: String(data.data.code || ''),
+      id: String(data.data.id || ""),
+      name: String(data.data.name || ""),
+      code: String(data.data.code || ""),
       description: data.data.description ? String(data.data.description) : undefined,
-      createdAt: String(data.data.createdAt || ''),
-      updatedAt: String(data.data.updatedAt || ''),
+      createdAt: String(data.data.createdAt || ""),
+      updatedAt: String(data.data.updatedAt || ""),
     };
   } catch (error: any) {
     // Handle Axios error responses
@@ -570,7 +570,7 @@ export async function createProduct(productData: {
 
 export async function fetchGrowthData(range: "7d" | "30d" | "90d"): Promise<GrowthData[]> {
   try {
-    const { data } = await apiClient().get('/platform/analytics/growth', {
+    const { data } = await apiClient().get("/platform/analytics/growth", {
       params: { range },
     });
 
@@ -586,7 +586,7 @@ export async function fetchGrowthData(range: "7d" | "30d" | "90d"): Promise<Grow
     // Process users data
     if (Array.isArray(apiData.users)) {
       apiData.users.forEach((item: Record<string, unknown>) => {
-        const date = String(item.date || '');
+        const date = String(item.date || "");
         const existing = dateMap.get(date) || { date, newUsers: 0, newAccounts: 0, newEnrollments: 0 };
         existing.newUsers = Number(item.count || 0);
         dateMap.set(date, existing);
@@ -596,7 +596,7 @@ export async function fetchGrowthData(range: "7d" | "30d" | "90d"): Promise<Grow
     // Process accounts data
     if (Array.isArray(apiData.accounts)) {
       apiData.accounts.forEach((item: Record<string, unknown>) => {
-        const date = String(item.date || '');
+        const date = String(item.date || "");
         const existing = dateMap.get(date) || { date, newUsers: 0, newAccounts: 0, newEnrollments: 0 };
         existing.newAccounts = Number(item.count || 0);
         dateMap.set(date, existing);
@@ -606,7 +606,7 @@ export async function fetchGrowthData(range: "7d" | "30d" | "90d"): Promise<Grow
     // Process enrollments data
     if (Array.isArray(apiData.enrollments)) {
       apiData.enrollments.forEach((item: Record<string, unknown>) => {
-        const date = String(item.date || '');
+        const date = String(item.date || "");
         const existing = dateMap.get(date) || { date, newUsers: 0, newAccounts: 0, newEnrollments: 0 };
         existing.newEnrollments = Number(item.count || 0);
         dateMap.set(date, existing);
@@ -614,8 +614,9 @@ export async function fetchGrowthData(range: "7d" | "30d" | "90d"): Promise<Grow
     }
 
     // Convert map to sorted array
-    const growthData = Array.from(dateMap.values())
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    const growthData = Array.from(dateMap.values()).sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
 
     return growthData;
   } catch {
@@ -626,7 +627,7 @@ export async function fetchGrowthData(range: "7d" | "30d" | "90d"): Promise<Grow
 
 export async function fetchSecurityOverview(): Promise<SecurityOverview> {
   try {
-    const { data } = await apiClient().get('/platform/security/overview');
+    const { data } = await apiClient().get("/platform/security/overview");
 
     if (!data.success || !data.data) {
       throw new Error("Invalid API response format");
@@ -637,18 +638,18 @@ export async function fetchSecurityOverview(): Promise<SecurityOverview> {
     return {
       failedLogins24h: Number(apiData.failedLogins24h || 0),
       topIPs: (Array.isArray(apiData.topIPs) ? apiData.topIPs : []).map((ip: Record<string, unknown>) => ({
-        ip: String(ip.ip || ''),
+        ip: String(ip.ip || ""),
         attempts: Number(ip.attempts || 0),
       })),
       tokenIssuanceCount: Number(apiData.tokenIssuanceCount || 0),
       suspiciousActivity: Boolean(apiData.suspiciousActivity || false),
       failedLogins: (Array.isArray(apiData.failedLogins) ? apiData.failedLogins : []).map(
         (fl: Record<string, unknown>) => ({
-          id: String(fl.id || ''),
-          email: String(fl.email || ''),
-          ip: String(fl.ip || ''),
-          timestamp: String(fl.timestamp || ''),
-          reason: String(fl.reason || ''),
+          id: String(fl.id || ""),
+          email: String(fl.email || ""),
+          ip: String(fl.ip || ""),
+          timestamp: String(fl.timestamp || ""),
+          reason: String(fl.reason || ""),
         })
       ),
     };
@@ -697,13 +698,11 @@ export async function suspendAccount(accountId: string): Promise<void> {
   }
 }
 
-
-
 export async function LoginEvents(params?: QueryParams): Promise<PaginatedResponse<LoginEventResponse>> {
   try {
-    const { page = 1, limit = 10, search, sortBy = 'desc' } = params || {};
+    const { page = 1, limit = 10, search, sortBy = "desc" } = params || {};
 
-    const { data } = await apiClient().get('/platform/security/loginevents', {
+    const { data } = await apiClient().get("/platform/security/loginevents", {
       params: {
         page,
         limit,
@@ -733,7 +732,15 @@ export async function LoginEvents(params?: QueryParams): Promise<PaginatedRespon
 }
 
 // Get product by ID
-export async function getProductById(productId: string): Promise<{ id: string; name: string; code: string; description?: string; status: string; createdAt: string; updatedAt: string }> {
+export async function getProductById(productId: string): Promise<{
+  id: string;
+  name: string;
+  code: string;
+  description?: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}> {
   try {
     const { data } = await apiClient().get(`/products/${productId}`);
 
@@ -742,13 +749,13 @@ export async function getProductById(productId: string): Promise<{ id: string; n
     }
 
     return {
-      id: String(data.data.id || ''),
-      name: String(data.data.name || ''),
-      code: String(data.data.code || ''),
+      id: String(data.data.id || ""),
+      name: String(data.data.name || ""),
+      code: String(data.data.code || ""),
       description: data.data.description ? String(data.data.description) : undefined,
-      status: String(data.data.status || 'ACTIVE'),
-      createdAt: String(data.data.createdAt || ''),
-      updatedAt: String(data.data.updatedAt || ''),
+      status: String(data.data.status || "ACTIVE"),
+      createdAt: String(data.data.createdAt || ""),
+      updatedAt: String(data.data.updatedAt || ""),
     };
   } catch (error) {
     throw error;
@@ -763,7 +770,14 @@ export async function updateProduct(
     description?: string;
     status?: string;
   }
-): Promise<{ id: string; name: string; code: string; description?: string; status: string; updatedAt: string }> {
+): Promise<{
+  id: string;
+  name: string;
+  code: string;
+  description?: string;
+  status: string;
+  updatedAt: string;
+}> {
   try {
     const { data } = await apiClient().put(`/products/${productId}`, updateData);
 
@@ -779,12 +793,12 @@ export async function updateProduct(
     }
 
     return {
-      id: String(data.data.id || ''),
-      name: String(data.data.name || ''),
-      code: String(data.data.code || ''),
+      id: String(data.data.id || ""),
+      name: String(data.data.name || ""),
+      code: String(data.data.code || ""),
       description: data.data.description ? String(data.data.description) : undefined,
-      status: String(data.data.status || 'ACTIVE'),
-      updatedAt: String(data.data.updatedAt || ''),
+      status: String(data.data.status || "ACTIVE"),
+      updatedAt: String(data.data.updatedAt || ""),
     };
   } catch (error: any) {
     // Handle Axios error responses

@@ -38,7 +38,7 @@ export function FilterBar({
     setDatePreset(preset);
     const today = new Date();
     let start: Date;
-    let end: Date = today;
+    const end: Date = today;
 
     switch (preset) {
       case "today":
@@ -83,7 +83,7 @@ export function FilterBar({
     }
   };
 
-  const handleColumnFilterChange = (columnKey: string, value: any) => {
+  const handleColumnFilterChange = (columnKey: string, value: string | null | undefined) => {
     if (onColumnFiltersChange) {
       const newFilters = { ...columnFilters };
       if (value === "" || value === null || value === undefined) {

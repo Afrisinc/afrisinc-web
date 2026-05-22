@@ -15,7 +15,11 @@ const Register = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<RegisterSchemaType>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterSchemaType>({
     resolver: zodResolver(RegisterSchema),
   });
 
@@ -54,11 +58,7 @@ const Register = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6 justify-center">
-            <img
-              src="/afrisic-logo.png"
-              alt="Afrisinc Logo"
-              className="w-10 h-10 rounded-xl object-cover"
-            />
+            <img src="/afrisic-logo.png" alt="Afrisinc Logo" className="w-10 h-10 rounded-xl object-cover" />
             <span className="text-xl font-bold text-foreground">Afrisinc</span>
           </Link>
           <h1 className="text-2xl font-bold text-foreground">Create your account</h1>
@@ -69,22 +69,14 @@ const Register = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-2">First Name</label>
-                <Input
-                  type="text"
-                  placeholder="John"
-                  {...register("firstName")}
-                />
+                <Input type="text" placeholder="John" {...register("firstName")} />
                 {errors.firstName && (
                   <p className="text-sm text-destructive mt-1">{errors.firstName.message}</p>
                 )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">Last Name</label>
-                <Input
-                  type="text"
-                  placeholder="Doe"
-                  {...register("lastName")}
-                />
+                <Input type="text" placeholder="Doe" {...register("lastName")} />
                 {errors.lastName && (
                   <p className="text-sm text-destructive mt-1">{errors.lastName.message}</p>
                 )}
@@ -92,36 +84,18 @@ const Register = () => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Email</label>
-              <Input
-                type="email"
-                placeholder="you@example.com"
-                {...register("email")}
-              />
-              {errors.email && (
-                <p className="text-sm text-destructive mt-1">{errors.email.message}</p>
-              )}
+              <Input type="email" placeholder="you@example.com" {...register("email")} />
+              {errors.email && <p className="text-sm text-destructive mt-1">{errors.email.message}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Phone</label>
-              <Input
-                type="tel"
-                placeholder="+1-555-0000"
-                {...register("phone")}
-              />
-              {errors.phone && (
-                <p className="text-sm text-destructive mt-1">{errors.phone.message}</p>
-              )}
+              <Input type="tel" placeholder="+1-555-0000" {...register("phone")} />
+              {errors.phone && <p className="text-sm text-destructive mt-1">{errors.phone.message}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Location</label>
-              <Input
-                type="text"
-                placeholder="New York, NY"
-                {...register("location")}
-              />
-              {errors.location && (
-                <p className="text-sm text-destructive mt-1">{errors.location.message}</p>
-              )}
+              <Input type="text" placeholder="New York, NY" {...register("location")} />
+              {errors.location && <p className="text-sm text-destructive mt-1">{errors.location.message}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Password</label>
@@ -139,9 +113,7 @@ const Register = () => {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              {errors.password && (
-                <p className="text-sm text-destructive mt-1">{errors.password.message}</p>
-              )}
+              {errors.password && <p className="text-sm text-destructive mt-1">{errors.password.message}</p>}
             </div>
             <div className="text-sm">
               <label className="flex items-start gap-2">

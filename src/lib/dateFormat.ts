@@ -11,10 +11,7 @@ export type DateFormatStyle = "relative" | "full" | "compact" | "time-only";
  * - Mar 10, 2026
  * - Mar 15, 2026 at 11:17 AM
  */
-export const formatDateProfessional = (
-  date: string | Date,
-  style: DateFormatStyle = "relative"
-): string => {
+export const formatDateProfessional = (date: string | Date, style: DateFormatStyle = "relative"): string => {
   try {
     const dateObj = typeof date === "string" ? new Date(date) : date;
 

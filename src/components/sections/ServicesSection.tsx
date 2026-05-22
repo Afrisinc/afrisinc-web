@@ -45,17 +45,36 @@ const services = [
 ];
 
 const accentColors = {
-  terra:  { bg: "hsl(22 88% 52% / 0.08)",   text: "hsl(22 82% 46%)",   border: "hsl(22 88% 52% / 0.2)",  glow: "hsl(22 88% 52% / 0.12)" },
-  forest: { bg: "hsl(158 42% 26% / 0.08)",  text: "hsl(158 42% 32%)",  border: "hsl(158 42% 26% / 0.2)", glow: "hsl(158 42% 26% / 0.1)" },
-  gold:   { bg: "hsl(43 95% 52% / 0.1)",    text: "hsl(38 80% 38%)",   border: "hsl(43 95% 52% / 0.25)", glow: "hsl(43 95% 52% / 0.12)" },
-  indigo: { bg: "hsl(240 40% 30% / 0.08)",  text: "hsl(240 40% 52%)",  border: "hsl(240 40% 30% / 0.2)", glow: "hsl(240 40% 30% / 0.1)" },
+  terra: {
+    bg: "hsl(22 88% 52% / 0.08)",
+    text: "hsl(22 82% 46%)",
+    border: "hsl(22 88% 52% / 0.2)",
+    glow: "hsl(22 88% 52% / 0.12)",
+  },
+  forest: {
+    bg: "hsl(158 42% 26% / 0.08)",
+    text: "hsl(158 42% 32%)",
+    border: "hsl(158 42% 26% / 0.2)",
+    glow: "hsl(158 42% 26% / 0.1)",
+  },
+  gold: {
+    bg: "hsl(43 95% 52% / 0.1)",
+    text: "hsl(38 80% 38%)",
+    border: "hsl(43 95% 52% / 0.25)",
+    glow: "hsl(43 95% 52% / 0.12)",
+  },
+  indigo: {
+    bg: "hsl(240 40% 30% / 0.08)",
+    text: "hsl(240 40% 52%)",
+    border: "hsl(240 40% 30% / 0.2)",
+    glow: "hsl(240 40% 30% / 0.1)",
+  },
 };
 
 export const ServicesSection = () => {
   return (
     <section id="services" className="py-28 md:py-36 bg-background">
       <div className="container mx-auto px-6">
-
         {/* Header */}
         <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
           <div>
@@ -67,8 +86,8 @@ export const ServicesSection = () => {
               <span className="block font-display italic text-gradient-primary">One Direction.</span>
             </h2>
             <p className="text-muted-foreground max-w-xs text-sm leading-relaxed flex-shrink-0 md:text-right">
-              Each department runs independently. Each one feeds the next.
-              Together, they're something bigger than any one of them.
+              Each department runs independently. Each one feeds the next. Together, they're something bigger
+              than any one of them.
             </p>
           </div>
         </div>
@@ -114,9 +133,7 @@ export const ServicesSection = () => {
                   <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
                     {service.title}
                   </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {service.description}
-                  </p>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{service.description}</p>
                 </div>
 
                 {/* Footer row */}
@@ -126,21 +143,22 @@ export const ServicesSection = () => {
                       <span
                         key={tag}
                         className="px-2.5 py-0.5 text-xs font-medium rounded-full"
-                        style={{ background: colors.bg, color: colors.text, border: `1px solid ${colors.border}` }}
+                        style={{
+                          background: colors.bg,
+                          color: colors.text,
+                          border: `1px solid ${colors.border}`,
+                        }}
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
-                  <ArrowUpRight
-                    className="w-4 h-4 text-muted-foreground/35 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 flex-shrink-0"
-                  />
+                  <ArrowUpRight className="w-4 h-4 text-muted-foreground/35 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 flex-shrink-0" />
                 </div>
               </Link>
             );
           })}
         </div>
-
       </div>
     </section>
   );

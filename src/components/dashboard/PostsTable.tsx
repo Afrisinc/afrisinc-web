@@ -3,40 +3,40 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { format } from "date-fns";
-import { 
-  FileText, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
-  Loader2, 
-  Facebook, 
-  Instagram, 
+import {
+  FileText,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Loader2,
+  Facebook,
+  Instagram,
   ExternalLink,
   LayoutList,
-  Inbox
+  Inbox,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const statusConfig = {
-  draft: { 
-    label: "Draft", 
-    icon: FileText, 
-    className: "bg-muted text-muted-foreground border-muted" 
+  draft: {
+    label: "Draft",
+    icon: FileText,
+    className: "bg-muted text-muted-foreground border-muted",
   },
-  pending: { 
-    label: "Pending", 
-    icon: Clock, 
-    className: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30" 
+  pending: {
+    label: "Pending",
+    icon: Clock,
+    className: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30",
   },
-  published: { 
-    label: "Published", 
-    icon: CheckCircle, 
-    className: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30" 
+  published: {
+    label: "Published",
+    icon: CheckCircle,
+    className: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30",
   },
-  failed: { 
-    label: "Failed", 
-    icon: XCircle, 
-    className: "bg-destructive/10 text-destructive border-destructive/30" 
+  failed: {
+    label: "Failed",
+    icon: XCircle,
+    className: "bg-destructive/10 text-destructive border-destructive/30",
   },
 };
 
@@ -93,9 +93,7 @@ const PostsTable = () => {
             </div>
             <div>
               <CardTitle>Recent Posts</CardTitle>
-              <CardDescription>
-                {posts?.length || 0} total posts generated
-              </CardDescription>
+              <CardDescription>{posts?.length || 0} total posts generated</CardDescription>
             </div>
           </div>
         </div>
@@ -108,8 +106,7 @@ const PostsTable = () => {
             </div>
             <h3 className="font-semibold text-foreground mb-1">No posts yet</h3>
             <p className="text-sm text-muted-foreground max-w-sm">
-              Create your first AI-generated post using the form on the left.
-              Your posts will appear here.
+              Create your first AI-generated post using the form on the left. Your posts will appear here.
             </p>
           </div>
         ) : (
@@ -132,10 +129,7 @@ const PostsTable = () => {
                   return (
                     <TableRow
                       key={post.id}
-                      className={cn(
-                        "transition-colors",
-                        index % 2 === 0 ? "bg-transparent" : "bg-muted/10"
-                      )}
+                      className={cn("transition-colors", index % 2 === 0 ? "bg-transparent" : "bg-muted/10")}
                     >
                       <TableCell>
                         <div className="space-y-1">
@@ -179,18 +173,14 @@ const PostsTable = () => {
                       <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
                         {format(new Date(post.created_at), "MMM d, yyyy")}
                         <br />
-                        <span className="text-xs">
-                          {format(new Date(post.created_at), "HH:mm")}
-                        </span>
+                        <span className="text-xs">{format(new Date(post.created_at), "HH:mm")}</span>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
                         {post.published_at && post.published_at !== "null" ? (
                           <>
                             {format(new Date(post.published_at), "MMM d, yyyy")}
                             <br />
-                            <span className="text-xs">
-                              {format(new Date(post.published_at), "HH:mm")}
-                            </span>
+                            <span className="text-xs">{format(new Date(post.published_at), "HH:mm")}</span>
                           </>
                         ) : (
                           <span className="text-muted-foreground/50">—</span>

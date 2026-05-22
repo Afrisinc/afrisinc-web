@@ -13,37 +13,45 @@ import { toast } from "sonner";
 
 export default function VPNManagement() {
   const [activeTab, setActiveTab] = useState("overview");
-  
+
   const { data: stats, isLoading: statsLoading } = useVPNStats();
   const { data: servers, isLoading: serversLoading } = useVPNServers();
   const { data: users, isLoading: usersLoading } = useVPNUsers();
   const { data: devices, isLoading: devicesLoading } = useVPNDevices();
   const { data: connections, isLoading: connectionsLoading } = useVPNConnections();
 
-  const handleGenerateConfig = async (deviceId: string, serverId: string, protocol: 'wireguard' | 'openvpn' | 'ikev2') => {
+  const handleGenerateConfig = async (
+    deviceId: string,
+    serverId: string,
+    protocol: "wireguard" | "openvpn" | "ikev2"
+  ) => {
     try {
       const config = await generateConfig(deviceId, serverId, protocol);
-      const device = devices?.find(d => d.id === deviceId);
-      const server = servers?.find(s => s.id === serverId);
-      const fileName = `${device?.name.toLowerCase().replace(/\s+/g, '-')}-${server?.name.toLowerCase()}.${protocol === 'wireguard' ? 'conf' : protocol === 'openvpn' ? 'ovpn' : 'mobileconfig'}`;
-      
-      const blob = new Blob([config], { type: 'text/plain' });
+      const device = devices?.find((d) => d.id === deviceId);
+      const server = servers?.find((s) => s.id === serverId);
+      const fileName = `${device?.name.toLowerCase().replace(/\s+/g, "-")}-${server?.name.toLowerCase()}.${protocol === "wireguard" ? "conf" : protocol === "openvpn" ? "ovpn" : "mobileconfig"}`;
+
+      const blob = new Blob([config], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = fileName;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      
+
       toast.success(`Configuration downloaded: ${fileName}`);
     } catch {
       toast.error("Failed to generate configuration");
     }
   };
 
-  const handleGenerateConfigAsync = async (deviceId: string, serverId: string, protocol: 'wireguard' | 'openvpn' | 'ikev2') => {
+  const handleGenerateConfigAsync = async (
+    deviceId: string,
+    serverId: string,
+    protocol: "wireguard" | "openvpn" | "ikev2"
+  ) => {
     return generateConfig(deviceId, serverId, protocol);
   };
 
@@ -52,9 +60,7 @@ export default function VPNManagement() {
       {/* Header */}
       <div>
         <h1 className="heading-section">VPN Management</h1>
-        <p className="text-secondary">
-          Manage servers, users, and connections for your VPN infrastructure
-        </p>
+        <p className="text-secondary">Manage servers, users, and connections for your VPN infrastructure</p>
       </div>
 
       {/* Stats Cards */}
@@ -90,8 +96,8 @@ export default function VPNManagement() {
         </TabsContent>
 
         <TabsContent value="users" className="space-y-6 mt-6">
-          <UsersTable 
-            users={users} 
+          <UsersTable
+            users={users}
             servers={servers}
             isLoading={usersLoading}
             onGenerateConfig={handleGenerateConfig}
@@ -100,10 +106,10 @@ export default function VPNManagement() {
 
         <TabsContent value="config" className="space-y-6 mt-6">
           <div className="grid gap-6 lg:grid-cols-2">
-            <ConfigGenerator 
-              servers={servers} 
-              devices={devices} 
-              isLoading={serversLoading || devicesLoading} 
+            <ConfigGenerator
+              servers={servers}
+              devices={devices}
+              isLoading={serversLoading || devicesLoading}
             />
             <QRCodeGenerator
               servers={servers}

@@ -2,6 +2,25 @@
 
 import type { Article, ArticleCategory, ArticlesResponse, ArticleFilters } from "@/types/article";
 import { getRuntimeConfig } from "@/lib/config";
+import { mockArticles, mockFeaturedArticle, mockCategories } from "@/lib/mockArticles";
+
+// Backend article response shape
+interface BackendArticle {
+  id: string;
+  slug?: string;
+  source_headline?: string;
+  source_summary?: string;
+  source_url?: string;
+  image_url?: string;
+  category?: string;
+  pub_date?: string;
+  updated_at?: string;
+  read_time?: number;
+  is_featured?: boolean;
+  ai_generated?: boolean;
+  tags?: string[];
+  author?: { name?: string; avatar?: string; role?: string };
+}
 
 // Cached categories
 let categoriesCache: ArticleCategory[] | null = null;
@@ -57,7 +76,7 @@ export function getCategoryPlaceholderImage(category?: string | string[]): strin
 
 // Check if a string is a valid image URL
 function isValidImageUrl(url: string | undefined): boolean {
-  if (!url || typeof url !== 'string') return false;
+  if (!url || typeof url !== "string") return false;
   const trimmed = url.trim();
   // Check if it starts with http/https or data URI
   return /^(https?:\/\/|data:image\/)/.test(trimmed);
@@ -71,18 +90,18 @@ function parseCategories(categoryString?: string): string | string[] {
   if (Array.isArray(categoryString)) return categoryString;
 
   // If it contains commas, split and trim
-  if (typeof categoryString === 'string' && categoryString.includes(',')) {
+  if (typeof categoryString === "string" && categoryString.includes(",")) {
     return categoryString
-      .split(',')
-      .map(cat => cat.trim())
-      .filter(cat => cat.length > 0);
+      .split(",")
+      .map((cat) => cat.trim())
+      .filter((cat) => cat.length > 0);
   }
 
   return categoryString;
 }
 
 // Map backend article response to our Article type
-async function mapBackendArticle(backendArticle: any): Promise<Article> {
+async function mapBackendArticle(backendArticle: BackendArticle): Promise<Article> {
   // Parse categories from backend (handles comma-separated string)
   const parsedCategories = parseCategories(backendArticle.category);
   const categoryForPlaceholder = Array.isArray(parsedCategories)
@@ -96,33 +115,44 @@ async function mapBackendArticle(backendArticle: any): Promise<Article> {
     ? backendArticle.image_url.trim()
     : placeholderImage;
 
+  // Derive a human-readable source name from the source URL
+  const sourceName = (() => {
+    try {
+      return new URL(backendArticle.source_url || "").hostname.replace(/^www\./, "");
+    } catch {
+      return "News Feed";
+    }
+  })();
 
   return {
     id: backendArticle.id,
-    slug: backendArticle.id, // Use ID as slug if not available
+    slug: backendArticle.slug || backendArticle.id.toString(),
     title: backendArticle.source_headline || "",
     summary: backendArticle.source_summary || "",
-    content: `<p>${backendArticle.source_summary || ""}</p>`, // Use summary as content fallback
+    content: `<p>${backendArticle.source_summary || ""}</p>`,
     featured_image: featuredImage,
     category: parsedCategories,
     type: "news",
-    tags: [],
+    tags: Array.isArray(backendArticle.tags) ? backendArticle.tags : [],
     source: {
-      name: "News Feed",
-      url: backendArticle.source_url || ""
+      name: sourceName,
+      url: backendArticle.source_url || "",
     },
     published_at: backendArticle.pub_date || new Date().toISOString(),
     updated_at: backendArticle.updated_at || backendArticle.pub_date || new Date().toISOString(),
-    read_time: Math.ceil((backendArticle.source_summary?.split(' ').length || 0) / 200),
+    read_time:
+      backendArticle.read_time ||
+      Math.ceil((backendArticle.source_summary?.split(" ").length || 0) / 200) ||
+      1,
     is_featured: backendArticle.is_featured || false,
+    ai_generated: backendArticle.ai_generated || false,
     seo: {
       meta_title: backendArticle.source_headline || "",
       meta_description: backendArticle.source_summary || "",
-      og_image: featuredImage
-    }
+      og_image: featuredImage,
+    },
   };
 }
-
 
 // API Functions - Call real N8N Articles API endpoints
 
@@ -136,20 +166,20 @@ export async function fetchArticles(filters: ArticleFilters = {}): Promise<Artic
     const searchParams = new URLSearchParams();
 
     if (filters.search) {
-      searchParams.append('search', filters.search);
+      searchParams.append("search", filters.search);
     }
 
     const page = filters.page || 1;
     const limit = filters.per_page || 10;
-    searchParams.append('page', page.toString());
-    searchParams.append('limit', limit.toString());
+    searchParams.append("page", page.toString());
+    searchParams.append("limit", limit.toString());
 
     const url = `${config.serverUrl}/articles?${searchParams.toString()}`;
 
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
@@ -160,9 +190,7 @@ export async function fetchArticles(filters: ArticleFilters = {}): Promise<Artic
     const data = await response.json();
 
     // Map backend response to our format
-    const articles = await Promise.all(
-      (data.data?.data || []).map(mapBackendArticle)
-    );
+    const articles = await Promise.all((data.data?.data || []).map(mapBackendArticle));
 
     return {
       articles,
@@ -171,8 +199,25 @@ export async function fetchArticles(filters: ArticleFilters = {}): Promise<Artic
       per_page: data.data?.pagination?.limit || limit,
       total_pages: data.data?.pagination?.totalPages || 0,
     };
-  } catch (error) {
-    throw error;
+  } catch {
+    // API unavailable — return mock data filtered by search
+    const page = filters.page || 1;
+    const limit = filters.per_page || 10;
+    let filtered = mockArticles;
+    if (filters.search) {
+      const q = filters.search.toLowerCase();
+      filtered = filtered.filter(
+        (a) => a.title.toLowerCase().includes(q) || a.summary.toLowerCase().includes(q)
+      );
+    }
+    const start = (page - 1) * limit;
+    return {
+      articles: filtered.slice(start, start + limit),
+      total: filtered.length,
+      page,
+      per_page: limit,
+      total_pages: Math.ceil(filtered.length / limit),
+    };
   }
 }
 
@@ -190,15 +235,15 @@ export async function fetchArticlesByCategory(
 
     const page = filters.page || 1;
     const limit = filters.per_page || 10;
-    searchParams.append('page', page.toString());
-    searchParams.append('limit', limit.toString());
+    searchParams.append("page", page.toString());
+    searchParams.append("limit", limit.toString());
 
     const url = `${config.serverUrl}/articles/category/${encodeURIComponent(category)}?${searchParams.toString()}`;
 
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
@@ -209,9 +254,7 @@ export async function fetchArticlesByCategory(
     const data = await response.json();
 
     // Map backend response to our format
-    const articles = await Promise.all(
-      (data.data?.data || []).map(mapBackendArticle)
-    );
+    const articles = await Promise.all((data.data?.data || []).map(mapBackendArticle));
 
     return {
       articles,
@@ -221,8 +264,21 @@ export async function fetchArticlesByCategory(
       total_pages: data.data?.pagination?.totalPages || 0,
     };
   } catch {
-    // Error Error fetching articles by category:', error);
-    throw error;
+    // API unavailable — return mock data filtered by category
+    const page = filters.page || 1;
+    const limit = filters.per_page || 10;
+    const filtered = mockArticles.filter((a) => {
+      const cats = Array.isArray(a.category) ? a.category : [a.category];
+      return cats.some((c) => c.toLowerCase() === category.toLowerCase());
+    });
+    const start = (page - 1) * limit;
+    return {
+      articles: filtered.slice(start, start + limit),
+      total: filtered.length,
+      page,
+      per_page: limit,
+      total_pages: Math.ceil(filtered.length / limit),
+    };
   }
 }
 
@@ -231,39 +287,52 @@ export async function fetchArticlesByCategory(
  * GET /articles/:id
  */
 export async function fetchArticleById(id: string): Promise<Article | null> {
+  const config = getRuntimeConfig();
+  const url = `${config.serverUrl}/articles/${encodeURIComponent(id)}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      return null;
+    }
+    throw new Error(`Failed to fetch article: ${response.status}`);
+  }
+
+  const data = await response.json();
+  return mapBackendArticle(data.data);
+}
+
+/**
+ * Fetch article by slug
+ * Tries GET /articles/slug/:slug first; falls back to mock data.
+ */
+export async function fetchArticleBySlug(slug: string): Promise<Article | null> {
   try {
     const config = getRuntimeConfig();
-    const url = `${config.serverUrl}/articles/${encodeURIComponent(id)}`;
+    const url = `${config.serverUrl}/articles/slug/${encodeURIComponent(slug)}`;
 
     const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
     });
 
     if (!response.ok) {
-      if (response.status === 404) {
-        return null;
-      }
-      throw new Error(`Failed to fetch article: ${response.status}`);
+      if (response.status === 404) return null;
+      throw new Error(`Failed to fetch article by slug: ${response.status}`);
     }
 
     const data = await response.json();
     return mapBackendArticle(data.data);
   } catch {
-    // Error Error fetching article by ID:', error);
-    throw error;
+    // API unavailable — search mock data
+    return mockArticles.find((a) => a.slug === slug) || null;
   }
-}
-
-/**
- * Fetch article by slug (mapped to ID)
- * For backward compatibility with existing code
- */
-export async function fetchArticleBySlug(slug: string): Promise<Article | null> {
-  // Slug is mapped to ID in the backend
-  return fetchArticleById(slug);
 }
 
 /**
@@ -281,9 +350,9 @@ export async function fetchCategories(): Promise<ArticleCategory[]> {
     const url = `${config.serverUrl}/articles?limit=100`;
 
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
@@ -295,11 +364,9 @@ export async function fetchCategories(): Promise<ArticleCategory[]> {
 
     // Extract unique categories from articles
     const categoryMap = new Map<string, ArticleCategory>();
-    (data.data?.data || []).forEach((article: any) => {
+    (data.data?.data || []).forEach((article: BackendArticle) => {
       // Handle category as string or array of strings
-      const categoryArray = Array.isArray(article.category)
-        ? article.category
-        : [article.category];
+      const categoryArray = Array.isArray(article.category) ? article.category : [article.category];
 
       // Process all categories in the array
       categoryArray.forEach((categoryRaw: string) => {
@@ -310,7 +377,7 @@ export async function fetchCategories(): Promise<ArticleCategory[]> {
               id: categorySlug,
               name: categoryRaw,
               slug: categorySlug,
-              description: ''
+              description: "",
             });
           }
         }
@@ -320,9 +387,8 @@ export async function fetchCategories(): Promise<ArticleCategory[]> {
     categoriesCache = Array.from(categoryMap.values());
     return categoriesCache;
   } catch {
-    // Error Error fetching categories:', error);
-    // Return empty array as fallback
-    return [];
+    // API unavailable — return categories derived from mock data
+    return mockCategories;
   }
 }
 
@@ -333,10 +399,10 @@ export async function fetchFeaturedArticle(): Promise<Article | null> {
   try {
     const response = await fetchArticles({ per_page: 1 });
 
-    const featured = response.articles.find(a => a.is_featured);
+    const featured = response.articles.find((a) => a.is_featured);
     return featured || response.articles[0] || null;
   } catch {
-    // Error Error fetching featured article:', error);
-    return null;
+    // API unavailable — return mock featured article
+    return mockFeaturedArticle;
   }
 }

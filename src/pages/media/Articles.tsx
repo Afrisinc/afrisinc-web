@@ -11,12 +11,7 @@ import { ArticlePagination } from "@/components/articles/ArticlePagination";
 import { AggregatedDisclaimer } from "@/components/articles/AggregatedDisclaimer";
 import { useArticles, useFeaturedArticle } from "@/hooks/useArticles";
 import type { ArticleFilters } from "@/types/article";
-import {
-  FileText,
-  ArrowLeft,
-  LayoutGrid,
-  LayoutList
-} from "lucide-react";
+import { FileText, ArrowLeft, LayoutGrid, LayoutList } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { subscribeNewsletter } from "@/services/notifyService";
 
@@ -31,7 +26,7 @@ const ArticlesPage = () => {
   const { data: featuredArticle, isLoading: isLoadingFeatured } = useFeaturedArticle();
 
   const handlePageChange = (page: number) => {
-    setFilters(prev => ({ ...prev, page }));
+    setFilters((prev) => ({ ...prev, page }));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -60,12 +55,15 @@ const ArticlesPage = () => {
     <PublicLayout>
       <Helmet>
         <title>Articles | Afrisinc Media</title>
-        <meta 
-          name="description" 
-          content="Stay informed with the latest technology news, insights, and editorial content from Africa's tech ecosystem." 
+        <meta
+          name="description"
+          content="Stay informed with the latest technology news, insights, and editorial content from Africa's tech ecosystem."
         />
         <meta property="og:title" content="Articles | Afrisinc Media" />
-        <meta property="og:description" content="Technology news, insights, and editorial content from Africa's tech ecosystem." />
+        <meta
+          property="og:description"
+          content="Technology news, insights, and editorial content from Africa's tech ecosystem."
+        />
         <meta property="og:type" content="website" />
       </Helmet>
 
@@ -81,7 +79,7 @@ const ArticlesPage = () => {
             <span>/</span>
             <span className="text-foreground">Articles</span>
           </div>
-          
+
           <div className="max-w-3xl">
             <Badge variant="outline" className="mb-6 animate-fade-up text-sm font-medium">
               <FileText className="w-4 h-4 mr-2" />
@@ -92,8 +90,8 @@ const ArticlesPage = () => {
               <span className="text-gradient-primary block mt-2">Tech Frontier</span>
             </h1>
             <p className="text-subtitle text-muted-foreground animate-fade-up animation-delay-200 leading-relaxed">
-              Original editorials, curated news, and expert opinions covering technology, 
-              business, and innovation across Africa and beyond.
+              Original editorials, curated news, and expert opinions covering technology, business, and
+              innovation across Africa and beyond.
             </p>
           </div>
         </div>
@@ -102,10 +100,7 @@ const ArticlesPage = () => {
       {/* Featured Article */}
       <section className="py-12 border-b border-border">
         <div className="container mx-auto px-6">
-          <FeaturedArticle 
-            article={featuredArticle || null} 
-            isLoading={isLoadingFeatured} 
-          />
+          <FeaturedArticle article={featuredArticle || null} isLoading={isLoadingFeatured} />
         </div>
       </section>
 
@@ -116,11 +111,9 @@ const ArticlesPage = () => {
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-8">
             <div>
               <h2 className="heading-subsection text-foreground mb-2 tracking-tight">Latest Articles</h2>
-              <p className="text-muted-foreground text-base">
-                {articlesData?.total || 0} articles
-              </p>
+              <p className="text-muted-foreground text-base">{articlesData?.total || 0} articles</p>
             </div>
-            
+
             {/* View Toggle */}
             <div className="flex items-center gap-2">
               <Button
@@ -141,27 +134,24 @@ const ArticlesPage = () => {
               </Button>
             </div>
           </div>
-          
+
           {/* Filters */}
           <div className="mb-8">
-            <ArticleFiltersComponent 
-              filters={filters} 
-              onFiltersChange={setFilters} 
-            />
+            <ArticleFiltersComponent filters={filters} onFiltersChange={setFilters} />
           </div>
-          
+
           {/* Disclaimer */}
           <div className="mb-8">
             <AggregatedDisclaimer />
           </div>
-          
+
           {/* Articles Grid/List */}
-          <ArticlesList 
-            articles={articlesData?.articles || []} 
+          <ArticlesList
+            articles={articlesData?.articles || []}
             isLoading={isLoadingArticles}
             variant={viewMode}
           />
-          
+
           {/* Pagination */}
           {articlesData && (
             <ArticlePagination
@@ -176,9 +166,7 @@ const ArticlesPage = () => {
       {/* Newsletter CTA */}
       <section className="py-20 bg-charcoal">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="heading-section font-bold text-white mb-4 tracking-tight">
-            Never Miss a Story
-          </h2>
+          <h2 className="heading-section font-bold text-white mb-4 tracking-tight">Never Miss a Story</h2>
           <p className="text-white/70 max-w-xl mx-auto mb-8 text-base md:text-lg leading-relaxed">
             Get the latest articles, insights, and analysis delivered directly to your inbox.
           </p>

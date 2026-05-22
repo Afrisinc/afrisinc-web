@@ -1,6 +1,13 @@
 import { ReactNode } from "react";
 
-export type FilterType = "text" | "select" | "multi-select" | "number-range" | "date" | "date-range" | "boolean";
+export type FilterType =
+  | "text"
+  | "select"
+  | "multi-select"
+  | "number-range"
+  | "date"
+  | "date-range"
+  | "boolean";
 
 export type SortOrder = "asc" | "desc" | null;
 
@@ -16,7 +23,7 @@ export interface ColumnConfig<T> {
   filterable?: boolean;
   filterType?: FilterType;
   filterOptions?: FilterOption[];
-  render?: (value: any, row: T) => ReactNode;
+  render?: (value: unknown, row: T) => ReactNode;
   width?: string;
   align?: "left" | "center" | "right";
 }
@@ -27,7 +34,7 @@ export interface DataTableQuery {
   search?: string;
   sort_by?: string;
   sort_order?: "asc" | "desc";
-  filters?: Record<string, any>;
+  filters?: Record<string, string>;
   start_date?: string;
   end_date?: string;
 }
@@ -56,9 +63,9 @@ export interface FilterBarProps {
   enableDateRange?: boolean;
   dateRange?: { start: string; end: string };
   onDateRangeChange?: (range: { start: string; end: string }) => void;
-  columnFilters?: Record<string, any>;
-  onColumnFiltersChange?: (filters: Record<string, any>) => void;
-  filterableColumns?: ColumnConfig<any>[];
+  columnFilters?: Record<string, string>;
+  onColumnFiltersChange?: (filters: Record<string, string>) => void;
+  filterableColumns?: ColumnConfig<Record<string, unknown>>[];
   enableSearch?: boolean;
   searchPlaceholder?: string;
 }

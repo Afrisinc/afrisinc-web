@@ -29,8 +29,12 @@ import { QueryParams } from "@/types/shared";
 export const usePlatformOverview = () =>
   useQuery({ queryKey: ["platform", "overview"], queryFn: fetchPlatformOverview });
 
-export const usePlatformUsers = (params: { search?: string; status?: string; limit?: number; offset?: number }) =>
-  useQuery({ queryKey: ["platform", "users", params], queryFn: () => fetchPlatformUsers(params) });
+export const usePlatformUsers = (params: {
+  search?: string;
+  status?: string;
+  limit?: number;
+  offset?: number;
+}) => useQuery({ queryKey: ["platform", "users", params], queryFn: () => fetchPlatformUsers(params) });
 
 export const usePlatformAccounts = (params: { type?: string; limit?: number; offset?: number }) =>
   useQuery({ queryKey: ["platform", "accounts", params], queryFn: () => fetchPlatformAccounts(params) });
@@ -43,13 +47,20 @@ export const usePlatformUserAccounts = (userId: string | null) =>
   });
 
 export const usePlatformOrganizations = (params: { limit?: number; offset?: number }) =>
-  useQuery({ queryKey: ["platform", "organizations", params], queryFn: () => fetchPlatformOrganizations(params) });
+  useQuery({
+    queryKey: ["platform", "organizations", params],
+    queryFn: () => fetchPlatformOrganizations(params),
+  });
 
 export const useProductEnrollments = () =>
   useQuery({ queryKey: ["platform", "products"], queryFn: fetchProductEnrollments });
 
 export const useProductAccounts = (productId: string) =>
-  useQuery({ queryKey: ["platform", "product-accounts", productId], queryFn: () => fetchProductAccounts(productId), enabled: !!productId });
+  useQuery({
+    queryKey: ["platform", "product-accounts", productId],
+    queryFn: () => fetchProductAccounts(productId),
+    enabled: !!productId,
+  });
 
 export const useGrowthData = (range: "7d" | "30d" | "90d") =>
   useQuery({ queryKey: ["platform", "growth", range], queryFn: () => fetchGrowthData(range) });
@@ -62,17 +73,26 @@ export const useLoginEvents = (params?: QueryParams) =>
 
 export const useSuspendUser = () => {
   const qc = useQueryClient();
-  return useMutation({ mutationFn: suspendUser, onSuccess: () => qc.invalidateQueries({ queryKey: ["platform", "users"] }) });
+  return useMutation({
+    mutationFn: suspendUser,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["platform", "users"] }),
+  });
 };
 
 export const useReactivateUser = () => {
   const qc = useQueryClient();
-  return useMutation({ mutationFn: reactivateUser, onSuccess: () => qc.invalidateQueries({ queryKey: ["platform", "users"] }) });
+  return useMutation({
+    mutationFn: reactivateUser,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["platform", "users"] }),
+  });
 };
 
 export const useSuspendAccount = () => {
   const qc = useQueryClient();
-  return useMutation({ mutationFn: suspendAccount, onSuccess: () => qc.invalidateQueries({ queryKey: ["platform", "accounts"] }) });
+  return useMutation({
+    mutationFn: suspendAccount,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["platform", "accounts"] }),
+  });
 };
 
 // Organization hooks
@@ -132,13 +152,8 @@ export const useAddPlatformOrganizationMember = () => {
 export const useRemovePlatformOrganizationMember = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      organizationId,
-      userId,
-    }: {
-      organizationId: string;
-      userId: string;
-    }) => removePlatformOrganizationMember(organizationId, userId),
+    mutationFn: ({ organizationId, userId }: { organizationId: string; userId: string }) =>
+      removePlatformOrganizationMember(organizationId, userId),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["platform", "organization-members"] }),
   });
 };

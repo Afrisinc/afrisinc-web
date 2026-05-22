@@ -4,29 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Newspaper,
-  Youtube,
-  Mic,
-  FileText,
-  Play,
-  Clock,
-  ArrowRight,
-  ArrowUpRight,
-  TrendingUp,
-} from "lucide-react";
-import { useFeaturedArticle, useArticles } from "@/hooks/useArticles";
+import { Play, ArrowRight, ArrowUpRight } from "lucide-react";
+import { useFeaturedArticle, useArticles, useCategories } from "@/hooks/useArticles";
 import { ArticleCard } from "@/components/articles/ArticleCard";
-import { formatDistanceToNow } from "date-fns";
+import { FeaturedArticle } from "@/components/articles/FeaturedArticle";
 import { useToast } from "@/hooks/use-toast";
 import { subscribeNewsletter } from "@/services/notifyService";
 import { useTrackForm } from "@/hooks/useTrackForm";
-
-const typeColors: Record<string, { bg: string; text: string; border: string }> = {
-  Documentary: { bg: "hsl(22 88% 52% / 0.1)",  text: "hsl(22 82% 46%)",  border: "hsl(22 88% 52% / 0.25)" },
-  News:        { bg: "hsl(158 42% 26% / 0.1)", text: "hsl(158 42% 32%)", border: "hsl(158 42% 26% / 0.25)" },
-  Podcast:     { bg: "hsl(43 95% 52% / 0.1)",  text: "hsl(38 80% 38%)",  border: "hsl(43 95% 52% / 0.25)" },
-};
 
 const videos = [
   {
@@ -74,9 +58,14 @@ const Media = () => {
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
   const { data: featuredArticle, isLoading: isLoadingFeatured } = useFeaturedArticle();
-  const { data: articlesData, isLoading: isLoadingArticles } = useArticles({ per_page: 4 });
-  const { onStart, onSubmit: trackSubmit, onError } = useTrackForm('newsletter_form', 'Newsletter Signup');
+  const { data: articlesData, isLoading: isLoadingArticles } = useArticles({
+    per_page: 6,
+    category: selectedCategory,
+  });
+  const { data: categories = [] } = useCategories();
+  const { onStart, onSubmit: trackSubmit, onError } = useTrackForm("newsletter_form", "Newsletter Signup");
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,7 +80,7 @@ const Media = () => {
       });
       setEmail("");
     } catch {
-      onError('email', 'server'); // Track error
+      onError("email", "server"); // Track error
       toast({
         title: "Failed to subscribe",
         description: "Please try again.",
@@ -104,14 +93,12 @@ const Media = () => {
 
   return (
     <PublicLayout>
-
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-background dot-grid grain">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background/80 pointer-events-none" />
 
         <div className="container mx-auto px-6 pt-36 pb-24 relative z-10">
           <div className="max-w-4xl">
-
             <p className="line-accent mb-12 animate-fade-in">Media Hub</p>
 
             <h1 className="animate-fade-up animation-delay-100" style={{ lineHeight: 1 }}>
@@ -130,110 +117,69 @@ const Media = () => {
             </h1>
 
             <p className="text-lg text-muted-foreground leading-[1.75] max-w-lg mt-10 animate-fade-up animation-delay-200">
-              News, insights, and stories from Africa's technology ecosystem and beyond.
-              Stay informed on what's shaping the future.
+              News, insights, and stories from Africa's technology ecosystem and beyond. Stay informed on
+              what's shaping the future.
             </p>
-
           </div>
         </div>
       </section>
 
+      {/* ── Latest Headlines Ticker ───────────────────────────────────────── */}
+      {articlesData && articlesData.articles.length > 0 && (
+        <div className="border-y border-border bg-muted/40">
+          <div className="container mx-auto px-6">
+            <div className="flex items-center gap-0 overflow-hidden">
+              <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-destructive py-3 pr-5 border-r border-border flex-shrink-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-destructive animate-pulse" />
+                Latest
+              </span>
+              <div className="flex items-center gap-6 overflow-x-auto scrollbar-none pl-5 py-3">
+                {articlesData.articles.slice(0, 4).map((article, i) => (
+                  <Link
+                    key={article.id}
+                    to={`/media/articles/${article.slug}`}
+                    className="flex items-center gap-3 flex-shrink-0 group"
+                  >
+                    {i > 0 && <span className="w-1 h-1 rounded-full bg-border flex-shrink-0" />}
+                    <span className="text-[11px] text-muted-foreground group-hover:text-foreground transition-colors line-clamp-1 max-w-[280px]">
+                      {article.title}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Featured Article ─────────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-background">
         <div className="container mx-auto px-6">
-
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
             <div>
               <p className="line-accent">Featured</p>
             </div>
             <div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                Latest from{" "}
-                <span className="font-display italic text-gradient-primary">Afrisinc.</span>
+                Latest from <span className="font-display italic text-gradient-primary">Afrisinc.</span>
               </h2>
             </div>
           </div>
 
-          {isLoadingFeatured ? (
-            <div className="grid lg:grid-cols-2 gap-8 items-center">
-              <Skeleton className="aspect-video rounded-2xl" />
-              <div className="space-y-4">
-                <Skeleton className="h-6 w-24" />
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-3/4" />
-                <Skeleton className="h-20 w-full" />
-                <Skeleton className="h-10 w-32" />
-              </div>
-            </div>
-          ) : featuredArticle ? (
-            <div className="grid lg:grid-cols-2 gap-8 items-start animate-fade-up">
-              <Link
-                to={`/media/articles/${featuredArticle.slug}`}
-                className="group relative rounded-2xl overflow-hidden border border-border bg-card hover:border-primary/25 transition-all duration-300"
-              >
-                <div className="relative aspect-video overflow-hidden">
-                  <img
-                    src={featuredArticle.featured_image}
-                    alt={featuredArticle.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent pointer-events-none" />
-                </div>
-              </Link>
-
-              <div className="animate-fade-up animation-delay-100">
-                <span
-                  className="px-3 py-1 text-xs font-semibold rounded-full inline-block mb-4"
-                  style={{
-                    background: typeColors[featuredArticle.category.name]?.bg || "hsl(var(--primary) / 0.15)",
-                    color: typeColors[featuredArticle.category.name]?.text || "hsl(var(--primary))",
-                    border: `1px solid ${typeColors[featuredArticle.category.name]?.border || "hsl(var(--primary) / 0.25)"}`,
-                  }}
-                >
-                  {featuredArticle.category.name}
-                </span>
-
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground leading-[1.1] mb-6">
-                  {featuredArticle.title}
-                </h2>
-
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {featuredArticle.summary}
-                </p>
-
-                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-8">
-                  <span>{formatDistanceToNow(new Date(featuredArticle.published_at), { addSuffix: true })}</span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    {featuredArticle.read_time} min read
-                  </span>
-                </div>
-
-                <Button variant="default" size="lg" className="group shadow-primary" asChild>
-                  <Link to={`/media/articles/${featuredArticle.slug}`}>
-                    Read Article
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          ) : null}
+          <FeaturedArticle article={featuredArticle ?? null} isLoading={isLoadingFeatured} />
         </div>
       </section>
 
       {/* ── Latest Articles ──────────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-muted/30">
         <div className="container mx-auto px-6">
-
-          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-12 pb-12 border-b border-border">
             <div>
               <p className="line-accent">Articles</p>
             </div>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                Deep Dives and{" "}
-                <span className="font-display italic text-gradient-primary">Analysis.</span>
+                Deep Dives and <span className="font-display italic text-gradient-primary">Analysis.</span>
               </h2>
               <Button variant="outline" size="lg" className="group flex-shrink-0" asChild>
                 <Link to="/media/articles">
@@ -244,9 +190,38 @@ const Media = () => {
             </div>
           </div>
 
+          {/* Category pills */}
+          {categories.length > 0 && (
+            <div className="flex items-center gap-2 flex-wrap mb-10">
+              <button
+                onClick={() => setSelectedCategory(undefined)}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors duration-200 ${
+                  !selectedCategory
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-transparent text-muted-foreground border-border hover:border-primary/40 hover:text-foreground"
+                }`}
+              >
+                All
+              </button>
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.slug === selectedCategory ? undefined : cat.slug)}
+                  className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors duration-200 ${
+                    selectedCategory === cat.slug
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-transparent text-muted-foreground border-border hover:border-primary/40 hover:text-foreground"
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+          )}
+
           {isLoadingArticles ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {Array.from({ length: 4 }).map((_, i) => (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="bg-card rounded-2xl overflow-hidden border border-border">
                   <Skeleton className="aspect-[16/10] w-full" />
                   <div className="p-6 space-y-3">
@@ -258,12 +233,12 @@ const Media = () => {
               ))}
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {articlesData?.articles.slice(0, 4).map((article, index) => (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {articlesData?.articles.map((article, index) => (
                 <div
                   key={article.id}
                   className="animate-fade-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  style={{ animationDelay: `${index * 80}ms` }}
                 >
                   <ArticleCard article={article} />
                 </div>
@@ -276,15 +251,13 @@ const Media = () => {
       {/* ── Videos ───────────────────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-background">
         <div className="container mx-auto px-6">
-
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
             <div>
               <p className="line-accent">Video</p>
             </div>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                Watch Our{" "}
-                <span className="font-display italic text-gradient-primary">Latest Videos.</span>
+                Watch Our <span className="font-display italic text-gradient-primary">Latest Videos.</span>
               </h2>
               <Button variant="outline" size="lg" className="group flex-shrink-0" asChild>
                 <a href="#" target="_blank" rel="noopener noreferrer">
@@ -337,15 +310,13 @@ const Media = () => {
       {/* ── Podcasts ─────────────────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-muted/30">
         <div className="container mx-auto px-6">
-
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
             <div>
               <p className="line-accent">Podcast</p>
             </div>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                The Afrisinc{" "}
-                <span className="font-display italic text-gradient-primary">Podcast.</span>
+                The Afrisinc <span className="font-display italic text-gradient-primary">Podcast.</span>
               </h2>
               <Button variant="outline" size="lg" className="group flex-shrink-0" asChild>
                 <a href="#" target="_blank" rel="noopener noreferrer">
@@ -394,7 +365,6 @@ const Media = () => {
         <div className="absolute top-0 left-0 right-0 kente-border opacity-55" />
 
         <div className="container mx-auto px-6 relative z-10">
-
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-background/10">
             <div>
               <p className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-background/40 before:block before:w-6 before:h-px before:bg-background/40 before:flex-shrink-0">
@@ -403,8 +373,7 @@ const Media = () => {
             </div>
             <div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-background leading-[1.0]">
-                Get the Latest{" "}
-                <span className="font-display italic text-gradient-primary">Insights.</span>
+                Get the Latest <span className="font-display italic text-gradient-primary">Insights.</span>
               </h2>
             </div>
           </div>
@@ -433,10 +402,8 @@ const Media = () => {
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </form>
-
         </div>
       </section>
-
     </PublicLayout>
   );
 };

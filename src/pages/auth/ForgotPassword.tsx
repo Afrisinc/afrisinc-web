@@ -44,9 +44,7 @@ const ForgotPassword = () => {
             <span className="text-xl font-bold text-foreground">Afrisinc</span>
           </Link>
           <h1 className="text-2xl font-bold text-foreground">Reset your password</h1>
-          <p className="text-muted-foreground">
-            Enter your email and we'll send you reset instructions
-          </p>
+          <p className="text-muted-foreground">Enter your email and we'll send you reset instructions</p>
         </div>
         <div className="bg-card rounded-2xl p-8 shadow-card">
           {sent ? (
@@ -69,8 +67,8 @@ const ForgotPassword = () => {
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-sm font-medium mb-2">Email</label>
-                <Input 
-                  type="email" 
+                <Input
+                  type="email"
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

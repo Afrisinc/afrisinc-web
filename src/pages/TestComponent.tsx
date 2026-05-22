@@ -44,8 +44,7 @@ export default function TestComponent() {
       const searchLower = query.search.toLowerCase();
       filtered = filtered.filter(
         (user) =>
-          user.name.toLowerCase().includes(searchLower) ||
-          user.email.toLowerCase().includes(searchLower)
+          user.name.toLowerCase().includes(searchLower) || user.email.toLowerCase().includes(searchLower)
       );
     }
 
@@ -224,9 +223,7 @@ export default function TestComponent() {
         {/* Debug Info */}
         <div className="mt-8 p-4 border rounded-lg bg-muted/50">
           <h3 className="font-semibold mb-2">Current Query State:</h3>
-          <pre className="text-xs overflow-auto">
-            {JSON.stringify(query, null, 2)}
-          </pre>
+          <pre className="text-xs overflow-auto">{JSON.stringify(query, null, 2)}</pre>
         </div>
       </div>
     </div>

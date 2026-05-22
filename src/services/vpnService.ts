@@ -1,4 +1,4 @@
-import { VPNServer, VPNUser, VPNDevice, VPNConnection, VPNStats } from '@/types/vpn';
+import { VPNServer, VPNUser, VPNDevice, VPNConnection, VPNStats } from "@/types/vpn";
 
 // API Response Types
 interface VPNServerResponse {
@@ -91,7 +91,7 @@ export interface CreateVPNServerRequest {
 
 export interface CreateVPNDeviceRequest {
   deviceName: string;
-  deviceType: 'desktop' | 'mobile' | 'router' | 'unknown' | 'other';
+  deviceType: "desktop" | "mobile" | "router" | "unknown" | "other";
 }
 
 interface CreateVPNDeviceResponse {
@@ -105,15 +105,13 @@ interface CreateVPNDeviceResponse {
   createdAt: string;
 }
 
-
-
 export async function fetchVPNStats(): Promise<VPNStats> {
   // Fetch real servers and users data from API
   const servers = await fetchServers();
   const users = await fetchUsers();
 
-  const onlineServers = servers.filter(s => s.status === 'active').length;
-  const activeUsers = users.filter(u => u.status === 'active').length;
+  const onlineServers = servers.filter((s) => s.status === "active").length;
+  const activeUsers = users.filter((u) => u.status === "active").length;
   const activeConnections = users.reduce((acc, u) => acc + (u.connectedCount || 0), 0);
 
   return {
@@ -129,9 +127,9 @@ export async function fetchVPNStats(): Promise<VPNStats> {
 export async function fetchServers(): Promise<VPNServer[]> {
   const apiUrl = import.meta.env.VITE_API_URL;
   const response = await fetch(`${apiUrl}/vpn/admin/servers`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'accept': 'application/json',
+      accept: "application/json",
     },
   });
 
@@ -142,12 +140,12 @@ export async function fetchServers(): Promise<VPNServer[]> {
   const data: VPNServersApiResponse = await response.json();
 
   if (!data.success || !Array.isArray(data.data)) {
-    throw new Error('Invalid API response format');
+    throw new Error("Invalid API response format");
   }
 
   // Map API response to VPNServer type with backward compatibility
   return data.data.map((server) => {
-    const healthStatus = (server.healthStatus || 'healthy') as 'healthy' | 'degraded' | 'unhealthy';
+    const healthStatus = (server.healthStatus || "healthy") as "healthy" | "degraded" | "unhealthy";
     return {
       id: server.id,
       name: server.name,
@@ -160,7 +158,7 @@ export async function fetchServers(): Promise<VPNServer[]> {
       networkCidr: server.networkCidr,
       maxClients: server.maxClients,
       currentClients: server.currentClients,
-      status: server.status === 'active' ? 'active' : 'inactive',
+      status: server.status === "active" ? "active" : "inactive",
       healthStatus,
       latitude: server.latitude,
       longitude: server.longitude,
@@ -170,7 +168,7 @@ export async function fetchServers(): Promise<VPNServer[]> {
       ip: server.publicIp,
       port: server.wireguardPort,
       country: server.location,
-      protocol: 'wireguard',
+      protocol: "wireguard",
       load: 0,
       maxConnections: server.maxClients,
       currentConnections: server.currentClients,
@@ -183,9 +181,9 @@ export async function fetchServers(): Promise<VPNServer[]> {
 export async function fetchUsers(): Promise<VPNUser[]> {
   const apiUrl = import.meta.env.VITE_API_URL;
   const response = await fetch(`${apiUrl}/vpn/users`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'accept': 'application/json',
+      accept: "application/json",
     },
   });
 
@@ -196,7 +194,7 @@ export async function fetchUsers(): Promise<VPNUser[]> {
   const data: VPNUsersApiResponse = await response.json();
 
   if (!data.success || !Array.isArray(data.data)) {
-    throw new Error('Invalid API response format');
+    throw new Error("Invalid API response format");
   }
 
   // Map API response to VPNUser type
@@ -211,7 +209,7 @@ export async function fetchUsers(): Promise<VPNUser[]> {
       type: mapDeviceType(device.deviceType),
       deviceType: device.deviceType,
       ip: device.ip,
-      status: device.status as 'active' | 'disconnected',
+      status: device.status as "active" | "disconnected",
       isConnected: device.isConnected,
       lastConnected: device.lastConnected,
       lastSeen: device.lastConnected,
@@ -224,8 +222,8 @@ export async function fetchUsers(): Promise<VPNUser[]> {
       email: user.email,
       ip: user.ip,
       publicKey: user.publicKey,
-      status: user.status === 'active' ? 'active' :
-              user.status === 'disconnected' ? 'disconnected' : 'pending',
+      status:
+        user.status === "active" ? "active" : user.status === "disconnected" ? "disconnected" : "pending",
       dataUsageLimit: user.dataUsageLimit,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
@@ -235,7 +233,7 @@ export async function fetchUsers(): Promise<VPNUser[]> {
       devices,
       usageInfo: user.usageInfo,
       // Legacy fields for backward compatibility
-      name: user.email.split('@')[0],
+      name: user.email.split("@")[0],
       dataUsed: user.usageInfo.totalGB,
       dataLimit: user.dataUsageLimit > 0 ? user.dataUsageLimit : null,
       expiresAt: null,
@@ -246,17 +244,17 @@ export async function fetchUsers(): Promise<VPNUser[]> {
 
 export async function fetchDevices(): Promise<VPNDevice[]> {
   const users = await fetchUsers();
-  return users.flatMap(user => user.devices);
+  return users.flatMap((user) => user.devices);
 }
 
 export async function fetchUserDevices(userId: string): Promise<VPNDevice[]> {
   const apiUrl = import.meta.env.VITE_API_URL;
   // Use port 8080 for admin operations
-  const adminUrl = apiUrl.replace(':8091', ':8080');
+  const adminUrl = apiUrl.replace(":8091", ":8080");
   const response = await fetch(`${adminUrl}/vpn/users/${userId}/devices`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'accept': 'application/json',
+      accept: "application/json",
     },
   });
 
@@ -267,7 +265,7 @@ export async function fetchUserDevices(userId: string): Promise<VPNDevice[]> {
   const data = await response.json();
 
   if (!data.success || !Array.isArray(data.data)) {
-    throw new Error('Invalid API response format');
+    throw new Error("Invalid API response format");
   }
 
   // Map API response to VPNDevice type
@@ -281,8 +279,8 @@ export async function fetchUserDevices(userId: string): Promise<VPNDevice[]> {
     deviceType: device.deviceType,
     ip: device.ip,
     publicKey: device.publicKey,
-    status: device.status as 'active' | 'disconnected',
-    isConnected: device.status === 'active',
+    status: device.status as "active" | "disconnected",
+    isConnected: device.status === "active",
     lastConnected: device.lastConnected,
     lastSeen: device.lastConnected,
     createdAt: device.createdAt,
@@ -298,15 +296,15 @@ export async function fetchConnections(): Promise<VPNConnection[]> {
 export async function generateConfig(
   deviceId: string,
   serverId: string,
-  protocol: 'wireguard' | 'openvpn' | 'ikev2'
+  protocol: "wireguard" | "openvpn" | "ikev2"
 ): Promise<string> {
   try {
     const apiUrl = import.meta.env.VITE_API_URL;
     const response = await fetch(`${apiUrl}/vpn/config/generate`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'accept': 'application/json',
-        'Content-Type': 'application/json',
+        accept: "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         deviceId,
@@ -321,21 +319,21 @@ export async function generateConfig(
 
     const data = await response.json();
 
-    if (typeof data.config !== 'string') {
-      throw new TypeError('Invalid config response');
+    if (typeof data.config !== "string") {
+      throw new TypeError("Invalid config response");
     }
 
     return data.config;
   } catch (error) {
     // Fallback: Generate template config if API endpoint doesn't exist
     const servers = await fetchServers();
-    const server = servers.find(s => s.id === serverId);
+    const server = servers.find((s) => s.id === serverId);
 
     if (!server) {
-      throw new Error('Server not found');
+      throw new Error("Server not found");
     }
 
-    if (protocol === 'wireguard') {
+    if (protocol === "wireguard") {
       return `[Interface]
 PrivateKey = YOUR_PRIVATE_KEY_HERE
 Address = 10.8.0.${Math.floor(Math.random() * 200) + 10}/24
@@ -348,7 +346,7 @@ Endpoint = ${server.publicIp}:${server.wireguardPort}
 PersistentKeepalive = 25`;
     }
 
-    if (protocol === 'openvpn') {
+    if (protocol === "openvpn") {
       return `client
 dev tun
 proto udp
@@ -387,18 +385,18 @@ YOUR_PRIVATE_KEY_HERE
   }
 }
 
-function mapDeviceType(type: string): VPNDevice['type'] {
+function mapDeviceType(type: string): VPNDevice["type"] {
   const normalized = type.toLowerCase();
-  if (['desktop', 'mobile', 'router'].includes(normalized)) {
-    return normalized as 'desktop' | 'mobile' | 'router';
+  if (["desktop", "mobile", "router"].includes(normalized)) {
+    return normalized as "desktop" | "mobile" | "router";
   }
-  return normalized === 'unknown' ? 'unknown' : 'other';
+  return normalized === "unknown" ? "unknown" : "other";
 }
 
 export function formatBytes(bytes: number): string {
-  if (bytes === 0) return '0 B';
+  if (bytes === 0) return "0 B";
   const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const sizes = ["B", "KB", "MB", "GB", "TB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
@@ -419,17 +417,14 @@ export function formatDuration(seconds: number): string {
   return `${minutes}m`;
 }
 
-export async function createDevice(
-  userId: string,
-  deviceData: CreateVPNDeviceRequest
-): Promise<VPNDevice> {
+export async function createDevice(userId: string, deviceData: CreateVPNDeviceRequest): Promise<VPNDevice> {
   try {
     const apiUrl = import.meta.env.VITE_API_URL;
     const response = await fetch(`${apiUrl}/vpn/users/${userId}/devices`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'accept': 'application/json',
-        'Content-Type': 'application/json',
+        accept: "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(deviceData),
     });
@@ -449,33 +444,31 @@ export async function createDevice(
       userId,
       name: apiResponse.deviceName,
       deviceName: apiResponse.deviceName,
-      type: ['desktop', 'mobile', 'router', 'unknown'].includes(deviceType.toLowerCase())
-        ? (deviceType.toLowerCase() as 'desktop' | 'mobile' | 'router' | 'unknown')
-        : 'other',
+      type: ["desktop", "mobile", "router", "unknown"].includes(deviceType.toLowerCase())
+        ? (deviceType.toLowerCase() as "desktop" | "mobile" | "router" | "unknown")
+        : "other",
       deviceType: deviceType,
       ip: apiResponse.ip,
-      status: apiResponse.status as 'active' | 'disconnected',
+      status: apiResponse.status as "active" | "disconnected",
       isConnected: apiResponse.isConnected,
       lastConnected: apiResponse.lastConnected,
       lastSeen: apiResponse.lastConnected,
       createdAt: apiResponse.createdAt,
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Failed to create device';
+    const message = error instanceof Error ? error.message : "Failed to create device";
     throw new Error(message);
   }
 }
 
-export async function createServer(
-  serverData: CreateVPNServerRequest
-): Promise<VPNServer> {
+export async function createServer(serverData: CreateVPNServerRequest): Promise<VPNServer> {
   try {
     const apiUrl = import.meta.env.VITE_API_URL;
     const response = await fetch(`${apiUrl}/vpn/admin/servers`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'accept': 'application/json',
-        'Content-Type': 'application/json',
+        accept: "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(serverData),
     });
@@ -501,8 +494,8 @@ export async function createServer(
       networkCidr: server.networkCidr,
       maxClients: server.maxClients,
       currentClients: server.currentClients || 0,
-      status: server.status === 'active' ? 'active' : 'inactive',
-      healthStatus: server.healthStatus || 'healthy',
+      status: server.status === "active" ? "active" : "inactive",
+      healthStatus: server.healthStatus || "healthy",
       latitude: server.latitude,
       longitude: server.longitude,
       createdAt: server.createdAt || new Date().toISOString(),
@@ -513,7 +506,7 @@ export async function createServer(
       ip: server.publicIp,
       port: server.wireguardPort,
       country: server.location,
-      protocol: 'wireguard',
+      protocol: "wireguard",
       load: 0,
       maxConnections: server.maxClients,
       currentConnections: server.currentClients || 0,
@@ -521,23 +514,19 @@ export async function createServer(
       lastHeartbeat: server.updatedAt || new Date().toISOString(),
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Failed to create server';
+    const message = error instanceof Error ? error.message : "Failed to create server";
     throw new Error(message);
   }
 }
 
-export async function fetchDeviceConfig(
-  userId: string,
-  deviceId: string,
-  serverId: string
-): Promise<string> {
+export async function fetchDeviceConfig(userId: string, deviceId: string, serverId: string): Promise<string> {
   const apiUrl = import.meta.env.VITE_API_URL;
   const response = await fetch(
     `${apiUrl}/vpn/users/${userId}/devices/${deviceId}/config?serverId=${serverId}`,
     {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'accept': 'text/plain',
+        accept: "text/plain",
       },
     }
   );
@@ -549,20 +538,14 @@ export async function fetchDeviceConfig(
   return await response.text();
 }
 
-export async function deleteDevice(
-  userId: string,
-  deviceId: string
-): Promise<void> {
+export async function deleteDevice(userId: string, deviceId: string): Promise<void> {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const response = await fetch(
-    `${apiUrl}/vpn/users/${userId}/devices/${deviceId}`,
-    {
-      method: 'DELETE',
-      headers: {
-        'accept': 'application/json',
-      },
-    }
-  );
+  const response = await fetch(`${apiUrl}/vpn/users/${userId}/devices/${deviceId}`, {
+    method: "DELETE",
+    headers: {
+      accept: "application/json",
+    },
+  });
 
   if (!response.ok) {
     throw new Error(`Failed to delete device: ${response.statusText}`);

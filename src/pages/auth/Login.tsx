@@ -15,7 +15,11 @@ const Login = () => {
   const location = useLocation();
   const { toast } = useToast();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginSchemaType>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
@@ -31,11 +35,14 @@ const Login = () => {
       if (res.success && res.resp_code === 1000) {
         const token = res.data.token || "";
         localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify({
-          id: res.data.user_id,
-          email: res.data.email,
-          accountIds: res.data.account_ids || [],
-        }));
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            id: res.data.user_id,
+            email: res.data.email,
+            accountIds: res.data.account_ids || [],
+          })
+        );
 
         toast({
           title: "Welcome back!",
@@ -70,11 +77,7 @@ const Login = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6 justify-center">
-            <img
-              src="/afrisic-logo.png"
-              alt="Afrisinc Logo"
-              className="w-10 h-10 rounded-xl object-cover"
-            />
+            <img src="/afrisic-logo.png" alt="Afrisinc Logo" className="w-10 h-10 rounded-xl object-cover" />
             <span className="text-xl font-bold text-foreground">Afrisinc</span>
           </Link>
           <h1 className="text-2xl font-bold text-foreground">Welcome back</h1>
@@ -84,14 +87,8 @@ const Login = () => {
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label className="block text-sm font-medium mb-2">Email</label>
-              <Input
-                type="email"
-                placeholder="you@example.com"
-                {...register("email")}
-              />
-              {errors.email && (
-                <p className="text-sm text-destructive mt-1">{errors.email.message}</p>
-              )}
+              <Input type="email" placeholder="you@example.com" {...register("email")} />
+              {errors.email && <p className="text-sm text-destructive mt-1">{errors.email.message}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Password</label>
@@ -109,9 +106,7 @@ const Login = () => {
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
-              {errors.password && (
-                <p className="text-sm text-destructive mt-1">{errors.password.message}</p>
-              )}
+              {errors.password && <p className="text-sm text-destructive mt-1">{errors.password.message}</p>}
             </div>
             <div className="flex justify-between text-sm">
               <label className="flex items-center gap-2">

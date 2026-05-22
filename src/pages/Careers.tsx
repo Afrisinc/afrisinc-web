@@ -18,19 +18,24 @@ import {
 } from "lucide-react";
 
 const accentColors = {
-  terra:  { bg: "hsl(22 88% 52% / 0.08)",  text: "hsl(22 82% 46%)",  border: "hsl(22 88% 52% / 0.2)" },
+  terra: { bg: "hsl(22 88% 52% / 0.08)", text: "hsl(22 82% 46%)", border: "hsl(22 88% 52% / 0.2)" },
   forest: { bg: "hsl(158 42% 26% / 0.08)", text: "hsl(158 42% 32%)", border: "hsl(158 42% 26% / 0.2)" },
-  gold:   { bg: "hsl(43 95% 52% / 0.10)",  text: "hsl(38 80% 38%)",  border: "hsl(43 95% 52% / 0.25)" },
+  gold: { bg: "hsl(43 95% 52% / 0.10)", text: "hsl(38 80% 38%)", border: "hsl(43 95% 52% / 0.25)" },
   indigo: { bg: "hsl(240 40% 30% / 0.08)", text: "hsl(240 40% 52%)", border: "hsl(240 40% 30% / 0.2)" },
 };
 
 const benefits = [
-  { icon: Laptop,       title: "Remote-First",    description: "Work from anywhere in the world",      accent: "terra" },
-  { icon: Heart,        title: "Health & Wellness", description: "Comprehensive health coverage",      accent: "forest" },
-  { icon: Plane,        title: "Paid Time Off",   description: "Generous vacation policy",             accent: "gold" },
-  { icon: GraduationCap, title: "Learning Budget", description: "$2,000 annual development fund",    accent: "indigo" },
-  { icon: Coffee,       title: "Home Office",     description: "Equipment and setup allowance",        accent: "terra" },
-  { icon: Users,        title: "Team Events",     description: "Regular retreats and meetups",         accent: "forest" },
+  { icon: Laptop, title: "Remote-First", description: "Work from anywhere in the world", accent: "terra" },
+  { icon: Heart, title: "Health & Wellness", description: "Comprehensive health coverage", accent: "forest" },
+  { icon: Plane, title: "Paid Time Off", description: "Generous vacation policy", accent: "gold" },
+  {
+    icon: GraduationCap,
+    title: "Learning Budget",
+    description: "$2,000 annual development fund",
+    accent: "indigo",
+  },
+  { icon: Coffee, title: "Home Office", description: "Equipment and setup allowance", accent: "terra" },
+  { icon: Users, title: "Team Events", description: "Regular retreats and meetups", accent: "forest" },
 ];
 
 const openings = [
@@ -94,8 +99,8 @@ const openings = [
 
 const stats = [
   { value: "150+", label: "Team Members" },
-  { value: "20+",  label: "Countries" },
-  { value: "45%",  label: "Women in Tech" },
+  { value: "20+", label: "Countries" },
+  { value: "45%", label: "Women in Tech" },
   { value: "4.8/5", label: "Employee Rating" },
 ];
 
@@ -116,14 +121,12 @@ const Careers = () => {
 
   return (
     <PublicLayout>
-
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-background dot-grid grain">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background/80 pointer-events-none" />
 
         <div className="container mx-auto px-6 pt-36 pb-24 relative z-10">
           <div className="max-w-4xl">
-
             <p className="line-accent mb-12 animate-fade-in">Careers</p>
 
             <h1 className="animate-fade-up animation-delay-100" style={{ lineHeight: 1 }}>
@@ -142,8 +145,8 @@ const Careers = () => {
             </h1>
 
             <p className="text-lg text-muted-foreground leading-[1.75] max-w-lg mt-10 animate-fade-up animation-delay-200">
-              Join a team of passionate innovators shaping the technology landscape.
-              We offer meaningful work, competitive compensation, and global opportunities.
+              Join a team of passionate innovators shaping the technology landscape. We offer meaningful work,
+              competitive compensation, and global opportunities.
             </p>
 
             <Button
@@ -157,7 +160,6 @@ const Careers = () => {
                 <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
               </a>
             </Button>
-
           </div>
         </div>
       </section>
@@ -186,15 +188,13 @@ const Careers = () => {
       {/* ── Benefits ───────────────────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-background">
         <div className="container mx-auto px-6">
-
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
             <div>
               <p className="line-accent">Why Join Us</p>
             </div>
             <div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                We Take Care of{" "}
-                <span className="font-display italic text-gradient-primary">Our People.</span>
+                We Take Care of <span className="font-display italic text-gradient-primary">Our People.</span>
               </h2>
             </div>
           </div>
@@ -218,9 +218,7 @@ const Careers = () => {
                     <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
                       {benefit.title}
                     </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {benefit.description}
-                    </p>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{benefit.description}</p>
                   </div>
                 </div>
               );
@@ -232,40 +230,37 @@ const Careers = () => {
       {/* ── Open Positions ───────────────────────────────────────────────── */}
       <section id="positions" className="py-28 md:py-36 bg-muted/30">
         <div className="container mx-auto px-6">
-
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
             <div>
               <p className="line-accent">Open Roles</p>
             </div>
             <div>
               <div className="mb-4">
-                <span className={`inline-block px-4 py-2 rounded-full border ${
-                  openings.length === 0
-                    ? "bg-muted border-border text-muted-foreground"
-                    : "bg-primary/10 border-primary/20 text-primary"
-                }`}>
+                <span
+                  className={`inline-block px-4 py-2 rounded-full border ${
+                    openings.length === 0
+                      ? "bg-muted border-border text-muted-foreground"
+                      : "bg-primary/10 border-primary/20 text-primary"
+                  }`}
+                >
                   <span className="text-sm font-semibold">{openings.length} Opportunities Available</span>
                 </span>
               </div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
                 {openings.length === 0 ? (
                   <>
-                    We're{" "}
-                    <span className="font-display italic text-gradient-primary">Hiring Soon.</span>
+                    We're <span className="font-display italic text-gradient-primary">Hiring Soon.</span>
                   </>
                 ) : (
                   <>
-                    Join Our{" "}
-                    <span className="font-display italic text-gradient-primary">Growing Team.</span>
+                    Join Our <span className="font-display italic text-gradient-primary">Growing Team.</span>
                   </>
                 )}
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed mt-6 max-w-lg">
-                {openings.length === 0 ? (
-                  "We're preparing exciting new roles across our teams. Check back soon or reach out to express your interest."
-                ) : (
-                  "We're actively hiring across engineering, design, product, and operations. Find the role that's perfect for you."
-                )}
+                {openings.length === 0
+                  ? "We're preparing exciting new roles across our teams. Check back soon or reach out to express your interest."
+                  : "We're actively hiring across engineering, design, product, and operations. Find the role that's perfect for you."}
               </p>
             </div>
           </div>
@@ -344,7 +339,6 @@ const Careers = () => {
         <div className="absolute top-0 left-0 right-0 kente-border opacity-55" />
 
         <div className="container mx-auto px-6 relative z-10">
-
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-background/10">
             <div>
               <p className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-background/40 before:block before:w-6 before:h-px before:bg-background/40 before:flex-shrink-0">
@@ -353,8 +347,7 @@ const Careers = () => {
             </div>
             <div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-background leading-[1.0]">
-                More Ways to{" "}
-                <span className="font-display italic text-gradient-primary">Work Together.</span>
+                More Ways to <span className="font-display italic text-gradient-primary">Work Together.</span>
               </h2>
             </div>
           </div>
@@ -367,8 +360,7 @@ const Careers = () => {
               </div>
               <h3 className="text-2xl font-bold text-background mb-4">Partner With Us</h3>
               <p className="text-background/60 text-sm leading-relaxed mb-6">
-                Looking for technology partnerships or collaborations?
-                Let's explore opportunities together.
+                Looking for technology partnerships or collaborations? Let's explore opportunities together.
               </p>
               <Button variant="default" size="lg" className="group shadow-primary w-full sm:w-auto" asChild>
                 <Link to="/contact">
@@ -385,8 +377,7 @@ const Careers = () => {
               </div>
               <h3 className="text-2xl font-bold text-background mb-4">Investment Opportunities</h3>
               <p className="text-background/60 text-sm leading-relaxed mb-6">
-                Interested in investing in Africa's technology future?
-                We'd love to hear from you.
+                Interested in investing in Africa's technology future? We'd love to hear from you.
               </p>
               <Button
                 variant="outline"
@@ -401,10 +392,8 @@ const Careers = () => {
               </Button>
             </div>
           </div>
-
         </div>
       </section>
-
     </PublicLayout>
   );
 };

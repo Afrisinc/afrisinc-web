@@ -21,7 +21,7 @@ interface ConfigGeneratorProps {
 export function ConfigGenerator({ servers, devices, isLoading }: ConfigGeneratorProps) {
   const [selectedDevice, setSelectedDevice] = useState<string>("");
   const [selectedServer, setSelectedServer] = useState<string>("");
-  const [selectedProtocol, setSelectedProtocol] = useState<'wireguard' | 'openvpn' | 'ikev2'>('wireguard');
+  const [selectedProtocol, setSelectedProtocol] = useState<"wireguard" | "openvpn" | "ikev2">("wireguard");
   const [generatedConfig, setGeneratedConfig] = useState<string>("");
   const [copied, setCopied] = useState(false);
   const [showQR, setShowQR] = useState(false);
@@ -52,20 +52,20 @@ export function ConfigGenerator({ servers, devices, isLoading }: ConfigGenerator
   };
 
   const handleDownload = () => {
-    const device = devices?.find(d => d.id === selectedDevice);
-    const server = servers?.find(s => s.id === selectedServer);
-    const fileName = `${device?.name.toLowerCase().replace(/\s+/g, '-')}-${server?.name.toLowerCase()}.${selectedProtocol === 'wireguard' ? 'conf' : selectedProtocol === 'openvpn' ? 'ovpn' : 'mobileconfig'}`;
-    
-    const blob = new Blob([generatedConfig], { type: 'text/plain' });
+    const device = devices?.find((d) => d.id === selectedDevice);
+    const server = servers?.find((s) => s.id === selectedServer);
+    const fileName = `${device?.name.toLowerCase().replace(/\s+/g, "-")}-${server?.name.toLowerCase()}.${selectedProtocol === "wireguard" ? "conf" : selectedProtocol === "openvpn" ? "ovpn" : "mobileconfig"}`;
+
+    const blob = new Blob([generatedConfig], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = fileName;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
+
     toast.success(`Downloaded ${fileName}`);
   };
 
@@ -86,9 +86,9 @@ export function ConfigGenerator({ servers, devices, isLoading }: ConfigGenerator
     );
   }
 
-  const onlineServers = servers?.filter(s => s.status === 'online') ?? [];
-  const device = devices?.find(d => d.id === selectedDevice);
-  const server = servers?.find(s => s.id === selectedServer);
+  const onlineServers = servers?.filter((s) => s.status === "online") ?? [];
+  const device = devices?.find((d) => d.id === selectedDevice);
+  const server = servers?.find((s) => s.id === selectedServer);
 
   return (
     <>
@@ -140,9 +140,9 @@ export function ConfigGenerator({ servers, devices, isLoading }: ConfigGenerator
 
             <div className="space-y-2">
               <Label>Protocol</Label>
-              <Select 
-                value={selectedProtocol} 
-                onValueChange={(v: 'wireguard' | 'openvpn' | 'ikev2') => setSelectedProtocol(v)}
+              <Select
+                value={selectedProtocol}
+                onValueChange={(v: "wireguard" | "openvpn" | "ikev2") => setSelectedProtocol(v)}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -151,7 +151,9 @@ export function ConfigGenerator({ servers, devices, isLoading }: ConfigGenerator
                   <SelectItem value="wireguard">
                     <div className="flex items-center gap-2">
                       <span>WireGuard</span>
-                      <Badge variant="outline" className="text-xs">Recommended</Badge>
+                      <Badge variant="outline" className="text-xs">
+                        Recommended
+                      </Badge>
                     </div>
                   </SelectItem>
                   <SelectItem value="openvpn">OpenVPN</SelectItem>
@@ -161,9 +163,9 @@ export function ConfigGenerator({ servers, devices, isLoading }: ConfigGenerator
             </div>
           </div>
 
-          <Button 
-            variant="default" 
-            onClick={handleGenerate} 
+          <Button
+            variant="default"
+            onClick={handleGenerate}
             disabled={!selectedDevice || !selectedServer || generateConfigMutation.isPending}
             className="w-full sm:w-auto"
           >
@@ -189,11 +191,7 @@ export function ConfigGenerator({ servers, devices, isLoading }: ConfigGenerator
                   </Button>
                 </div>
               </div>
-              <Textarea
-                value={generatedConfig}
-                readOnly
-                className="font-mono text-xs h-64 bg-muted/50"
-              />
+              <Textarea value={generatedConfig} readOnly className="font-mono text-xs h-64 bg-muted/50" />
               <p className="text-xs text-muted-foreground">
                 ⚠️ Keep this configuration secure. Replace placeholder values with your actual keys.
               </p>

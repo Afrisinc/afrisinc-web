@@ -11,7 +11,16 @@ import { UpdateOrganizationDialog } from "@/components/platform/UpdateOrganizati
 import { usePlatformOrganizationMembers, useRemovePlatformOrganizationMember } from "@/hooks/usePlatform";
 import type { PlatformOrganization } from "@/types/platform";
 import { Building2, Users, Trash2, Plus, Edit } from "lucide-react";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 
 interface OrganizationDetailsSheetProps {
@@ -75,7 +84,11 @@ export function OrganizationDetailsSheet({
         </SheetHeader>
 
         {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden mt-4">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="flex-1 flex flex-col overflow-hidden mt-4"
+        >
           <TabsList className="grid w-full grid-cols-2 flex-shrink-0">
             <TabsTrigger value="details" className="gap-2">
               <Building2 className="h-4 w-4" />
@@ -95,11 +108,7 @@ export function OrganizationDetailsSheet({
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="text-base">Organization Information</CardTitle>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setUpdateDialogOpen(true)}
-                    >
+                    <Button variant="ghost" size="icon" onClick={() => setUpdateDialogOpen(true)}>
                       <Edit className="h-4 w-4" />
                     </Button>
                   </CardHeader>
@@ -205,12 +214,7 @@ export function OrganizationDetailsSheet({
               {/* Members Tab */}
               <TabsContent value="members" className="space-y-4 mt-4">
                 <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    className="flex-1"
-                    onClick={onAddMember}
-                    disabled={!onAddMember}
-                  >
+                  <Button size="sm" className="flex-1" onClick={onAddMember} disabled={!onAddMember}>
                     <Plus className="h-4 w-4 mr-2" />
                     Add Member
                   </Button>
@@ -266,7 +270,7 @@ export function OrganizationDetailsSheet({
                             </div>
 
                             {/* Details row */}
-                            {(member.phone) && (
+                            {member.phone && (
                               <div className="grid grid-cols-2 gap-2 text-xs">
                                 {member.phone && (
                                   <div>
@@ -301,7 +305,8 @@ export function OrganizationDetailsSheet({
           <AlertDialogHeader>
             <AlertDialogTitle>Remove Member</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to remove <strong>{confirmRemove?.memberEmail}</strong> from this organization?
+              Are you sure you want to remove <strong>{confirmRemove?.memberEmail}</strong> from this
+              organization?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

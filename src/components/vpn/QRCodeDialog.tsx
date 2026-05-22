@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -30,33 +37,33 @@ export function QRCodeDialog({ isOpen, onClose, config, device, server, protocol
   };
 
   const handleDownloadQR = () => {
-    const svg = document.getElementById('vpn-qr-code');
+    const svg = document.getElementById("vpn-qr-code");
     if (!svg) return;
 
     const svgData = new XMLSerializer().serializeToString(svg);
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
     const img = new Image();
-    
+
     img.onload = () => {
       canvas.width = img.width;
       canvas.height = img.height;
       ctx?.drawImage(img, 0, 0);
-      const pngFile = canvas.toDataURL('image/png');
-      const downloadLink = document.createElement('a');
-      downloadLink.download = `${device?.name.toLowerCase().replace(/\s+/g, '-')}-${server?.name.toLowerCase()}-qr.png`;
+      const pngFile = canvas.toDataURL("image/png");
+      const downloadLink = document.createElement("a");
+      downloadLink.download = `${device?.name.toLowerCase().replace(/\s+/g, "-")}-${server?.name.toLowerCase()}-qr.png`;
       downloadLink.href = pngFile;
       downloadLink.click();
     };
-    
-    img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+
+    img.src = "data:image/svg+xml;base64," + btoa(svgData);
     toast.success("QR code downloaded");
   };
 
   const protocolLabels: Record<string, string> = {
-    wireguard: 'WireGuard',
-    openvpn: 'OpenVPN',
-    ikev2: 'IKEv2',
+    wireguard: "WireGuard",
+    openvpn: "OpenVPN",
+    ikev2: "IKEv2",
   };
 
   return (
@@ -101,15 +108,17 @@ export function QRCodeDialog({ isOpen, onClose, config, device, server, protocol
           {server && (
             <div className="text-center text-sm text-muted-foreground">
               <p>Server: {server.name}</p>
-              <p>{server.location}, {server.country}</p>
+              <p>
+                {server.location}, {server.country}
+              </p>
             </div>
           )}
 
           {/* Instructions */}
           <div className="rounded-lg bg-muted/50 p-3">
             <p className="text-xs text-muted-foreground">
-              <strong>Instructions:</strong> Open your VPN app (WireGuard, OpenVPN Connect, etc.) 
-              and use the "Scan QR Code" or "Import from QR" option to add this tunnel.
+              <strong>Instructions:</strong> Open your VPN app (WireGuard, OpenVPN Connect, etc.) and use the
+              "Scan QR Code" or "Import from QR" option to add this tunnel.
             </p>
           </div>
         </div>
@@ -133,20 +142,24 @@ interface QRCodeGeneratorProps {
   servers?: VPNServer[];
   devices?: VPNDevice[];
   isLoading: boolean;
-  onGenerateConfig: (deviceId: string, serverId: string, protocol: 'wireguard' | 'openvpn' | 'ikev2') => Promise<string>;
+  onGenerateConfig: (
+    deviceId: string,
+    serverId: string,
+    protocol: "wireguard" | "openvpn" | "ikev2"
+  ) => Promise<string>;
 }
 
 export function QRCodeGenerator({ servers, devices, isLoading, onGenerateConfig }: QRCodeGeneratorProps) {
   const [selectedDevice, setSelectedDevice] = useState<string>("");
   const [selectedServer, setSelectedServer] = useState<string>("");
-  const [selectedProtocol, setSelectedProtocol] = useState<'wireguard' | 'openvpn' | 'ikev2'>('wireguard');
+  const [selectedProtocol, setSelectedProtocol] = useState<"wireguard" | "openvpn" | "ikev2">("wireguard");
   const [generatedConfig, setGeneratedConfig] = useState<string>("");
   const [showQR, setShowQR] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleGenerate = async () => {
     if (!selectedDevice || !selectedServer) return;
-    
+
     setIsGenerating(true);
     try {
       const config = await onGenerateConfig(selectedDevice, selectedServer, selectedProtocol);
@@ -160,9 +173,9 @@ export function QRCodeGenerator({ servers, devices, isLoading, onGenerateConfig 
     }
   };
 
-  const onlineServers = servers?.filter(s => s.status === 'online') ?? [];
-  const device = devices?.find(d => d.id === selectedDevice);
-  const server = servers?.find(s => s.id === selectedServer);
+  const onlineServers = servers?.filter((s) => s.status === "online") ?? [];
+  const device = devices?.find((d) => d.id === selectedDevice);
+  const server = servers?.find((s) => s.id === selectedServer);
 
   if (isLoading) {
     return null;
@@ -218,9 +231,9 @@ export function QRCodeGenerator({ servers, devices, isLoading, onGenerateConfig 
 
               <div className="space-y-2">
                 <Label className="text-left block">Protocol</Label>
-                <Select 
-                  value={selectedProtocol} 
-                  onValueChange={(v: 'wireguard' | 'openvpn' | 'ikev2') => setSelectedProtocol(v)}
+                <Select
+                  value={selectedProtocol}
+                  onValueChange={(v: "wireguard" | "openvpn" | "ikev2") => setSelectedProtocol(v)}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -233,8 +246,8 @@ export function QRCodeGenerator({ servers, devices, isLoading, onGenerateConfig 
                 </Select>
               </div>
 
-              <Button 
-                variant="default" 
+              <Button
+                variant="default"
                 className="w-full mt-4"
                 onClick={handleGenerate}
                 disabled={!selectedDevice || !selectedServer || isGenerating}

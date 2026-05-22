@@ -2,7 +2,15 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -15,7 +23,11 @@ interface DevicesPanelProps {
   devices?: VPNDevice[];
   servers?: VPNServer[];
   isLoading: boolean;
-  onGenerateConfig?: (deviceId: string, serverId: string, protocol: 'wireguard' | 'openvpn' | 'ikev2') => void;
+  onGenerateConfig?: (
+    deviceId: string,
+    serverId: string,
+    protocol: "wireguard" | "openvpn" | "ikev2"
+  ) => void;
 }
 
 const deviceIcons = {
@@ -26,12 +38,12 @@ const deviceIcons = {
 };
 
 const osLabels: Record<string, string> = {
-  windows: 'Windows',
-  macos: 'macOS',
-  linux: 'Linux',
-  ios: 'iOS',
-  android: 'Android',
-  other: 'Other',
+  windows: "Windows",
+  macos: "macOS",
+  linux: "Linux",
+  ios: "iOS",
+  android: "Android",
+  other: "Other",
 };
 
 export function DevicesPanel({ devices, servers, isLoading, onGenerateConfig }: DevicesPanelProps) {
@@ -39,7 +51,7 @@ export function DevicesPanel({ devices, servers, isLoading, onGenerateConfig }: 
   const [configDialogOpen, setConfigDialogOpen] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState<VPNDevice | null>(null);
   const [selectedServer, setSelectedServer] = useState<string>("");
-  const [selectedProtocol, setSelectedProtocol] = useState<'wireguard' | 'openvpn' | 'ikev2'>('wireguard');
+  const [selectedProtocol, setSelectedProtocol] = useState<"wireguard" | "openvpn" | "ikev2">("wireguard");
 
   const handleGenerateConfig = () => {
     if (selectedDevice && selectedServer && onGenerateConfig) {
@@ -152,43 +164,52 @@ export function DevicesPanel({ devices, servers, isLoading, onGenerateConfig }: 
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${device.isConnected ? 'bg-emerald-500/10' : 'bg-muted'}`}>
-                        <DeviceIcon className={`h-5 w-5 ${device.isConnected ? 'text-emerald-500' : 'text-muted-foreground'}`} />
+                      <div
+                        className={`p-2 rounded-lg ${device.isConnected ? "bg-emerald-500/10" : "bg-muted"}`}
+                      >
+                        <DeviceIcon
+                          className={`h-5 w-5 ${device.isConnected ? "text-emerald-500" : "text-muted-foreground"}`}
+                        />
                       </div>
                       <div>
                         <p className="font-medium">{device.name}</p>
                         <p className="text-xs text-muted-foreground">{osLabels[device.os]}</p>
                       </div>
                     </div>
-                    <Badge 
-                      variant="outline" 
-                      className={device.isConnected 
-                        ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' 
-                        : 'bg-muted text-muted-foreground'
+                    <Badge
+                      variant="outline"
+                      className={
+                        device.isConnected
+                          ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
+                          : "bg-muted text-muted-foreground"
                       }
                     >
                       {device.isConnected ? (
-                        <><Wifi className="h-3 w-3 mr-1" /> Online</>
+                        <>
+                          <Wifi className="h-3 w-3 mr-1" /> Online
+                        </>
                       ) : (
-                        <><WifiOff className="h-3 w-3 mr-1" /> Offline</>
+                        <>
+                          <WifiOff className="h-3 w-3 mr-1" /> Offline
+                        </>
                       )}
                     </Badge>
                   </div>
-                  
+
                   <div className="text-xs text-muted-foreground mb-3 space-y-1">
                     {device.lastIp && <p>Last IP: {device.lastIp}</p>}
                     <p>
-                      Last seen: {device.lastSeen 
+                      Last seen:{" "}
+                      {device.lastSeen
                         ? formatDistanceToNow(new Date(device.lastSeen), { addSuffix: true })
-                        : 'Never'
-                      }
+                        : "Never"}
                     </p>
                   </div>
 
                   <div className="flex gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       className="flex-1"
                       onClick={() => openConfigDialog(device)}
                     >
@@ -218,9 +239,7 @@ export function DevicesPanel({ devices, servers, isLoading, onGenerateConfig }: 
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Generate VPN Configuration</DialogTitle>
-            <DialogDescription>
-              Create a configuration file for {selectedDevice?.name}
-            </DialogDescription>
+            <DialogDescription>Create a configuration file for {selectedDevice?.name}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -230,17 +249,22 @@ export function DevicesPanel({ devices, servers, isLoading, onGenerateConfig }: 
                   <SelectValue placeholder="Choose a server" />
                 </SelectTrigger>
                 <SelectContent>
-                  {servers?.filter(s => s.status === 'online').map((server) => (
-                    <SelectItem key={server.id} value={server.id}>
-                      {server.name} - {server.location}, {server.country} ({server.load}% load)
-                    </SelectItem>
-                  ))}
+                  {servers
+                    ?.filter((s) => s.status === "online")
+                    .map((server) => (
+                      <SelectItem key={server.id} value={server.id}>
+                        {server.name} - {server.location}, {server.country} ({server.load}% load)
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
               <Label>Protocol</Label>
-              <Select value={selectedProtocol} onValueChange={(v: 'wireguard' | 'openvpn' | 'ikev2') => setSelectedProtocol(v)}>
+              <Select
+                value={selectedProtocol}
+                onValueChange={(v: "wireguard" | "openvpn" | "ikev2") => setSelectedProtocol(v)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

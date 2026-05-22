@@ -29,9 +29,9 @@ import { toast } from "sonner";
 import { getCategoryPlaceholderImage } from "@/services/articlesService";
 
 const typeColors: Record<string, { bg: string; text: string; border: string }> = {
-  Documentary: { bg: "hsl(22 88% 52% / 0.1)",  text: "hsl(22 82% 46%)",  border: "hsl(22 88% 52% / 0.25)" },
-  News:        { bg: "hsl(158 42% 26% / 0.1)", text: "hsl(158 42% 32%)", border: "hsl(158 42% 26% / 0.25)" },
-  Podcast:     { bg: "hsl(43 95% 52% / 0.1)",  text: "hsl(38 80% 38%)",  border: "hsl(43 95% 52% / 0.25)" },
+  Documentary: { bg: "hsl(22 88% 52% / 0.1)", text: "hsl(22 82% 46%)", border: "hsl(22 88% 52% / 0.25)" },
+  News: { bg: "hsl(158 42% 26% / 0.1)", text: "hsl(158 42% 32%)", border: "hsl(158 42% 26% / 0.25)" },
+  Podcast: { bg: "hsl(43 95% 52% / 0.1)", text: "hsl(38 80% 38%)", border: "hsl(43 95% 52% / 0.25)" },
 };
 
 const ArticleDetail = () => {
@@ -42,7 +42,7 @@ const ArticleDetail = () => {
     per_page: 3,
   });
 
-  const relatedArticles = relatedData?.articles.filter(a => a.id !== article?.id).slice(0, 3) || [];
+  const relatedArticles = relatedData?.articles.filter((a) => a.id !== article?.id).slice(0, 3) || [];
 
   const handleShare = (platform: string) => {
     const url = window.location.href;
@@ -107,7 +107,8 @@ const ArticleDetail = () => {
   const publishedDate = new Date(article.published_at);
   const updatedDate = new Date(article.updated_at);
   const wasUpdated = updatedDate.getTime() !== publishedDate.getTime();
-  const categoryColor = typeColors[article.category] || typeColors["News"];
+  const primaryCategory = Array.isArray(article.category) ? article.category[0] : article.category;
+  const categoryColor = typeColors[primaryCategory] || typeColors["News"];
 
   return (
     <PublicLayout>
@@ -123,23 +124,25 @@ const ArticleDetail = () => {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "NewsArticle",
-            "headline": article.title,
-            "image": getCategoryPlaceholderImage(article.category),
-            "datePublished": article.published_at,
-            "dateModified": article.updated_at,
-            "author": article.author ? {
-              "@type": "Person",
-              "name": article.author.name,
-            } : undefined,
-            "publisher": {
+            headline: article.title,
+            image: getCategoryPlaceholderImage(article.category),
+            datePublished: article.published_at,
+            dateModified: article.updated_at,
+            author: article.author
+              ? {
+                  "@type": "Person",
+                  name: article.author.name,
+                }
+              : undefined,
+            publisher: {
               "@type": "Organization",
-              "name": "Afrisinc",
-              "logo": {
+              name: "Afrisinc",
+              logo: {
                 "@type": "ImageObject",
-                "url": `${window.location.origin}/afrisic-logo.png`,
+                url: `${window.location.origin}/afrisic-logo.png`,
               },
             },
-            "description": article.summary,
+            description: article.summary,
           })}
         </script>
       </Helmet>
@@ -147,7 +150,6 @@ const ArticleDetail = () => {
       {/* ── Hero Header ───────────────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-background">
         <div className="container mx-auto px-6">
-
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8 animate-fade-in">
             <Link to="/media" className="hover:text-foreground transition-colors">
@@ -207,9 +209,7 @@ const ArticleDetail = () => {
                 )}
                 <div>
                   <div className="font-medium text-foreground">{article.author.name}</div>
-                  {article.author.role && (
-                    <div className="text-xs">{article.author.role}</div>
-                  )}
+                  {article.author.role && <div className="text-xs">{article.author.role}</div>}
                 </div>
               </div>
             )}
@@ -259,7 +259,6 @@ const ArticleDetail = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-
         </div>
       </section>
 
@@ -280,7 +279,6 @@ const ArticleDetail = () => {
       <section className="py-20">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto">
-
             {/* Source Attribution */}
             {article.source && (
               <div className="bg-muted/50 border border-border rounded-2xl p-6 mb-10">
@@ -328,9 +326,7 @@ const ArticleDetail = () => {
             {/* Read Original */}
             {article.source && (
               <div className="mt-12 p-8 rounded-2xl bg-muted/30 border border-border text-center">
-                <p className="text-muted-foreground mb-6 text-sm">
-                  Want to read the full original article?
-                </p>
+                <p className="text-muted-foreground mb-6 text-sm">Want to read the full original article?</p>
                 <Button variant="default" size="lg" className="group shadow-primary" asChild>
                   <a href={article.source.url} target="_blank" rel="noopener noreferrer">
                     Visit {article.source.name}
@@ -339,7 +335,6 @@ const ArticleDetail = () => {
                 </Button>
               </div>
             )}
-
           </div>
         </div>
       </section>
@@ -348,15 +343,13 @@ const ArticleDetail = () => {
       {relatedArticles.length > 0 && (
         <section className="py-28 md:py-36 bg-muted/30">
           <div className="container mx-auto px-6">
-
             <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
               <div>
                 <p className="line-accent">Related</p>
               </div>
               <div>
                 <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                  More from{" "}
-                  <span className="font-display italic text-gradient-primary">Afrisinc.</span>
+                  More from <span className="font-display italic text-gradient-primary">Afrisinc.</span>
                 </h2>
               </div>
             </div>
@@ -389,7 +382,6 @@ const ArticleDetail = () => {
           </div>
         </div>
       </section>
-
     </PublicLayout>
   );
 };

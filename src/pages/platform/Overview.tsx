@@ -5,7 +5,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Users, Building2, Layers, CreditCard, TrendingUp, AlertTriangle } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 
 const PIE_COLORS = ["hsl(36, 60%, 50%)", "hsl(160, 40%, 25%)"];
 
@@ -62,10 +75,17 @@ export default function PlatformOverview() {
             {isLoading ? (
               <Skeleton className="h-64 w-full" />
             ) : (
-              <ChartContainer config={{ count: { label: "Enrollments", color: "hsl(var(--primary))" } }} className="h-64">
+              <ChartContainer
+                config={{ count: { label: "Enrollments", color: "hsl(var(--primary))" } }}
+                className="h-64"
+              >
                 <BarChart data={data?.enrollmentsByProduct}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                  <XAxis dataKey="product" className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} />
+                  <XAxis
+                    dataKey="product"
+                    className="text-xs"
+                    tick={{ fill: "hsl(var(--muted-foreground))" }}
+                  />
                   <YAxis tick={{ fill: "hsl(var(--muted-foreground))" }} />
                   <ChartTooltip content={<ChartTooltipContent />} />
                   <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
@@ -87,7 +107,16 @@ export default function PlatformOverview() {
               <div className="h-64 flex items-center justify-center">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={data?.accountTypeSplit} cx="50%" cy="50%" innerRadius={60} outerRadius={90} dataKey="count" nameKey="type" label={({ type, count }) => `${type}: ${count}`}>
+                    <Pie
+                      data={data?.accountTypeSplit}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={90}
+                      dataKey="count"
+                      nameKey="type"
+                      label={({ type, count }) => `${type}: ${count}`}
+                    >
                       {data?.accountTypeSplit.map((_, i) => (
                         <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
                       ))}
@@ -143,11 +172,7 @@ export default function PlatformOverview() {
             >
               <LineChart data={growthData}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                <XAxis
-                  dataKey="date"
-                  className="text-xs"
-                  tick={{ fill: "hsl(var(--muted-foreground))" }}
-                />
+                <XAxis dataKey="date" className="text-xs" tick={{ fill: "hsl(var(--muted-foreground))" }} />
                 <YAxis tick={{ fill: "hsl(var(--muted-foreground))" }} />
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <Legend />

@@ -7,15 +7,15 @@ import { useToast } from "@/hooks/use-toast";
 import { submitContactForm } from "@/services/notifyService";
 
 const contactMeta = [
-  { label: "Email",           value: "hello@afrisinc.com",       href: "mailto:hello@afrisinc.com", icon: Mail  },
-  { label: "Global Presence", value: "Africa · Europe · Americas", href: null,                       icon: Globe },
+  { label: "Email", value: "hello@afrisinc.com", href: "mailto:hello@afrisinc.com", icon: Mail },
+  { label: "Global Presence", value: "Africa · Europe · Americas", href: null, icon: Globe },
   // { label: "Phone",           value: "+1 (555) 123-4567",         href: "tel:+15551234567",          icon: Phone },
 ];
 
 const socials = [
-  { name: "Twitter",   href: "#" },
-  { name: "LinkedIn",  href: "#" },
-  { name: "YouTube",   href: "#" },
+  { name: "Twitter", href: "#" },
+  { name: "LinkedIn", href: "#" },
+  { name: "YouTube", href: "#" },
   { name: "Instagram", href: "#" },
 ];
 
@@ -53,7 +53,6 @@ export const ContactSection = () => {
   return (
     <section id="contact" className="py-28 md:py-36 bg-background">
       <div className="container mx-auto px-6">
-
         {/* Header */}
         <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
           <div>
@@ -61,21 +60,17 @@ export const ContactSection = () => {
           </div>
           <div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-              We Read{" "}
-              <span className="font-display italic text-gradient-primary">
-                Every Message.
-              </span>
+              We Read <span className="font-display italic text-gradient-primary">Every Message.</span>
             </h2>
           </div>
         </div>
 
         <div className="grid lg:grid-cols-[5fr_7fr] gap-10 lg:gap-16">
-
           {/* Left — contact info */}
           <div className="space-y-10">
             <p className="text-muted-foreground leading-relaxed text-sm">
-              A question, a half-formed idea, or a proper proposal — send it over.
-              We respond to every message within 24 hours.
+              A question, a half-formed idea, or a proper proposal — send it over. We respond to every message
+              within 24 hours.
             </p>
 
             <div className="space-y-5">
@@ -133,7 +128,9 @@ export const ContactSection = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">Name</label>
+                <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">
+                  Name
+                </label>
                 <Input
                   placeholder="Your name"
                   value={formData.name}
@@ -142,7 +139,9 @@ export const ContactSection = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">Email</label>
+                <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">
+                  Email
+                </label>
                 <Input
                   type="email"
                   placeholder="you@example.com"
@@ -154,7 +153,9 @@ export const ContactSection = () => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">Subject</label>
+              <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">
+                Subject
+              </label>
               <Input
                 placeholder="What's on your mind?"
                 value={formData.subject}
@@ -164,7 +165,9 @@ export const ContactSection = () => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">Message</label>
+              <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">
+                Message
+              </label>
               <Textarea
                 placeholder="Give us the details — or just say hi. We'll figure it out from there."
                 rows={6}
@@ -185,7 +188,6 @@ export const ContactSection = () => {
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
             </Button>
           </form>
-
         </div>
       </div>
     </section>

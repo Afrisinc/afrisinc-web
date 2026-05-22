@@ -9,6 +9,7 @@ services:
     restart: unless-stopped
     environment:
       - VITE_API_URL=${VITE_API_URL}
+      - API_URL=${VITE_API_URL}
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:8090"]
       interval: 30s

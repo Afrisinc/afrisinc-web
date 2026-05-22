@@ -20,7 +20,7 @@ const articleTypes: { value: ArticleType | "all"; label: string }[] = [
 export function ArticleFiltersComponent({ filters, onFiltersChange }: ArticleFiltersProps) {
   const { data: categories = [] } = useCategories();
   const [searchValue, setSearchValue] = useState(filters.search || "");
-  const debounceTimer = useRef<NodeJS.Timeout>();
+  const debounceTimer = useRef<ReturnType<typeof setTimeout>>();
 
   // Debounce search to smooth loading and reduce API calls
   useEffect(() => {
@@ -41,6 +41,7 @@ export function ArticleFiltersComponent({ filters, onFiltersChange }: ArticleFil
         clearTimeout(debounceTimer.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
   const handleCategoryChange = (categorySlug: string) => {
@@ -71,17 +72,14 @@ export function ArticleFiltersComponent({ filters, onFiltersChange }: ArticleFil
           className="pl-10"
         />
       </div>
-      
+
       {/* Type Filter */}
       <div className="flex flex-wrap gap-2">
         {articleTypes.map((type) => (
           <Button
             key={type.value}
             variant={
-              (filters.type === type.value) || 
-              (!filters.type && type.value === "all") 
-                ? "default" 
-                : "outline"
+              filters.type === type.value || (!filters.type && type.value === "all") ? "default" : "outline"
             }
             size="sm"
             onClick={() => handleTypeChange(type.value)}
@@ -91,7 +89,7 @@ export function ArticleFiltersComponent({ filters, onFiltersChange }: ArticleFil
           </Button>
         ))}
       </div>
-      
+
       {/* Category Filter */}
       <div className="flex flex-wrap gap-2">
         <Button

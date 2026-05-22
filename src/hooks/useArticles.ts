@@ -1,16 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { 
-  fetchArticles, 
-  fetchArticleBySlug, 
-  fetchCategories, 
-  fetchFeaturedArticle 
+import {
+  fetchArticles,
+  fetchArticlesByCategory,
+  fetchArticleBySlug,
+  fetchCategories,
+  fetchFeaturedArticle,
 } from "@/services/articlesService";
 import type { ArticleFilters } from "@/types/article";
 
 export function useArticles(filters: ArticleFilters = {}) {
   return useQuery({
     queryKey: ["articles", filters],
-    queryFn: () => fetchArticles(filters),
+    queryFn: () =>
+      filters.category ? fetchArticlesByCategory(filters.category, filters) : fetchArticles(filters),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }

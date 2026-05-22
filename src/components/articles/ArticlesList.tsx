@@ -12,17 +12,14 @@ interface ArticlesListProps {
 export function ArticlesList({ articles, isLoading, variant = "grid" }: ArticlesListProps) {
   if (isLoading) {
     return (
-      <div className={variant === "grid" 
-        ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-6" 
-        : "space-y-4"
-      }>
+      <div className={variant === "grid" ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
         {Array.from({ length: 6 }).map((_, i) => (
           <ArticleCardSkeleton key={i} variant={variant === "list" ? "compact" : "default"} />
         ))}
       </div>
     );
   }
-  
+
   if (!articles.length) {
     return (
       <div className="text-center py-16">
@@ -30,28 +27,16 @@ export function ArticlesList({ articles, isLoading, variant = "grid" }: Articles
           <FileText className="w-8 h-8 text-muted-foreground" />
         </div>
         <h3 className="text-lg font-semibold text-foreground mb-2">No articles found</h3>
-        <p className="text-muted-foreground">
-          Try adjusting your filters or search terms.
-        </p>
+        <p className="text-muted-foreground">Try adjusting your filters or search terms.</p>
       </div>
     );
   }
 
   return (
-    <div className={variant === "grid" 
-      ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-6" 
-      : "space-y-4"
-    }>
+    <div className={variant === "grid" ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
       {articles.map((article, index) => (
-        <div 
-          key={article.id}
-          className="animate-fade-up"
-          style={{ animationDelay: `${index * 50}ms` }}
-        >
-          <ArticleCard 
-            article={article} 
-            variant={variant === "list" ? "compact" : "default"} 
-          />
+        <div key={article.id} className="animate-fade-up" style={{ animationDelay: `${index * 50}ms` }}>
+          <ArticleCard article={article} variant={variant === "list" ? "compact" : "default"} />
         </div>
       ))}
     </div>
@@ -71,7 +56,7 @@ function ArticleCardSkeleton({ variant }: { variant: "default" | "compact" }) {
       </div>
     );
   }
-  
+
   return (
     <div className="bg-card rounded-xl overflow-hidden">
       <Skeleton className="aspect-[16/10] w-full" />

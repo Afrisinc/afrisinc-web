@@ -3,26 +3,26 @@ import { ArrowUpRight } from "lucide-react";
 
 const footerLinks = {
   Company: [
-    { name: "About",   href: "/about"    },
-    { name: "Careers", href: "/careers"  },
-    { name: "Press",   href: "#"         },
-    { name: "Contact", href: "/contact"  },
+    { name: "About", href: "/about" },
+    { name: "Careers", href: "/careers" },
+    { name: "Press", href: "#" },
+    { name: "Contact", href: "/contact" },
   ],
   Services: [
-    { name: "Media",      href: "/media"      },
+    { name: "Media", href: "/media" },
     { name: "Technology", href: "/technology" },
-    { name: "Products",   href: "/products"   },
-    { name: "Consulting", href: "/contact"    },
+    { name: "Products", href: "/products" },
+    { name: "Consulting", href: "/contact" },
   ],
   Resources: [
-    { name: "Blog",          href: "/media"   },
-    { name: "Documentation", href: "#"        },
-    { name: "Support",       href: "/contact" },
-    { name: "API",           href: "#"        },
+    { name: "Blog", href: "/media" },
+    { name: "Documentation", href: "#" },
+    { name: "Support", href: "/contact" },
+    { name: "API", href: "#" },
   ],
   Legal: [
     { name: "Privacy", href: "#" },
-    { name: "Terms",   href: "#" },
+    { name: "Terms", href: "#" },
     { name: "Cookies", href: "#" },
   ],
 };
@@ -32,7 +32,6 @@ const socials = ["Twitter", "LinkedIn", "YouTube", "Instagram"];
 export const Footer = () => {
   return (
     <footer className="bg-foreground text-background grain relative overflow-hidden">
-
       {/* Kente stripe at top */}
       <div className="kente-border opacity-55" />
 
@@ -43,8 +42,7 @@ export const Footer = () => {
             className="font-bold tracking-tight leading-[0.92]"
             style={{ fontSize: "clamp(40px, 7vw, 88px)" }}
           >
-            Innovation Without{" "}
-            <br />
+            Innovation Without <br />
             <span className="font-display italic text-gradient-primary">Borders.</span>
           </h2>
           <Link
@@ -60,21 +58,17 @@ export const Footer = () => {
       {/* Links grid */}
       <div className="container mx-auto px-6 py-16">
         <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-10">
-
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2.5 mb-6">
-              <img
-                src="/afrisic-logo.png"
-                alt="Afrisinc"
-                className="w-8 h-8 rounded-lg object-cover"
-              />
+              <img src="/afrisic-logo.png" alt="Afrisinc" className="w-8 h-8 rounded-lg object-cover" />
               <span className="font-bold text-background tracking-tight">
                 Afri<span className="font-display italic text-gradient-primary">sinc</span>
               </span>
             </Link>
             <p className="text-background/38 text-sm leading-relaxed max-w-xs">
-              A multi-department parent company pioneering innovation across technology, media, and global services.
+              A multi-department parent company pioneering innovation across technology, media, and global
+              services.
             </p>
           </div>
 
@@ -118,7 +112,6 @@ export const Footer = () => {
           ))}
         </div>
       </div>
-
     </footer>
   );
 };

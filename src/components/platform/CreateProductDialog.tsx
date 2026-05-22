@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -38,10 +45,11 @@ export function CreateProductDialog({ isOpen, onClose }: CreateProductDialogProp
       toast.success("Product created successfully");
       setFormData({ name: "", code: "", description: "" });
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating product:", error);
 
-      const errorMessage = error?.message || error?.resp_msg || "Failed to create product";
+      const err = error as { message?: string; resp_msg?: string };
+      const errorMessage = err?.message || err?.resp_msg || "Failed to create product";
       toast.error(errorMessage);
     }
   };
@@ -75,7 +83,9 @@ export function CreateProductDialog({ isOpen, onClose }: CreateProductDialogProp
               onChange={(e) => setFormData((prev) => ({ ...prev, code: e.target.value.toLowerCase() }))}
               required
             />
-            <p className="text-xs text-muted-foreground">Unique identifier for the product (lowercase, no spaces)</p>
+            <p className="text-xs text-muted-foreground">
+              Unique identifier for the product (lowercase, no spaces)
+            </p>
           </div>
 
           <div className="space-y-2">

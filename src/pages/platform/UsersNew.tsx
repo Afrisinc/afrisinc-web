@@ -2,8 +2,24 @@ import { useState } from "react";
 import { Eye, Ban, CheckCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { DataTable, type ColumnConfig, type DataTableQuery } from "@/components/data-table";
 import { CopyableText } from "@/components/ui/copyable-text";
 import { usePlatformUsers, useSuspendUser, useReactivateUser } from "@/hooks/usePlatform";
@@ -19,7 +35,10 @@ export default function UsersNew() {
   });
 
   const [selectedUser, setSelectedUser] = useState<PlatformUser | null>(null);
-  const [confirmAction, setConfirmAction] = useState<{ user: PlatformUser; action: "suspend" | "reactivate" } | null>(null);
+  const [confirmAction, setConfirmAction] = useState<{
+    user: PlatformUser;
+    action: "suspend" | "reactivate";
+  } | null>(null);
 
   // Convert DataTable query to platform service params
   const params = {
@@ -88,9 +107,7 @@ export default function UsersNew() {
         { label: "Suspended", value: "SUSPENDED" },
         { label: "Pending", value: "PENDING" },
       ],
-      render: (value) => (
-        <Badge variant={statusVariant(value)}>{value}</Badge>
-      ),
+      render: (value) => <Badge variant={statusVariant(value)}>{value}</Badge>,
     },
     {
       key: "createdAt",
@@ -102,7 +119,7 @@ export default function UsersNew() {
       key: "lastLogin",
       label: "Last Login",
       sortable: true,
-      render: (value) => value ? new Date(value).toLocaleDateString() : "Never",
+      render: (value) => (value ? new Date(value).toLocaleDateString() : "Never"),
     },
     {
       key: "actions",
@@ -110,24 +127,36 @@ export default function UsersNew() {
       align: "right",
       render: (_, user) => (
         <div className="flex justify-end gap-1">
-          <Button variant="ghost" size="icon" onClick={(e) => {
-            e.stopPropagation();
-            setSelectedUser(user);
-          }}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedUser(user);
+            }}
+          >
             <Eye className="h-4 w-4" />
           </Button>
           {user.status === "ACTIVE" ? (
-            <Button variant="ghost" size="icon" onClick={(e) => {
-              e.stopPropagation();
-              setConfirmAction({ user, action: "suspend" });
-            }}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                setConfirmAction({ user, action: "suspend" });
+              }}
+            >
               <Ban className="h-4 w-4 text-destructive" />
             </Button>
           ) : (
-            <Button variant="ghost" size="icon" onClick={(e) => {
-              e.stopPropagation();
-              setConfirmAction({ user, action: "reactivate" });
-            }}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                setConfirmAction({ user, action: "reactivate" });
+              }}
+            >
               <CheckCircle className="h-4 w-4 text-secondary" />
             </Button>
           )}
@@ -183,12 +212,16 @@ export default function UsersNew() {
                 <span className="text-muted-foreground">Created</span>
                 <span>{new Date(selectedUser.createdAt).toLocaleString()}</span>
                 <span className="text-muted-foreground">Last Login</span>
-                <span>{selectedUser.lastLogin ? new Date(selectedUser.lastLogin).toLocaleString() : "Never"}</span>
+                <span>
+                  {selectedUser.lastLogin ? new Date(selectedUser.lastLogin).toLocaleString() : "Never"}
+                </span>
               </div>
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setSelectedUser(null)}>Close</Button>
+            <Button variant="outline" onClick={() => setSelectedUser(null)}>
+              Close
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

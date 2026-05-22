@@ -81,10 +81,7 @@ const Callback = () => {
       } catch (error) {
         toast({
           title: "Authorization Failed",
-          description:
-            error instanceof Error
-              ? error.message
-              : "An error occurred during authorization.",
+          description: error instanceof Error ? error.message : "An error occurred during authorization.",
           variant: "destructive",
         });
         navigate("/login");
@@ -102,12 +99,8 @@ const Callback = () => {
             <div className="w-10 h-10 rounded-lg bg-background"></div>
           </div>
         </div>
-        <h1 className="text-2xl font-bold text-foreground mb-2">
-          Completing sign in...
-        </h1>
-        <p className="text-muted-foreground">
-          Please wait while we authenticate your account.
-        </p>
+        <h1 className="text-2xl font-bold text-foreground mb-2">Completing sign in...</h1>
+        <p className="text-muted-foreground">Please wait while we authenticate your account.</p>
       </div>
     </div>
   );

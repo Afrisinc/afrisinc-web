@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchVPNStats,
   fetchServers,
@@ -12,11 +12,11 @@ import {
   deleteDevice,
   CreateVPNServerRequest,
   CreateVPNDeviceRequest,
-} from '@/services/vpnService';
+} from "@/services/vpnService";
 
 export function useVPNStats() {
   return useQuery({
-    queryKey: ['vpn', 'stats'],
+    queryKey: ["vpn", "stats"],
     queryFn: fetchVPNStats,
     refetchInterval: 30000, // Refresh every 30 seconds
   });
@@ -24,7 +24,7 @@ export function useVPNStats() {
 
 export function useVPNServers() {
   return useQuery({
-    queryKey: ['vpn', 'servers'],
+    queryKey: ["vpn", "servers"],
     queryFn: fetchServers,
     refetchInterval: 60000,
   });
@@ -32,21 +32,21 @@ export function useVPNServers() {
 
 export function useVPNUsers() {
   return useQuery({
-    queryKey: ['vpn', 'users'],
+    queryKey: ["vpn", "users"],
     queryFn: fetchUsers,
   });
 }
 
 export function useVPNDevices() {
   return useQuery({
-    queryKey: ['vpn', 'devices'],
+    queryKey: ["vpn", "devices"],
     queryFn: fetchDevices,
   });
 }
 
 export function useVPNConnections() {
   return useQuery({
-    queryKey: ['vpn', 'connections'],
+    queryKey: ["vpn", "connections"],
     queryFn: fetchConnections,
     refetchInterval: 15000, // Refresh every 15 seconds
   });
@@ -56,13 +56,17 @@ export function useGenerateConfig() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ deviceId, serverId, protocol }: {
+    mutationFn: ({
+      deviceId,
+      serverId,
+      protocol,
+    }: {
       deviceId: string;
       serverId: string;
-      protocol: 'wireguard' | 'openvpn' | 'ikev2';
+      protocol: "wireguard" | "openvpn" | "ikev2";
     }) => generateConfig(deviceId, serverId, protocol),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vpn'] });
+      queryClient.invalidateQueries({ queryKey: ["vpn"] });
     },
   });
 }
@@ -75,8 +79,8 @@ export function useCreateServer() {
     onSuccess: async () => {
       // Refetch queries to immediately show the newly created server
       await Promise.all([
-        queryClient.refetchQueries({ queryKey: ['vpn', 'servers'] }),
-        queryClient.refetchQueries({ queryKey: ['vpn', 'stats'] }),
+        queryClient.refetchQueries({ queryKey: ["vpn", "servers"] }),
+        queryClient.refetchQueries({ queryKey: ["vpn", "stats"] }),
       ]);
     },
   });
@@ -91,9 +95,9 @@ export function useCreateDevice() {
     onSuccess: async () => {
       // Refetch queries to immediately show the newly created device
       await Promise.all([
-        queryClient.refetchQueries({ queryKey: ['vpn', 'users'] }),
-        queryClient.refetchQueries({ queryKey: ['vpn', 'devices'] }),
-        queryClient.refetchQueries({ queryKey: ['vpn', 'stats'] }),
+        queryClient.refetchQueries({ queryKey: ["vpn", "users"] }),
+        queryClient.refetchQueries({ queryKey: ["vpn", "devices"] }),
+        queryClient.refetchQueries({ queryKey: ["vpn", "stats"] }),
       ]);
     },
   });
@@ -115,9 +119,9 @@ export function useDeleteDevice() {
     onSuccess: async () => {
       // Refetch queries to immediately reflect device deletion
       await Promise.all([
-        queryClient.refetchQueries({ queryKey: ['vpn', 'users'] }),
-        queryClient.refetchQueries({ queryKey: ['vpn', 'devices'] }),
-        queryClient.refetchQueries({ queryKey: ['vpn', 'stats'] }),
+        queryClient.refetchQueries({ queryKey: ["vpn", "users"] }),
+        queryClient.refetchQueries({ queryKey: ["vpn", "devices"] }),
+        queryClient.refetchQueries({ queryKey: ["vpn", "stats"] }),
       ]);
     },
   });

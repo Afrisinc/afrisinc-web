@@ -47,7 +47,11 @@ export const useNotificationSecurityOverview = () =>
     queryFn: notificationProductService.getSecurityOverview,
   });
 
-export const useNotificationSecurityLoginEvents = (params?: { page?: number; limit?: number; search?: string }) =>
+export const useNotificationSecurityLoginEvents = (params?: {
+  page?: number;
+  limit?: number;
+  search?: string;
+}) =>
   useQuery({
     queryKey: ["notifications", "security", "login-events", params],
     queryFn: () => notificationProductService.getSecurityLoginEvents(params),

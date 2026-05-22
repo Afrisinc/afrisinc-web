@@ -5,10 +5,38 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Shield, Cloud, BarChart3, Lock } from "lucide-react";
 
 const products = [
-  { name: "Afrisinc Cloud", status: "Live", users: "1,234", description: "Enterprise cloud infrastructure", icon: Cloud, route: null },
-  { name: "Analytics Suite", status: "Live", users: "856", description: "Business intelligence & analytics", icon: BarChart3, route: null },
-  { name: "VPN Network", status: "Live", users: "567", description: "Secure VPN infrastructure management", icon: Shield, route: "/dashboard/products/vpn" },
-  { name: "SecureID", status: "Beta", users: "342", description: "Identity & access management", icon: Lock, route: null },
+  {
+    name: "Afrisinc Cloud",
+    status: "Live",
+    users: "1,234",
+    description: "Enterprise cloud infrastructure",
+    icon: Cloud,
+    route: null,
+  },
+  {
+    name: "Analytics Suite",
+    status: "Live",
+    users: "856",
+    description: "Business intelligence & analytics",
+    icon: BarChart3,
+    route: null,
+  },
+  {
+    name: "VPN Network",
+    status: "Live",
+    users: "567",
+    description: "Secure VPN infrastructure management",
+    icon: Shield,
+    route: "/dashboard/products/vpn",
+  },
+  {
+    name: "SecureID",
+    status: "Beta",
+    users: "342",
+    description: "Identity & access management",
+    icon: Lock,
+    route: null,
+  },
 ];
 
 const DashboardProducts = () => {
@@ -38,9 +66,7 @@ const DashboardProducts = () => {
                 <div className="p-2.5 rounded-lg bg-primary/10">
                   <p.icon className="w-5 h-5 text-primary" />
                 </div>
-                <Badge variant={p.status === "Live" ? "default" : "secondary"}>
-                  {p.status}
-                </Badge>
+                <Badge variant={p.status === "Live" ? "default" : "secondary"}>{p.status}</Badge>
               </div>
             </CardHeader>
             <CardContent className="space-y-2">

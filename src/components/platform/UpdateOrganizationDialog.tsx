@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,11 +20,7 @@ interface UpdateOrganizationDialogProps {
   onClose: () => void;
 }
 
-export function UpdateOrganizationDialog({
-  organization,
-  isOpen,
-  onClose,
-}: UpdateOrganizationDialogProps) {
+export function UpdateOrganizationDialog({ organization, isOpen, onClose }: UpdateOrganizationDialogProps) {
   const [formData, setFormData] = useState({
     name: "",
     legal_name: "",

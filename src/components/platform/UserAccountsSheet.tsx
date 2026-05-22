@@ -46,7 +46,11 @@ export function UserAccountsSheet({ user, isOpen, onClose }: UserAccountsSheetPr
         </SheetHeader>
 
         {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden mt-4">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="flex-1 flex flex-col overflow-hidden mt-4"
+        >
           <TabsList className="grid w-full grid-cols-2 flex-shrink-0">
             <TabsTrigger value="overview" className="gap-2">
               <User className="h-4 w-4" />
@@ -101,14 +105,14 @@ export function UserAccountsSheet({ user, isOpen, onClose }: UserAccountsSheetPr
 
                       <div className="flex justify-between items-center pt-2 border-t">
                         <span className="text-muted-foreground">Status</span>
-                        <Badge variant={statusVariant(user.status)}>
-                          {user.status}
-                        </Badge>
+                        <Badge variant={statusVariant(user.status)}>{user.status}</Badge>
                       </div>
 
                       <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Created</span>
-                        <span className="text-right text-xs">{new Date(user.createdAt).toLocaleDateString()}</span>
+                        <span className="text-right text-xs">
+                          {new Date(user.createdAt).toLocaleDateString()}
+                        </span>
                       </div>
 
                       <div className="flex justify-between items-center">
@@ -160,9 +164,7 @@ export function UserAccountsSheet({ user, isOpen, onClose }: UserAccountsSheetPr
                     <Card key={account.id}>
                       <CardHeader className="pb-3">
                         <div className="flex items-center justify-between">
-                          <CardTitle className="text-sm font-medium">
-                            {account.type} Account
-                          </CardTitle>
+                          <CardTitle className="text-sm font-medium">{account.type} Account</CardTitle>
                           <Badge variant="outline">{account.type}</Badge>
                         </div>
                         <CopyableText

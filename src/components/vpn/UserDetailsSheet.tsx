@@ -8,12 +8,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  User, Settings, Smartphone, Monitor, Router, Plus, Download,
-  Trash2, Wifi, WifiOff, Mail, Calendar, Database, Shield,
-  Clock, Ban, Check, Edit2, AlertTriangle
+  User,
+  Settings,
+  Smartphone,
+  Monitor,
+  Router,
+  Plus,
+  Download,
+  Trash2,
+  Wifi,
+  WifiOff,
+  Mail,
+  Calendar,
+  Database,
+  Shield,
+  Clock,
+  Ban,
+  Check,
+  Edit2,
+  AlertTriangle,
 } from "lucide-react";
 import { VPNUser, VPNDevice, VPNServer } from "@/types/vpn";
 import { formatDistanceToNow, format } from "date-fns";
@@ -25,7 +49,11 @@ interface UserDetailsSheetProps {
   servers?: VPNServer[];
   isOpen: boolean;
   onClose: () => void;
-  onGenerateConfig?: (deviceId: string, serverId: string, protocol: 'wireguard' | 'openvpn' | 'ikev2') => void;
+  onGenerateConfig?: (
+    deviceId: string,
+    serverId: string,
+    protocol: "wireguard" | "openvpn" | "ikev2"
+  ) => void;
 }
 
 const statusColors = {
@@ -43,27 +71,35 @@ const deviceIcons = {
 };
 
 const osLabels: Record<string, string> = {
-  windows: 'Windows',
-  macos: 'macOS',
-  linux: 'Linux',
-  ios: 'iOS',
-  android: 'Android',
-  other: 'Other',
+  windows: "Windows",
+  macos: "macOS",
+  linux: "Linux",
+  ios: "iOS",
+  android: "Android",
+  other: "Other",
 };
 
-export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateConfig }: UserDetailsSheetProps) {
+export function UserDetailsSheet({
+  user,
+  servers,
+  isOpen,
+  onClose,
+  onGenerateConfig,
+}: UserDetailsSheetProps) {
   const [activeTab, setActiveTab] = useState("overview");
   const [addDeviceOpen, setAddDeviceOpen] = useState(false);
   const [configDialogOpen, setConfigDialogOpen] = useState(false);
   const [deviceConfigDialogOpen, setDeviceConfigDialogOpen] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState<VPNDevice | null>(null);
   const [selectedServer, setSelectedServer] = useState<string>("");
-  const [selectedProtocol, setSelectedProtocol] = useState<'wireguard' | 'openvpn' | 'ikev2'>('wireguard');
+  const [selectedProtocol, setSelectedProtocol] = useState<"wireguard" | "openvpn" | "ikev2">("wireguard");
   const [editMode, setEditMode] = useState(false);
 
   // Device creation form state
   const [deviceName, setDeviceName] = useState("");
-  const [deviceType, setDeviceType] = useState<'desktop' | 'mobile' | 'router' | 'unknown' | 'other'>('desktop');
+  const [deviceType, setDeviceType] = useState<"desktop" | "mobile" | "router" | "unknown" | "other">(
+    "desktop"
+  );
 
   const createDeviceMutation = useCreateDevice();
   const deviceConfigMutation = useDeviceConfig();
@@ -72,8 +108,8 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
   if (!user) return null;
 
   const dataUsagePercent = user.dataLimit ? ((user.dataUsed ?? 0) / user.dataLimit) * 100 : 0;
-  const onlineServers = servers?.filter(s => s.status === 'active') ?? [];
-  const connectedDevices = user.devices.filter(d => d.isConnected);
+  const onlineServers = servers?.filter((s) => s.status === "active") ?? [];
+  const connectedDevices = user.devices.filter((d) => d.isConnected);
 
   const handleGenerateConfig = () => {
     if (selectedDevice && selectedServer && onGenerateConfig) {
@@ -132,11 +168,11 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
       });
 
       // Download the config file
-      const deviceName = selectedDevice.name || selectedDevice.deviceName || 'device';
-      const fileName = `${deviceName.toLowerCase().replace(/\s+/g, '-')}-config.conf`;
-      const blob = new Blob([config], { type: 'text/plain' });
+      const deviceName = selectedDevice.name || selectedDevice.deviceName || "device";
+      const fileName = `${deviceName.toLowerCase().replace(/\s+/g, "-")}-config.conf`;
+      const blob = new Blob([config], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = fileName;
       document.body.appendChild(a);
@@ -200,7 +236,11 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
             </div>
           </SheetHeader>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden mt-6">
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="flex-1 flex flex-col overflow-hidden mt-6"
+          >
             <TabsList className="grid w-full grid-cols-3 flex-shrink-0">
               <TabsTrigger value="overview" className="gap-2">
                 <User className="h-4 w-4" />
@@ -230,9 +270,7 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                         <span className="text-xs">Devices</span>
                       </div>
                       <p className="text-2xl font-bold">{user.devices.length}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {connectedDevices.length} online
-                      </p>
+                      <p className="text-xs text-muted-foreground">{connectedDevices.length} online</p>
                     </CardContent>
                   </Card>
                   <Card>
@@ -243,7 +281,7 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                       </div>
                       <p className="text-2xl font-bold">{user.dataUsed.toFixed(1)} GB</p>
                       <p className="text-xs text-muted-foreground">
-                        {user.dataLimit ? `of ${user.dataLimit} GB` : 'Unlimited'}
+                        {user.dataLimit ? `of ${user.dataLimit} GB` : "Unlimited"}
                       </p>
                     </CardContent>
                   </Card>
@@ -255,20 +293,24 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium">Data Quota</span>
-                        <span className="text-sm text-muted-foreground">
-                          {dataUsagePercent.toFixed(0)}%
-                        </span>
+                        <span className="text-sm text-muted-foreground">{dataUsagePercent.toFixed(0)}%</span>
                       </div>
-                            <Progress 
-                              value={dataUsagePercent} 
-                              className="h-2"
-                              indicatorClassName={dataUsagePercent > 90 ? "bg-destructive" : dataUsagePercent > 70 ? "bg-amber-500" : undefined}
-                            />
-                            {dataUsagePercent > 90 && (
-                              <p className="text-xs text-destructive mt-2 flex items-center gap-1">
-                                <AlertTriangle className="h-3 w-3" />
-                                User is approaching data limit
-                              </p>
+                      <Progress
+                        value={dataUsagePercent}
+                        className="h-2"
+                        indicatorClassName={
+                          dataUsagePercent > 90
+                            ? "bg-destructive"
+                            : dataUsagePercent > 70
+                              ? "bg-amber-500"
+                              : undefined
+                        }
+                      />
+                      {dataUsagePercent > 90 && (
+                        <p className="text-xs text-destructive mt-2 flex items-center gap-1">
+                          <AlertTriangle className="h-3 w-3" />
+                          User is approaching data limit
+                        </p>
                       )}
                     </CardContent>
                   </Card>
@@ -284,7 +326,7 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                           <Calendar className="h-4 w-4" />
                           Member since
                         </span>
-                        <span>{format(new Date(user.createdAt), 'MMM d, yyyy')}</span>
+                        <span>{format(new Date(user.createdAt), "MMM d, yyyy")}</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-muted-foreground flex items-center gap-2">
@@ -292,9 +334,9 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                           Last connection
                         </span>
                         <span>
-                          {user.lastConnection 
+                          {user.lastConnection
                             ? formatDistanceToNow(new Date(user.lastConnection), { addSuffix: true })
-                            : 'Never'}
+                            : "Never"}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
@@ -303,9 +345,7 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                           Expires
                         </span>
                         <span>
-                          {user.expiresAt 
-                            ? format(new Date(user.expiresAt), 'MMM d, yyyy')
-                            : 'Never'}
+                          {user.expiresAt ? format(new Date(user.expiresAt), "MMM d, yyyy") : "Never"}
                         </span>
                       </div>
                     </div>
@@ -323,11 +363,14 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                         </Button>
                       </div>
                       <div className="space-y-2">
-                        {connectedDevices.slice(0, 3).map(device => {
+                        {connectedDevices.slice(0, 3).map((device) => {
                           const DeviceIcon = deviceIcons[device.type] || Monitor;
-                          const osLabel = device.os ? osLabels[device.os] : 'Unknown OS';
+                          const osLabel = device.os ? osLabels[device.os] : "Unknown OS";
                           return (
-                            <div key={device.id} className="flex items-center gap-3 p-2 rounded-lg bg-muted/50">
+                            <div
+                              key={device.id}
+                              className="flex items-center gap-3 p-2 rounded-lg bg-muted/50"
+                            >
                               <DeviceIcon className="h-4 w-4 text-emerald-500" />
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-medium truncate">{device.name}</p>
@@ -346,7 +389,7 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
               <TabsContent value="devices" className="mt-0 space-y-4">
                 <div className="flex items-center justify-between">
                   <p className="text-sm text-muted-foreground">
-                    {user.devices.length} device{user.devices.length !== 1 ? 's' : ''} registered
+                    {user.devices.length} device{user.devices.length !== 1 ? "s" : ""} registered
                   </p>
                   <Dialog open={addDeviceOpen} onOpenChange={setAddDeviceOpen}>
                     <DialogTrigger asChild>
@@ -373,7 +416,12 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <Label>Device Type</Label>
-                            <Select value={deviceType} onValueChange={(value: any) => setDeviceType(value)}>
+                            <Select
+                              value={deviceType}
+                              onValueChange={(value) =>
+                                setDeviceType(value as "desktop" | "mobile" | "router" | "other" | "unknown")
+                              }
+                            >
                               <SelectTrigger disabled={createDeviceMutation.isPending}>
                                 <SelectValue />
                               </SelectTrigger>
@@ -386,7 +434,10 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                             </Select>
                           </div>
                           <div className="space-y-2">
-                            <Label>Operating System <span className="text-xs text-muted-foreground">(optional)</span></Label>
+                            <Label>
+                              Operating System{" "}
+                              <span className="text-xs text-muted-foreground">(optional)</span>
+                            </Label>
                             <Select disabled>
                               <SelectTrigger>
                                 <SelectValue placeholder="Auto-detected" />
@@ -437,28 +488,38 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                   <div className="space-y-3">
                     {user.devices.map((device) => {
                       const DeviceIcon = deviceIcons[device.type] || Monitor;
-                      const osLabel = device.os ? osLabels[device.os] : 'Unknown OS';
+                      const osLabel = device.os ? osLabels[device.os] : "Unknown OS";
                       return (
                         <Card key={device.id}>
                           <CardContent className="p-4">
                             <div className="flex items-start justify-between gap-3">
                               <div className="flex items-center gap-3 flex-1 min-w-0">
-                                <div className={`p-2.5 rounded-lg flex-shrink-0 ${device.isConnected ? 'bg-emerald-500/10' : 'bg-muted'}`}>
-                                  <DeviceIcon className={`h-5 w-5 ${device.isConnected ? 'text-emerald-500' : 'text-muted-foreground'}`} />
+                                <div
+                                  className={`p-2.5 rounded-lg flex-shrink-0 ${device.isConnected ? "bg-emerald-500/10" : "bg-muted"}`}
+                                >
+                                  <DeviceIcon
+                                    className={`h-5 w-5 ${device.isConnected ? "text-emerald-500" : "text-muted-foreground"}`}
+                                  />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2">
                                     <p className="font-medium truncate">{device.name}</p>
                                     <Badge
                                       variant="outline"
-                                      className={`flex-shrink-0 ${device.isConnected
-                                        ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
-                                        : 'bg-muted text-muted-foreground'}`}
+                                      className={`flex-shrink-0 ${
+                                        device.isConnected
+                                          ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
+                                          : "bg-muted text-muted-foreground"
+                                      }`}
                                     >
                                       {device.isConnected ? (
-                                        <><Wifi className="h-3 w-3 mr-1" /> Online</>
+                                        <>
+                                          <Wifi className="h-3 w-3 mr-1" /> Online
+                                        </>
                                       ) : (
-                                        <><WifiOff className="h-3 w-3 mr-1" /> Offline</>
+                                        <>
+                                          <WifiOff className="h-3 w-3 mr-1" /> Offline
+                                        </>
                                       )}
                                     </Badge>
                                   </div>
@@ -468,9 +529,10 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                                   <div className="text-xs text-muted-foreground mt-1 space-y-0.5">
                                     {device.lastIp && <p>IP: {device.lastIp}</p>}
                                     <p>
-                                      Last seen: {device.lastSeen 
+                                      Last seen:{" "}
+                                      {device.lastSeen
                                         ? formatDistanceToNow(new Date(device.lastSeen), { addSuffix: true })
-                                        : 'Never'}
+                                        : "Never"}
                                     </p>
                                   </div>
                                 </div>
@@ -515,19 +577,23 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                   <CardContent className="p-4 space-y-4">
                     <div className="flex items-center justify-between">
                       <h4 className="font-medium">User Settings</h4>
-                      <Button 
-                        variant={editMode ? "default" : "outline"} 
+                      <Button
+                        variant={editMode ? "default" : "outline"}
                         size="sm"
                         onClick={() => setEditMode(!editMode)}
                       >
                         {editMode ? (
-                          <><Check className="h-4 w-4 mr-2" /> Save</>
+                          <>
+                            <Check className="h-4 w-4 mr-2" /> Save
+                          </>
                         ) : (
-                          <><Edit2 className="h-4 w-4 mr-2" /> Edit</>
+                          <>
+                            <Edit2 className="h-4 w-4 mr-2" /> Edit
+                          </>
                         )}
                       </Button>
                     </div>
-                    
+
                     <div className="space-y-4">
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div className="space-y-2">
@@ -542,9 +608,9 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div className="space-y-2">
                           <Label>Data Limit (GB)</Label>
-                          <Input 
-                            defaultValue={user.dataLimit?.toString() ?? ''} 
-                            disabled={!editMode} 
+                          <Input
+                            defaultValue={user.dataLimit?.toString() ?? ""}
+                            disabled={!editMode}
                             placeholder="Leave empty for unlimited"
                             type="number"
                           />
@@ -583,12 +649,12 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
                         <Clock className="h-4 w-4 mr-2" />
                         Extend Subscription
                       </Button>
-                      <Button 
-                        variant="outline" 
-                        className={`justify-start ${user.status === 'suspended' ? 'text-emerald-600' : 'text-destructive'}`}
+                      <Button
+                        variant="outline"
+                        className={`justify-start ${user.status === "suspended" ? "text-emerald-600" : "text-destructive"}`}
                       >
                         <Ban className="h-4 w-4 mr-2" />
-                        {user.status === 'suspended' ? 'Reactivate User' : 'Suspend User'}
+                        {user.status === "suspended" ? "Reactivate User" : "Suspend User"}
                       </Button>
                     </div>
                   </CardContent>
@@ -617,9 +683,7 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Generate VPN Configuration</DialogTitle>
-            <DialogDescription>
-              Create a configuration file for {selectedDevice?.name}
-            </DialogDescription>
+            <DialogDescription>Create a configuration file for {selectedDevice?.name}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -639,7 +703,10 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
             </div>
             <div className="space-y-2">
               <Label>Protocol</Label>
-              <Select value={selectedProtocol} onValueChange={(v: 'wireguard' | 'openvpn' | 'ikev2') => setSelectedProtocol(v)}>
+              <Select
+                value={selectedProtocol}
+                onValueChange={(v: "wireguard" | "openvpn" | "ikev2") => setSelectedProtocol(v)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -668,9 +735,7 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Download Device Configuration</DialogTitle>
-            <DialogDescription>
-              Download VPN configuration for {selectedDevice?.name}
-            </DialogDescription>
+            <DialogDescription>Download VPN configuration for {selectedDevice?.name}</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -690,10 +755,18 @@ export function UserDetailsSheet({ user, servers, isOpen, onClose, onGenerateCon
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeviceConfigDialogOpen(false)} disabled={deviceConfigMutation.isPending}>
+            <Button
+              variant="outline"
+              onClick={() => setDeviceConfigDialogOpen(false)}
+              disabled={deviceConfigMutation.isPending}
+            >
               Cancel
             </Button>
-            <Button variant="default" onClick={handleDownloadDeviceConfig} disabled={!selectedServer || deviceConfigMutation.isPending}>
+            <Button
+              variant="default"
+              onClick={handleDownloadDeviceConfig}
+              disabled={!selectedServer || deviceConfigMutation.isPending}
+            >
               <Download className="h-4 w-4 mr-2" />
               {deviceConfigMutation.isPending ? "Downloading..." : "Download"}
             </Button>
