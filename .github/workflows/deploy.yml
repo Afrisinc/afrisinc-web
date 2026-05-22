@@ -56,11 +56,16 @@ jobs:
           envs: DEPLOY_GHCR_USERNAME,DEPLOY_GHCR_TOKEN
           script: |
             set -e
-            APP_PATH="${{ secrets.VPS_APP_PATH }}"
-            APP_PATH=${APP_PATH:=/opt/apps/afrisinc/afrisinc-web}
+            APP_PATH="${{ secrets.VPS_APP_PATH }}/afrisinc-web"
             cd $APP_PATH
 
             echo "$DEPLOY_GHCR_TOKEN" | docker login ghcr.io -u "$DEPLOY_GHCR_USERNAME" --password-stdin
+
+            # Export required environment variables for docker-compose
+            export GHCR_OWNER="${{ secrets.GHCR_OWNER }}"
+            export IMAGE_TAG="latest"
+            export VITE_API_URL="${{ secrets.VITE_API_URL }}"
+
 
             docker compose pull
             docker compose up -d --remove-orphans
