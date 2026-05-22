@@ -9,7 +9,7 @@ ARG VITE_GA_MEASUREMENT_ID=""
 ARG VITE_GA_DEBUG=false
 
 # Enable pnpm via Corepack
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10 --activate
 
 # Install dependencies
 COPY package.json pnpm-lock.yaml ./
