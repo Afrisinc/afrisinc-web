@@ -176,9 +176,7 @@ export async function seoMiddleware(req, res, next) {
             : resolve(__dirname, "../index.html");
         let html = fs.readFileSync(indexPath, "utf-8");
         // Generate and inject meta tags
-        const metaTags = article
-            ? generateArticleMetaTags(article)
-            : generateDefaultMetaTags();
+        const metaTags = article ? generateArticleMetaTags(article) : generateDefaultMetaTags();
         html = injectMetaTags(html, metaTags);
         res.status(200).set({ "Content-Type": "text/html" }).end(html);
     }

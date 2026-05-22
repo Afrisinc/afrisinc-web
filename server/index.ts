@@ -1,5 +1,4 @@
 import express from "express";
-import { createServer as createViteServer } from "vite";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import fs from "node:fs";
@@ -9,13 +8,20 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const isProduction = process.env.NODE_ENV === "production";
 const PORT = process.env.PORT || 8090;
 
+// Type for Vite dev server (only used in development)
+type ViteDevServer = {
+  middlewares: express.Handler;
+  transformIndexHtml: (url: string, html: string) => Promise<string>;
+};
+
 async function createServer() {
   const app = express();
 
-  let vite: Awaited<ReturnType<typeof createViteServer>> | null = null;
+  let vite: ViteDevServer | null = null;
 
   if (!isProduction) {
-    // Development: use Vite's dev server as middleware
+    // Development: dynamically import Vite and use as middleware
+    const { createServer: createViteServer } = await import("vite");
     vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",

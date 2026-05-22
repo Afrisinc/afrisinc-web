@@ -1,5 +1,4 @@
 import express from "express";
-import { createServer as createViteServer } from "vite";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import fs from "node:fs";
@@ -11,7 +10,8 @@ async function createServer() {
     const app = express();
     let vite = null;
     if (!isProduction) {
-        // Development: use Vite's dev server as middleware
+        // Development: dynamically import Vite and use as middleware
+        const { createServer: createViteServer } = await import("vite");
         vite = await createViteServer({
             server: { middlewareMode: true },
             appType: "spa",
