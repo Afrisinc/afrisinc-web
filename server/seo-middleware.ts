@@ -6,6 +6,7 @@ import {
   generateArticleMetaTags,
   generateDefaultMetaTags,
   isSocialCrawler,
+  stripHtmlTags,
   SITE_SEO,
   type ArticleSEO,
 } from "../src/lib/seo.js";
@@ -151,7 +152,7 @@ async function fetchArticle(slug: string): Promise<ArticleSEO | null> {
 
     return {
       title: article.source_headline || article.title || "",
-      description: article.source_summary || article.summary || "",
+      description: stripHtmlTags(article.source_summary || article.summary),
       image: imageUrl,
       url: `${SITE_SEO.siteUrl}/media/articles/${slug}`,
       type: "article",

@@ -31,9 +31,7 @@ async function createServer() {
     app.use(seoMiddleware);
     // Fallback: serve index.html for SPA routing
     app.get("*", async (req, res) => {
-        const indexPath = isProduction
-            ? resolve(distPath, "index.html")
-            : resolve(rootPath, "index.html");
+        const indexPath = isProduction ? resolve(distPath, "index.html") : resolve(rootPath, "index.html");
         let html = fs.readFileSync(indexPath, "utf-8");
         if (!isProduction && vite) {
             html = await vite.transformIndexHtml(req.url, html);
