@@ -73,9 +73,15 @@ export default function PlatformProducts() {
                 </div>
 
                 <div className="pt-3 border-t border-border/50 flex gap-1.5 flex-wrap">
-                  <Badge variant="outline" className="text-xs">FREE: {product.plans.FREE}</Badge>
-                  <Badge variant="outline" className="text-xs">PRO: {product.plans.PRO}</Badge>
-                  <Badge variant="outline" className="text-xs">ENT: {product.plans.ENTERPRISE}</Badge>
+                  <Badge variant="outline" className="text-xs">
+                    FREE: {product.plans.FREE}
+                  </Badge>
+                  <Badge variant="outline" className="text-xs">
+                    PRO: {product.plans.PRO}
+                  </Badge>
+                  <Badge variant="outline" className="text-xs">
+                    ENT: {product.plans.ENTERPRISE}
+                  </Badge>
                 </div>
               </CardContent>
             </Card>
@@ -84,10 +90,7 @@ export default function PlatformProducts() {
       )}
 
       {/* Create Product Dialog */}
-      <CreateProductDialog
-        isOpen={createDialogOpen}
-        onClose={() => setCreateDialogOpen(false)}
-      />
+      <CreateProductDialog isOpen={createDialogOpen} onClose={() => setCreateDialogOpen(false)} />
     </div>
   );
 }

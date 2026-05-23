@@ -9,7 +9,7 @@ ARG VITE_GA_MEASUREMENT_ID=""
 ARG VITE_GA_DEBUG=false
 
 # Enable pnpm via Corepack
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10 --activate
 
 # Install dependencies
 COPY package.json pnpm-lock.yaml ./
@@ -18,18 +18,40 @@ RUN pnpm install --frozen-lockfile
 # Copy source code
 COPY . .
 
-# Build the Vite app with API URL and GA4
-RUN VITE_API_URL=${VITE_API_URL} VITE_NOTIFY_URL=${VITE_NOTIFY_URL} VITE_NOTIFY_APP_ID=${VITE_NOTIFY_APP_ID} VITE_GA_MEASUREMENT_ID=${VITE_GA_MEASUREMENT_ID} VITE_GA_DEBUG=${VITE_GA_DEBUG} pnpm build
+# Build the Vite client app
+RUN VITE_API_URL=${VITE_API_URL} \
+    VITE_NOTIFY_URL=${VITE_NOTIFY_URL} \
+    VITE_NOTIFY_APP_ID=${VITE_NOTIFY_APP_ID} \
+    VITE_GA_MEASUREMENT_ID=${VITE_GA_MEASUREMENT_ID} \
+    VITE_GA_DEBUG=${VITE_GA_DEBUG} \
+    pnpm build
 
-# ---------- Serve ----------
-FROM nginx:alpine
+# Build the SSR server
+RUN pnpm build:server
 
-# Copy built files from builder
-COPY --from=builder /app/dist /usr/share/nginx/html
+# ---------- Serve with SSR ----------
+FROM node:20-alpine AS runner
+WORKDIR /app
 
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Enable pnpm
+RUN corepack enable && corepack prepare pnpm@10 --activate
+
+# Copy package files and install production dependencies only
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --prod --frozen-lockfile
+
+# Copy built client assets
+COPY --from=builder /app/dist ./dist
+
+# Copy built server
+COPY --from=builder /app/dist-server ./dist-server
+
+# Copy config
+COPY --from=builder /app/dist/config.json ./dist/config.json
+
+ENV NODE_ENV=production
+ENV PORT=8090
 
 EXPOSE 8090
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "dist-server/server/index.js"]

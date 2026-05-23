@@ -6,17 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { submitContactForm } from "@/services/notifyService";
 import { useTrackForm } from "@/hooks/useTrackForm";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Clock,
-  ArrowUpRight,
-  Linkedin,
-  Twitter,
-  Youtube,
-  Github,
-} from "lucide-react";
+import { Mail, Phone, MapPin, Clock, ArrowUpRight, Linkedin, Twitter, Youtube, Github } from "lucide-react";
 
 const contactMeta = [
   {
@@ -40,24 +30,24 @@ const contactMeta = [
 ];
 
 const offices = [
-  { city: "Kigali",       country: "Rwanda",         type: "Headquarters"       },
-  { city: "Nairobi",      country: "Kenya",          type: "Regional Office"    },
-  { city: "Johannesburg", country: "South Africa",   type: "Regional Office"    },
-  { city: "London",       country: "United Kingdom", type: "International Office"},
+  { city: "Kigali", country: "Rwanda", type: "Headquarters" },
+  { city: "Nairobi", country: "Kenya", type: "Regional Office" },
+  { city: "Johannesburg", country: "South Africa", type: "Regional Office" },
+  { city: "London", country: "United Kingdom", type: "International Office" },
 ];
 
 const socialLinks = [
-  { name: "LinkedIn",  icon: Linkedin, href: "#" },
-  { name: "Twitter",   icon: Twitter,  href: "#" },
-  { name: "YouTube",   icon: Youtube,  href: "#" },
-  { name: "GitHub",    icon: Github,   href: "#" },
+  { name: "LinkedIn", icon: Linkedin, href: "#" },
+  { name: "Twitter", icon: Twitter, href: "#" },
+  { name: "YouTube", icon: Youtube, href: "#" },
+  { name: "GitHub", icon: Github, href: "#" },
 ];
 
 const quickLinks = [
-  { name: "Schedule a Demo",       href: "#" },
+  { name: "Schedule a Demo", href: "#" },
   { name: "Support Documentation", href: "#" },
-  { name: "Partner Program",       href: "#" },
-  { name: "Investor Relations",    href: "#" },
+  { name: "Partner Program", href: "#" },
+  { name: "Investor Relations", href: "#" },
 ];
 
 const Contact = () => {
@@ -71,7 +61,7 @@ const Contact = () => {
     message: "",
   });
 
-  const { onStart, onSubmit: trackSubmit, onError } = useTrackForm('contact_form', 'Contact Us');
+  const { onStart, onSubmit: trackSubmit, onError } = useTrackForm("contact_form", "Contact Us");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -96,7 +86,7 @@ const Contact = () => {
       });
       setFormData({ name: "", email: "", company: "", subject: "", message: "" });
     } catch (err) {
-      onError('message', 'server'); // Track error
+      onError("message", "server"); // Track error
       toast({
         title: "Something went wrong",
         description: "Please try again.",
@@ -109,14 +99,12 @@ const Contact = () => {
 
   return (
     <PublicLayout>
-
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative min-h-[55vh] flex items-center overflow-hidden bg-background dot-grid grain">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background/80 pointer-events-none" />
 
         <div className="container mx-auto px-6 pt-36 pb-24 relative z-10">
           <div className="max-w-4xl">
-
             <p className="line-accent mb-12 animate-fade-in">Get In Touch</p>
 
             <h1 className="animate-fade-up animation-delay-100" style={{ lineHeight: 1 }}>
@@ -135,10 +123,9 @@ const Contact = () => {
             </h1>
 
             <p className="text-lg text-muted-foreground leading-[1.75] max-w-lg mt-10 animate-fade-up animation-delay-200">
-              A question, a half-formed idea, or a proper proposal — send it over.
-              We respond to every message within 24 hours.
+              A question, a half-formed idea, or a proper proposal — send it over. We respond to every message
+              within 24 hours.
             </p>
-
           </div>
         </div>
       </section>
@@ -146,7 +133,6 @@ const Contact = () => {
       {/* ── Contact Form + Info ───────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-background">
         <div className="container mx-auto px-6">
-
           {/* Section header */}
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
             <div>
@@ -154,18 +140,15 @@ const Contact = () => {
             </div>
             <div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                We Read{" "}
-                <span className="font-display italic text-gradient-primary">Every Message.</span>
+                We Read <span className="font-display italic text-gradient-primary">Every Message.</span>
               </h2>
             </div>
           </div>
 
           {/* Two-column: info left, form right */}
           <div className="grid lg:grid-cols-[5fr_7fr] gap-10 lg:gap-16">
-
             {/* ── Left panel ── */}
             <div className="space-y-10">
-
               {/* Contact meta */}
               <div className="space-y-5">
                 {contactMeta.map((info) => (
@@ -203,7 +186,9 @@ const Contact = () => {
 
               {/* Social pills */}
               <div>
-                <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-4">Follow</p>
+                <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-4">
+                  Follow
+                </p>
                 <div className="flex flex-wrap gap-2.5">
                   {socialLinks.map((social) => (
                     <a
@@ -220,7 +205,9 @@ const Contact = () => {
 
               {/* Offices */}
               <div>
-                <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-4">Our Offices</p>
+                <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-4">
+                  Our Offices
+                </p>
                 <div className="divide-y divide-border">
                   {offices.map((office) => (
                     <div key={office.city} className="flex items-center justify-between py-3">
@@ -258,12 +245,10 @@ const Contact = () => {
                   </ul>
                 </div>
               </div>
-
             </div>
 
             {/* ── Right panel: Form ── */}
             <form onSubmit={handleSubmit} className="space-y-5">
-
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/55">
@@ -353,13 +338,10 @@ const Contact = () => {
                   </>
                 )}
               </Button>
-
             </form>
-
           </div>
         </div>
       </section>
-
     </PublicLayout>
   );
 };

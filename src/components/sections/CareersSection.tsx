@@ -49,7 +49,6 @@ export const CareersSection = () => {
       <div className="absolute top-0 left-0 right-0 kente-border opacity-55" />
 
       <div className="container mx-auto px-6 relative z-10">
-
         {/* Header */}
         <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-background/10">
           <div>
@@ -60,9 +59,7 @@ export const CareersSection = () => {
           <div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-background leading-[1.0]">
               Ready to Build{" "}
-              <span className="font-display italic text-gradient-primary">
-                Something Real?
-              </span>
+              <span className="font-display italic text-gradient-primary">Something Real?</span>
             </h2>
           </div>
         </div>
@@ -83,17 +80,13 @@ export const CareersSection = () => {
               >
                 {item.index}
               </span>
-              <span className="text-xs font-mono text-background/25 md:hidden">
-                {item.index}
-              </span>
+              <span className="text-xs font-mono text-background/25 md:hidden">{item.index}</span>
 
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-background mb-3 group-hover:text-primary transition-colors duration-200">
                   {item.title}
                 </h3>
-                <p className="text-background/48 text-sm leading-relaxed max-w-xl">
-                  {item.description}
-                </p>
+                <p className="text-background/48 text-sm leading-relaxed max-w-xl">{item.description}</p>
               </div>
 
               <div className="flex items-center gap-2 text-sm font-semibold text-background/35 group-hover:text-primary transition-colors duration-200 flex-shrink-0 md:self-center whitespace-nowrap">
@@ -107,7 +100,8 @@ export const CareersSection = () => {
         {/* Bottom CTA */}
         <div className="mt-20 pt-12 border-t border-background/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <p className="text-background/35 text-sm max-w-sm leading-relaxed">
-            We're a global team. Our products ship everywhere. If you're good at what you do, location is never the reason we say no.
+            We're a global team. Our products ship everywhere. If you're good at what you do, location is
+            never the reason we say no.
           </p>
           <Link
             to="/contact"
@@ -117,7 +111,6 @@ export const CareersSection = () => {
             <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>
-
       </div>
     </section>
   );

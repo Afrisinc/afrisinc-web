@@ -27,9 +27,7 @@ const columns: ColumnConfig<LoginEventResponse>[] = [
       { label: "Login Failure", value: "login_failure" },
     ],
     render: (value: string) => (
-      <Badge variant="outline">
-        {value === "login_event" ? "Event" : "Failure"}
-      </Badge>
+      <Badge variant="outline">{value === "login_event" ? "Event" : "Failure"}</Badge>
     ),
     width: "10%",
   },
@@ -98,7 +96,7 @@ export function LoginEventsTable() {
     page: query.page,
     limit: query.limit,
     search: query.search,
-    sortBy: query.sort_order || 'desc',
+    sortBy: query.sort_order || "desc",
   });
 
   const handleQueryChange = (newQuery: DataTableQuery) => {

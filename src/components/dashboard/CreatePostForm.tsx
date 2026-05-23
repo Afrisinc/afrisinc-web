@@ -4,7 +4,15 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useTopics } from "@/hooks/useTopics";
 import { useGenerateAIPost } from "@/hooks/useAIPosts";
@@ -24,7 +32,7 @@ type FormData = z.infer<typeof formSchema>;
 const CreatePostForm = () => {
   const { data: topics, isLoading: topicsLoading } = useTopics();
   const generatePost = useGenerateAIPost();
-  
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,9 +69,7 @@ const CreatePostForm = () => {
             </div>
             Generate AI Content
           </CardTitle>
-          <CardDescription>
-            Create AI-powered posts for Facebook & Instagram
-          </CardDescription>
+          <CardDescription>Create AI-powered posts for Facebook & Instagram</CardDescription>
         </CardHeader>
         <CardContent className="flex items-center justify-center py-16">
           <div className="flex flex-col items-center gap-3">
@@ -85,9 +91,7 @@ const CreatePostForm = () => {
           </div>
           Generate AI Content
         </CardTitle>
-        <CardDescription>
-          Create AI-powered posts for Facebook & Instagram
-        </CardDescription>
+        <CardDescription>Create AI-powered posts for Facebook & Instagram</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -130,10 +134,10 @@ const CreatePostForm = () => {
                     Keywords / Hashtags
                   </FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="#innovation #tech #africa" 
+                    <Input
+                      placeholder="#innovation #tech #africa"
                       className="h-11 bg-muted/30 border-border/50"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormDescription className="text-xs">Optional hashtags to include</FormDescription>
@@ -152,10 +156,10 @@ const CreatePostForm = () => {
                     Link
                   </FormLabel>
                   <FormControl>
-                    <Input 
-                      placeholder="https://example.com/article" 
+                    <Input
+                      placeholder="https://example.com/article"
                       className="h-11 bg-muted/30 border-border/50"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormDescription className="text-xs">Optional URL to reference</FormDescription>
@@ -176,12 +180,16 @@ const CreatePostForm = () => {
                   </FormLabel>
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      { value: "both", label: "Both", icon: () => (
-                        <div className="flex -space-x-1">
-                          <Facebook className="w-4 h-4 text-blue-500" />
-                          <Instagram className="w-4 h-4 text-pink-500" />
-                        </div>
-                      )},
+                      {
+                        value: "both",
+                        label: "Both",
+                        icon: () => (
+                          <div className="flex -space-x-1">
+                            <Facebook className="w-4 h-4 text-blue-500" />
+                            <Instagram className="w-4 h-4 text-pink-500" />
+                          </div>
+                        ),
+                      },
                       { value: "facebook", label: "Facebook", icon: Facebook, color: "text-blue-500" },
                       { value: "instagram", label: "Instagram", icon: Instagram, color: "text-pink-500" },
                     ].map((platform) => (
@@ -224,10 +232,12 @@ const CreatePostForm = () => {
                           : "border-border/50 hover:border-border bg-muted/20"
                       )}
                     >
-                      <div className={cn(
-                        "w-2 h-2 rounded-full",
-                        selectedMode === "test" ? "bg-amber-500" : "bg-muted-foreground"
-                      )} />
+                      <div
+                        className={cn(
+                          "w-2 h-2 rounded-full",
+                          selectedMode === "test" ? "bg-amber-500" : "bg-muted-foreground"
+                        )}
+                      />
                       <span className="text-sm font-medium">Test Mode</span>
                     </button>
                     <button
@@ -240,10 +250,12 @@ const CreatePostForm = () => {
                           : "border-border/50 hover:border-border bg-muted/20"
                       )}
                     >
-                      <div className={cn(
-                        "w-2 h-2 rounded-full",
-                        selectedMode === "production" ? "bg-emerald-500" : "bg-muted-foreground"
-                      )} />
+                      <div
+                        className={cn(
+                          "w-2 h-2 rounded-full",
+                          selectedMode === "production" ? "bg-emerald-500" : "bg-muted-foreground"
+                        )}
+                      />
                       <span className="text-sm font-medium">Production</span>
                     </button>
                   </div>

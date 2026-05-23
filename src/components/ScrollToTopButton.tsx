@@ -17,9 +17,10 @@ export const ScrollToTopButton = () => {
 
   useEffect(() => {
     // Check if current route is dashboard or platform (non-public)
-    const isNonPublic = window.location.pathname.startsWith("/dashboard") ||
-                        window.location.pathname.startsWith("/platform") ||
-                        window.location.pathname === "/testcomponent";
+    const isNonPublic =
+      window.location.pathname.startsWith("/dashboard") ||
+      window.location.pathname.startsWith("/platform") ||
+      window.location.pathname === "/testcomponent";
     setIsDashboard(isNonPublic);
   }, []);
 
@@ -36,10 +37,7 @@ export const ScrollToTopButton = () => {
       // 1. User is within 300px from bottom (trying to scroll down or already at bottom area)
       // 2. User is scrolling UP (currentScrollY < lastScrollY)
       // 3. Scrolled more than 300px from top (not on hero)
-      const shouldShow =
-        distanceFromBottom < 300 &&
-        currentScrollY < lastScrollY &&
-        currentScrollY > 300;
+      const shouldShow = distanceFromBottom < 300 && currentScrollY < lastScrollY && currentScrollY > 300;
 
       setIsVisible(shouldShow);
       setLastScrollY(currentScrollY);

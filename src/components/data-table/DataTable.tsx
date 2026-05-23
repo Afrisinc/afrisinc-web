@@ -8,7 +8,7 @@ import { FilterBar } from "./FilterBar";
 import { ExportDropdown } from "./ExportDropdown";
 import type { DataTableProps, DataTableQuery, SortOrder } from "./types";
 
-export function DataTable<T extends Record<string, any>>({
+export function DataTable<T extends Record<string, unknown>>({
   columns,
   data,
   total,
@@ -38,6 +38,7 @@ export function DataTable<T extends Record<string, any>>({
   // Notify parent when query changes
   useEffect(() => {
     onQueryChange(query);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   const handleSort = (columnKey: string) => {
@@ -74,7 +75,7 @@ export function DataTable<T extends Record<string, any>>({
     }));
   };
 
-  const handleColumnFiltersChange = (filters: Record<string, any>) => {
+  const handleColumnFiltersChange = (filters: Record<string, string>) => {
     setQuery((prev) => ({ ...prev, filters, page: 1 }));
   };
 
@@ -90,7 +91,7 @@ export function DataTable<T extends Record<string, any>>({
   const totalPages = Math.ceil(total / query.limit);
   const filterableColumns = enableColumnFilters ? columns.filter((c) => c.filterable) : [];
 
-  const renderCellValue = (column: typeof columns[0], row: T) => {
+  const renderCellValue = (column: (typeof columns)[0], row: T) => {
     const value = row[column.key as keyof T];
     if (column.render) {
       return column.render(value, row);

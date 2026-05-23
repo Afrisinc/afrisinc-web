@@ -1,16 +1,37 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { LayoutDashboard, Package, Users, Newspaper, Settings, Globe, Sparkles, LogOut, Shield, TrendingUp, Building2, Layers, CreditCard, BarChart3, ShieldAlert, Lock, Bell } from "lucide-react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import {
+  LayoutDashboard,
+  Package,
+  Users,
+  Newspaper,
+  Settings,
+  Globe,
+  Sparkles,
+  LogOut,
+  Shield,
+  TrendingUp,
+  Building2,
+  Layers,
+  CreditCard,
+  BarChart3,
+  ShieldAlert,
+  Lock,
+  Bell,
+} from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const productIcons: Record<string, React.ReactNode> = {
   vpn: <Lock className="w-4 h-4" />,
@@ -44,9 +65,7 @@ const platformItems = [
   { title: "Security", url: "/dashboard/platform/security", icon: ShieldAlert },
 ];
 
-const bottomItems = [
-  { title: "Settings", url: "/dashboard/settings", icon: Settings },
-];
+const bottomItems = [{ title: "Settings", url: "/dashboard/settings", icon: Settings }];
 
 export const DashboardSidebar = () => {
   const location = useLocation();
@@ -109,7 +128,10 @@ export const DashboardSidebar = () => {
   return (
     <Sidebar className="border-r border-border bg-background">
       <div className="px-4 py-6 border-b border-border/50">
-        <Link to="/" className="group flex items-center gap-3 hover:opacity-80 transition-opacity duration-200">
+        <Link
+          to="/"
+          className="group flex items-center gap-3 hover:opacity-80 transition-opacity duration-200"
+        >
           <img src="/afrisic-logo.png" alt="Afrisinc" className="w-10 h-10 object-contain" />
           <div className="flex flex-col">
             <span className="font-bold text-foreground text-sm leading-tight">Afrisinc</span>
@@ -121,7 +143,9 @@ export const DashboardSidebar = () => {
         {/* Product Selector */}
         <SidebarGroup className="px-0 py-3">
           <div className="px-4">
-            <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-3">Product</p>
+            <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-3">
+              Product
+            </p>
             <Select value={selectedProduct} onValueChange={handleProductChange}>
               <SelectTrigger className="w-full h-9 border-border/50 bg-background hover:border-border/80 transition-colors text-sm font-medium">
                 <SelectValue />
@@ -142,7 +166,9 @@ export const DashboardSidebar = () => {
 
         {/* Dashboard */}
         <SidebarGroup>
-          <SidebarGroupLabel className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60">Overview</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60">
+            Overview
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
               {mainItems.map((item) => (
@@ -168,53 +194,51 @@ export const DashboardSidebar = () => {
 
         {/* Product-Specific Platform Routes */}
         {(selectedProduct === "platform" || selectedProduct === "notify") && (
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 flex items-center gap-2">
-            <Shield className="w-3.5 h-3.5" />
-            {selectedProduct === "platform" ? "Platform" : "Notify"}
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
-              {selectedProduct === "platform" ? (
-                platformItems.map((item) => (
-                  <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton
-                      asChild
-                      className={`transition-all duration-200 ${
-                        isActive(item.url)
-                          ? "bg-primary/15 text-primary font-semibold"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-                      }`}
-                    >
-                      <Link to={item.url} className="flex items-center gap-3">
-                        <item.icon className="w-4 h-4 flex-shrink-0" />
-                        <span className="text-sm">{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))
-              ) : (
-                getProductPlatformRoutes(selectedProduct).map((item) => (
-                  <SidebarMenuItem key={item.url}>
-                    <SidebarMenuButton
-                      asChild
-                      className={`transition-all duration-200 ${
-                        isActive(item.url)
-                          ? "bg-primary/15 text-primary font-semibold"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
-                      }`}
-                    >
-                      <Link to={item.url} className="flex items-center gap-3">
-                        <item.icon className="w-4 h-4 flex-shrink-0" />
-                        <span className="text-sm">{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))
-              )}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+          <SidebarGroup>
+            <SidebarGroupLabel className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 flex items-center gap-2">
+              <Shield className="w-3.5 h-3.5" />
+              {selectedProduct === "platform" ? "Platform" : "Notify"}
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu className="gap-1">
+                {selectedProduct === "platform"
+                  ? platformItems.map((item) => (
+                      <SidebarMenuItem key={item.url}>
+                        <SidebarMenuButton
+                          asChild
+                          className={`transition-all duration-200 ${
+                            isActive(item.url)
+                              ? "bg-primary/15 text-primary font-semibold"
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                          }`}
+                        >
+                          <Link to={item.url} className="flex items-center gap-3">
+                            <item.icon className="w-4 h-4 flex-shrink-0" />
+                            <span className="text-sm">{item.title}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))
+                  : getProductPlatformRoutes(selectedProduct).map((item) => (
+                      <SidebarMenuItem key={item.url}>
+                        <SidebarMenuButton
+                          asChild
+                          className={`transition-all duration-200 ${
+                            isActive(item.url)
+                              ? "bg-primary/15 text-primary font-semibold"
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                          }`}
+                        >
+                          <Link to={item.url} className="flex items-center gap-3">
+                            <item.icon className="w-4 h-4 flex-shrink-0" />
+                            <span className="text-sm">{item.title}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
         )}
 
         {/* Settings */}

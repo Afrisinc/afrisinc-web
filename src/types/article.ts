@@ -35,6 +35,7 @@ export interface Article {
   updated_at: string;
   read_time: number; // in minutes
   is_featured: boolean;
+  ai_generated?: boolean;
   seo: {
     meta_title: string;
     meta_description: string;

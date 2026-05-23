@@ -6,7 +6,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const DashboardHeader = () => {
   const { user } = useAuth();
-  
+
   // Get initials from email or name
   const getInitials = () => {
     if (!user) return "U";
@@ -20,9 +20,9 @@ export const DashboardHeader = () => {
         <SidebarTrigger />
         <div className="relative hidden md:block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <input 
-            placeholder="Search..." 
-            className="pl-10 pr-4 py-2 bg-muted rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-primary" 
+          <input
+            placeholder="Search..."
+            className="pl-10 pr-4 py-2 bg-muted rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>

@@ -19,9 +19,9 @@ import {
 } from "lucide-react";
 
 const accentColors = {
-  terra:  { bg: "hsl(22 88% 52% / 0.08)",  text: "hsl(22 82% 46%)",  border: "hsl(22 88% 52% / 0.2)" },
+  terra: { bg: "hsl(22 88% 52% / 0.08)", text: "hsl(22 82% 46%)", border: "hsl(22 88% 52% / 0.2)" },
   forest: { bg: "hsl(158 42% 26% / 0.08)", text: "hsl(158 42% 32%)", border: "hsl(158 42% 26% / 0.2)" },
-  gold:   { bg: "hsl(43 95% 52% / 0.10)",  text: "hsl(38 80% 38%)",  border: "hsl(43 95% 52% / 0.25)" },
+  gold: { bg: "hsl(43 95% 52% / 0.10)", text: "hsl(38 80% 38%)", border: "hsl(43 95% 52% / 0.25)" },
   indigo: { bg: "hsl(240 40% 30% / 0.08)", text: "hsl(240 40% 52%)", border: "hsl(240 40% 30% / 0.2)" },
 };
 
@@ -78,9 +78,9 @@ const platforms = [
 
 const stats = [
   { value: "99.99%", label: "Uptime SLA" },
-  { value: "500+",   label: "Enterprise Clients" },
-  { value: "15+",    label: "Countries Served" },
-  { value: "24/7",   label: "Support Available" },
+  { value: "500+", label: "Enterprise Clients" },
+  { value: "15+", label: "Countries Served" },
+  { value: "24/7", label: "Support Available" },
 ];
 
 const Technology = () => {
@@ -99,14 +99,12 @@ const Technology = () => {
 
   return (
     <PublicLayout>
-
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-background dot-grid grain">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background/80 pointer-events-none" />
 
         <div className="container mx-auto px-6 pt-36 pb-24 relative z-10">
           <div className="max-w-4xl">
-
             <p className="line-accent mb-12 animate-fade-in">Technology & Software</p>
 
             <h1 className="animate-fade-up animation-delay-100" style={{ lineHeight: 1 }}>
@@ -125,8 +123,8 @@ const Technology = () => {
             </h1>
 
             <p className="text-lg text-muted-foreground leading-[1.75] max-w-lg mt-10 animate-fade-up animation-delay-200">
-              World-class technology solutions built in Africa for the global market.
-              Scalable, secure, and designed for the modern enterprise.
+              World-class technology solutions built in Africa for the global market. Scalable, secure, and
+              designed for the modern enterprise.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 mt-10 animate-fade-up animation-delay-300">
@@ -143,7 +141,6 @@ const Technology = () => {
                 </Link>
               </Button>
             </div>
-
           </div>
         </div>
       </section>
@@ -176,7 +173,6 @@ const Technology = () => {
       ) : (
         <section id="platforms" className="py-28 md:py-36 bg-background">
           <div className="container mx-auto px-6">
-
             <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
               <div>
                 <p className="line-accent">Platforms & Products</p>
@@ -191,66 +187,79 @@ const Technology = () => {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {platforms.map((platform, index) => {
-              const colors = accentColors[platform.accent as keyof typeof accentColors];
-              return (
-                <div
-                  key={platform.name}
-                  className="group relative rounded-2xl border border-border bg-card p-8 hover:border-primary/25 hover:shadow-card-hover transition-all duration-300 overflow-hidden flex flex-col min-h-[320px] animate-fade-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  {/* Icon + status row */}
-                  <div className="flex items-start justify-between mb-6 relative z-10">
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
-                      style={{ background: colors.bg, border: `1px solid ${colors.border}` }}
-                    >
-                      <platform.icon className="w-5 h-5" style={{ color: colors.text }} />
-                    </div>
-                    <span
-                      className="px-3 py-1 text-xs font-semibold rounded-full"
-                      style={{
-                        background: platform.status === "Live" ? "hsl(var(--forest) / 0.15)" : platform.status === "Beta" ? "hsl(var(--primary) / 0.15)" : "hsl(var(--muted))",
-                        color: platform.status === "Live" ? "hsl(var(--forest))" : platform.status === "Beta" ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))",
-                      }}
-                    >
-                      {platform.status}
-                    </span>
-                  </div>
-
-                  {/* Content */}
-                  <h3 className="text-lg font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300 relative z-10">
-                    {platform.name}
-                  </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-1 relative z-10">
-                    {platform.description}
-                  </p>
-
-                  {/* Feature tags */}
-                  <div className="flex flex-wrap gap-2 mb-6 relative z-10">
-                    {platform.features.slice(0, 2).map((feature) => (
-                      <span
-                        key={feature}
-                        className="px-2.5 py-0.5 text-xs font-medium rounded-full"
-                        style={{ background: colors.bg, color: colors.text, border: `1px solid ${colors.border}` }}
-                      >
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Link */}
-                  <a
-                    href="#"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground/70 group-hover:text-primary transition-colors duration-300 relative z-10"
+                const colors = accentColors[platform.accent as keyof typeof accentColors];
+                return (
+                  <div
+                    key={platform.name}
+                    className="group relative rounded-2xl border border-border bg-card p-8 hover:border-primary/25 hover:shadow-card-hover transition-all duration-300 overflow-hidden flex flex-col min-h-[320px] animate-fade-up"
+                    style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    Learn More
-                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-                  </a>
-                </div>
-              );
+                    {/* Icon + status row */}
+                    <div className="flex items-start justify-between mb-6 relative z-10">
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105"
+                        style={{ background: colors.bg, border: `1px solid ${colors.border}` }}
+                      >
+                        <platform.icon className="w-5 h-5" style={{ color: colors.text }} />
+                      </div>
+                      <span
+                        className="px-3 py-1 text-xs font-semibold rounded-full"
+                        style={{
+                          background:
+                            platform.status === "Live"
+                              ? "hsl(var(--forest) / 0.15)"
+                              : platform.status === "Beta"
+                                ? "hsl(var(--primary) / 0.15)"
+                                : "hsl(var(--muted))",
+                          color:
+                            platform.status === "Live"
+                              ? "hsl(var(--forest))"
+                              : platform.status === "Beta"
+                                ? "hsl(var(--primary))"
+                                : "hsl(var(--muted-foreground))",
+                        }}
+                      >
+                        {platform.status}
+                      </span>
+                    </div>
+
+                    {/* Content */}
+                    <h3 className="text-lg font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300 relative z-10">
+                      {platform.name}
+                    </h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-1 relative z-10">
+                      {platform.description}
+                    </p>
+
+                    {/* Feature tags */}
+                    <div className="flex flex-wrap gap-2 mb-6 relative z-10">
+                      {platform.features.slice(0, 2).map((feature) => (
+                        <span
+                          key={feature}
+                          className="px-2.5 py-0.5 text-xs font-medium rounded-full"
+                          style={{
+                            background: colors.bg,
+                            color: colors.text,
+                            border: `1px solid ${colors.border}`,
+                          }}
+                        >
+                          {feature}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Link */}
+                    <a
+                      href="#"
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground/70 group-hover:text-primary transition-colors duration-300 relative z-10"
+                    >
+                      Learn More
+                      <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+                    </a>
+                  </div>
+                );
               })}
             </div>
-
           </div>
         </section>
       )}
@@ -281,7 +290,6 @@ const Technology = () => {
         <div className="absolute top-0 left-0 right-0 kente-border opacity-55" />
 
         <div className="container mx-auto px-6 relative z-10">
-
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-background/10">
             <div>
               <p className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-background/40 before:block before:w-6 before:h-px before:bg-background/40 before:flex-shrink-0">
@@ -298,8 +306,8 @@ const Technology = () => {
 
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <p className="text-background/50 text-sm leading-relaxed max-w-sm">
-              Get started with Afrisinc technology solutions today. Our team is ready to help you
-              find the perfect fit for your organization.
+              Get started with Afrisinc technology solutions today. Our team is ready to help you find the
+              perfect fit for your organization.
             </p>
             <div className="flex flex-wrap gap-3">
               <Button variant="default" size="lg" className="group shadow-primary" asChild>
@@ -317,10 +325,8 @@ const Technology = () => {
               </Link>
             </div>
           </div>
-
         </div>
       </section>
-
     </PublicLayout>
   );
 };

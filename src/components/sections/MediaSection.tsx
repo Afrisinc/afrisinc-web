@@ -14,30 +14,31 @@ const secondary = [
   {
     type: "News",
     title: "Innovation in African FinTech",
-    description: "How mobile money quietly rewired the financial lives of millions — and why traditional banks didn't see it coming.",
+    description:
+      "How mobile money quietly rewired the financial lives of millions — and why traditional banks didn't see it coming.",
     readTime: "5 min read",
     isVideo: false,
   },
   {
     type: "Podcast",
     title: "Founders Unplugged: Episode 23",
-    description: "No scripts. No polished answers. Just founders talking honestly about what it actually takes to build something real.",
+    description:
+      "No scripts. No polished answers. Just founders talking honestly about what it actually takes to build something real.",
     duration: "45:00",
     isVideo: true,
   },
 ];
 
 const typeColors: Record<string, { bg: string; text: string; border: string }> = {
-  Documentary: { bg: "hsl(22 88% 52% / 0.1)",  text: "hsl(22 82% 46%)",  border: "hsl(22 88% 52% / 0.25)" },
-  News:        { bg: "hsl(158 42% 26% / 0.1)", text: "hsl(158 42% 32%)", border: "hsl(158 42% 26% / 0.25)" },
-  Podcast:     { bg: "hsl(43 95% 52% / 0.1)",  text: "hsl(38 80% 38%)",  border: "hsl(43 95% 52% / 0.25)" },
+  Documentary: { bg: "hsl(22 88% 52% / 0.1)", text: "hsl(22 82% 46%)", border: "hsl(22 88% 52% / 0.25)" },
+  News: { bg: "hsl(158 42% 26% / 0.1)", text: "hsl(158 42% 32%)", border: "hsl(158 42% 26% / 0.25)" },
+  Podcast: { bg: "hsl(43 95% 52% / 0.1)", text: "hsl(38 80% 38%)", border: "hsl(43 95% 52% / 0.25)" },
 };
 
 export const MediaSection = () => {
   return (
     <section id="media" className="py-28 md:py-36 bg-muted/30">
       <div className="container mx-auto px-6">
-
         {/* Header */}
         <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
           <div>
@@ -60,7 +61,6 @@ export const MediaSection = () => {
 
         {/* Magazine grid */}
         <div className="grid lg:grid-cols-[3fr_2fr] gap-5">
-
           {/* Featured */}
           <article className="group relative rounded-2xl overflow-hidden border border-border hover:border-primary/25 transition-all duration-300 cursor-pointer bg-card">
             <div className="relative" style={{ aspectRatio: "16/9" }}>
@@ -95,7 +95,11 @@ export const MediaSection = () => {
               <div className="absolute top-4 left-4">
                 <span
                   className="px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm"
-                  style={{ background: typeColors[featured.type].bg, color: typeColors[featured.type].text, border: `1px solid ${typeColors[featured.type].border}` }}
+                  style={{
+                    background: typeColors[featured.type].bg,
+                    color: typeColors[featured.type].text,
+                    border: `1px solid ${typeColors[featured.type].border}`,
+                  }}
                 >
                   {featured.type}
                 </span>
@@ -114,9 +118,7 @@ export const MediaSection = () => {
               <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-200">
                 {featured.title}
               </h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {featured.description}
-              </p>
+              <p className="text-muted-foreground text-sm leading-relaxed">{featured.description}</p>
             </div>
           </article>
 
@@ -151,7 +153,11 @@ export const MediaSection = () => {
                   <div className="absolute top-3 left-3">
                     <span
                       className="px-2.5 py-0.5 text-xs font-semibold rounded-full backdrop-blur-sm"
-                      style={{ background: typeColors[item.type].bg, color: typeColors[item.type].text, border: `1px solid ${typeColors[item.type].border}` }}
+                      style={{
+                        background: typeColors[item.type].bg,
+                        color: typeColors[item.type].text,
+                        border: `1px solid ${typeColors[item.type].border}`,
+                      }}
                     >
                       {item.type}
                     </span>
@@ -176,7 +182,6 @@ export const MediaSection = () => {
               </article>
             ))}
           </div>
-
         </div>
       </div>
     </section>

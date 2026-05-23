@@ -9,7 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -24,7 +32,10 @@ interface ServersTableProps {
 }
 
 const serverFormSchema = z.object({
-  id: z.string().min(1, "Server ID is required").regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers, and hyphens only"),
+  id: z
+    .string()
+    .min(1, "Server ID is required")
+    .regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers, and hyphens only"),
   name: z.string().min(1, "Server name is required").max(100),
   location: z.string().min(1, "Location is required").max(100),
   countryCode: z.string().length(2, "Country code must be 2 letters").toUpperCase(),
@@ -34,7 +45,9 @@ const serverFormSchema = z.object({
   agentApiKey: z.string().min(8, "API key must be at least 8 characters"),
   wireguardPort: z.coerce.number().min(1).max(65535, "Port must be between 1-65535"),
   serverPublicKey: z.string().min(20, "Public key must be at least 20 characters"),
-  networkCidr: z.string().regex(/^(\d{1,3}\.){3}\d{1,3}\/\d{1,2}$/, "Must be valid CIDR notation (e.g., 192.168.0.0/24)"),
+  networkCidr: z
+    .string()
+    .regex(/^(\d{1,3}\.){3}\d{1,3}\/\d{1,2}$/, "Must be valid CIDR notation (e.g., 192.168.0.0/24)"),
   maxClients: z.coerce.number().min(1, "Must have at least 1 client").max(10000),
   bandwidthLimitMbps: z.coerce.number().min(1, "Bandwidth limit is required").max(100000),
   latitude: z.coerce.number().min(-90).max(90, "Latitude must be -90 to 90"),
@@ -344,7 +357,11 @@ export function ServersTable({ servers, isLoading }: ServersTableProps) {
                           <FormItem>
                             <FormLabel>Server Public Key *</FormLabel>
                             <FormControl>
-                              <Textarea placeholder="e.g. HCn4ftHEkTyPHEPoAJCbXKQ2mxS+A3rObr/kgqyg0W0=" className="font-mono text-xs" {...field} />
+                              <Textarea
+                                placeholder="e.g. HCn4ftHEkTyPHEPoAJCbXKQ2mxS+A3rObr/kgqyg0W0="
+                                className="font-mono text-xs"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -402,7 +419,11 @@ export function ServersTable({ servers, isLoading }: ServersTableProps) {
                     </div>
 
                     <DialogFooter className="pt-4">
-                      <Button variant="outline" onClick={() => setAddDialogOpen(false)} disabled={createServerMutation.isPending}>
+                      <Button
+                        variant="outline"
+                        onClick={() => setAddDialogOpen(false)}
+                        disabled={createServerMutation.isPending}
+                      >
                         Cancel
                       </Button>
                       <Button variant="default" type="submit" disabled={createServerMutation.isPending}>
@@ -453,13 +474,17 @@ export function ServersTable({ servers, isLoading }: ServersTableProps) {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <div className={`h-2 w-2 rounded-full ${statusColors[server.status as keyof typeof statusColors]}`} />
+                      <div
+                        className={`h-2 w-2 rounded-full ${statusColors[server.status as keyof typeof statusColors]}`}
+                      />
                       <span className="text-sm capitalize">{server.status}</span>
                     </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     <div className="flex items-center gap-2">
-                      <div className={`h-2 w-2 rounded-full ${healthStatusColors[server.healthStatus as keyof typeof healthStatusColors]}`} />
+                      <div
+                        className={`h-2 w-2 rounded-full ${healthStatusColors[server.healthStatus as keyof typeof healthStatusColors]}`}
+                      />
                       <span className="text-xs capitalize">{server.healthStatus}</span>
                     </div>
                   </TableCell>
@@ -482,7 +507,7 @@ export function ServersTable({ servers, isLoading }: ServersTableProps) {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className={`h-8 w-8 ${server.status === 'online' ? 'text-emerald-500' : 'text-muted-foreground'}`}
+                        className={`h-8 w-8 ${server.status === "online" ? "text-emerald-500" : "text-muted-foreground"}`}
                       >
                         <Power className="h-4 w-4" />
                       </Button>
@@ -501,7 +526,7 @@ export function ServersTable({ servers, isLoading }: ServersTableProps) {
 function getFlagEmoji(countryCode: string): string {
   const codePoints = countryCode
     .toUpperCase()
-    .split('')
+    .split("")
     .map((char) => 127397 + char.charCodeAt(0));
   return String.fromCodePoint(...codePoints);
 }

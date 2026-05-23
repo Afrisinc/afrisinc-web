@@ -2,11 +2,7 @@ import { useState } from "react";
 import React from "react";
 import { Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -33,10 +29,7 @@ interface CopyableTextProps extends React.HTMLAttributes<HTMLDivElement> {
   showCopy?: boolean;
 }
 
-export const CopyableText = React.forwardRef<
-  HTMLDivElement,
-  CopyableTextProps
->(
+export const CopyableText = React.forwardRef<HTMLDivElement, CopyableTextProps>(
   (
     {
       text,
@@ -65,34 +58,21 @@ export const CopyableText = React.forwardRef<
       }
     };
 
-    const truncatedText =
-      text.length > truncateAt ? `${text.substring(0, truncateAt)}...` : text;
+    const truncatedText = text.length > truncateAt ? `${text.substring(0, truncateAt)}...` : text;
 
     const textElement = (
-      <span
-        className={cn(
-          "text-sm",
-          mono && "font-mono",
-          "text-muted-foreground select-none"
-        )}
-      >
+      <span className={cn("text-sm", mono && "font-mono", "text-muted-foreground select-none")}>
         {truncatedText}
       </span>
     );
 
     return (
-      <div
-        ref={ref}
-        className={cn("flex items-center gap-1.5 group", className)}
-        {...props}
-      >
+      <div ref={ref} className={cn("flex items-center gap-1.5 group", className)} {...props}>
         {showTooltip ? (
           <Tooltip>
             <TooltipTrigger asChild>{textElement}</TooltipTrigger>
             <TooltipContent>
-              <p className="font-mono text-xs max-w-xs break-all">
-                {tooltipContent || text}
-              </p>
+              <p className="font-mono text-xs max-w-xs break-all">{tooltipContent || text}</p>
             </TooltipContent>
           </Tooltip>
         ) : (
@@ -107,11 +87,7 @@ export const CopyableText = React.forwardRef<
             onClick={handleCopy}
             title="Copy to clipboard"
           >
-            {copied ? (
-              <Check className="h-3 w-3 text-green-500" />
-            ) : (
-              <Copy className="h-3 w-3" />
-            )}
+            {copied ? <Check className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
           </Button>
         )}
       </div>

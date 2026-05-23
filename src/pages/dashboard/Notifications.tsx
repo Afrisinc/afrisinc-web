@@ -12,21 +12,8 @@ import {
   useNotificationSecurityLoginEvents,
   useNotificationUsers,
 } from "@/hooks/useNotificationProduct";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const DashboardNotifications = () => {
   const [loginEventsLimit, setLoginEventsLimit] = useState(10);
@@ -148,11 +135,15 @@ const DashboardNotifications = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Active Users:</span>
-                  <span className="font-semibold text-green-600">{analyticsUsers.data.active_users_in_range || 0}</span>
+                  <span className="font-semibold text-green-600">
+                    {analyticsUsers.data.active_users_in_range || 0}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Suspended:</span>
-                  <span className="font-semibold text-red-600">{analyticsUsers.data.suspended_users || 0}</span>
+                  <span className="font-semibold text-red-600">
+                    {analyticsUsers.data.suspended_users || 0}
+                  </span>
                 </div>
               </div>
             ) : (
@@ -209,16 +200,22 @@ const DashboardNotifications = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Failed Logins (24h)</p>
-                  <p className="text-2xl font-bold text-red-600">{securityOverview.data.failedLogins24h || 0}</p>
+                  <p className="text-2xl font-bold text-red-600">
+                    {securityOverview.data.failedLogins24h || 0}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Token Issuance</p>
-                  <p className="text-2xl font-bold text-blue-600">{securityOverview.data.tokenIssuanceCount || 0}</p>
+                  <p className="text-2xl font-bold text-blue-600">
+                    {securityOverview.data.tokenIssuanceCount || 0}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Suspicious Activity</p>
                   <p className="text-2xl font-bold">
-                    <span className={securityOverview.data.suspiciousActivity ? "text-red-600" : "text-green-600"}>
+                    <span
+                      className={securityOverview.data.suspiciousActivity ? "text-red-600" : "text-green-600"}
+                    >
                       {securityOverview.data.suspiciousActivity ? "Yes" : "No"}
                     </span>
                   </p>
@@ -229,12 +226,14 @@ const DashboardNotifications = () => {
                 <div className="mt-4 pt-4 border-t border-border">
                   <p className="text-sm font-semibold mb-2">Top IPs</p>
                   <div className="space-y-2">
-                    {securityOverview.data.topIPs.map((ipData: any, idx: number) => (
-                      <div key={idx} className="flex justify-between text-sm p-2 bg-muted/50 rounded">
-                        <span className="font-mono">{ipData.ip}</span>
-                        <span className="text-muted-foreground">{ipData.attempts} attempt(s)</span>
-                      </div>
-                    ))}
+                    {securityOverview.data.topIPs.map(
+                      (ipData: { ip: string; attempts: number }, idx: number) => (
+                        <div key={idx} className="flex justify-between text-sm p-2 bg-muted/50 rounded">
+                          <span className="font-mono">{ipData.ip}</span>
+                          <span className="text-muted-foreground">{ipData.attempts} attempt(s)</span>
+                        </div>
+                      )
+                    )}
                   </div>
                 </div>
               )}
@@ -269,34 +268,45 @@ const DashboardNotifications = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {usersData.data.map((user: any) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="font-medium">
-                      {user.firstName} {user.lastName}
-                    </TableCell>
-                    <TableCell className="text-sm">{user.email}</TableCell>
-                    <TableCell className="text-sm">{user.phone || "N/A"}</TableCell>
-                    <TableCell>
-                      <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
-                        {user.accounts?.length || 0}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          user.emailVerified
-                            ? "bg-green-100 text-green-700"
-                            : "bg-yellow-100 text-yellow-700"
-                        }`}
-                      >
-                        {user.emailVerified ? "Yes" : "No"}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {formatDateProfessional(user.lastActivity)}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {usersData.data.map(
+                  (user: {
+                    id: string;
+                    firstName?: string;
+                    lastName?: string;
+                    email?: string;
+                    phone?: string;
+                    accounts?: unknown[];
+                    verifiedAt?: string;
+                    lastActiveAt?: string;
+                  }) => (
+                    <TableRow key={user.id}>
+                      <TableCell className="font-medium">
+                        {user.firstName} {user.lastName}
+                      </TableCell>
+                      <TableCell className="text-sm">{user.email}</TableCell>
+                      <TableCell className="text-sm">{user.phone || "N/A"}</TableCell>
+                      <TableCell>
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                          {user.accounts?.length || 0}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            user.emailVerified
+                              ? "bg-green-100 text-green-700"
+                              : "bg-yellow-100 text-yellow-700"
+                          }`}
+                        >
+                          {user.emailVerified ? "Yes" : "No"}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {formatDateProfessional(user.lastActivity)}
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
               </TableBody>
             </Table>
           ) : (
@@ -314,7 +324,10 @@ const DashboardNotifications = () => {
               Login Events ({loginEvents?.data?.pagination?.total || 0} total)
             </CardTitle>
             <div className="flex gap-2">
-              <Select value={String(loginEventsLimit)} onValueChange={(val) => setLoginEventsLimit(parseInt(val))}>
+              <Select
+                value={String(loginEventsLimit)}
+                onValueChange={(val) => setLoginEventsLimit(parseInt(val))}
+              >
                 <SelectTrigger className="w-20">
                   <SelectValue />
                 </SelectTrigger>
@@ -330,7 +343,9 @@ const DashboardNotifications = () => {
         <CardContent>
           {loginEventsLoading ? (
             <Skeleton className="h-64 w-full" />
-          ) : loginEvents?.data?.data && Array.isArray(loginEvents.data.data) && loginEvents.data.data.length > 0 ? (
+          ) : loginEvents?.data?.data &&
+            Array.isArray(loginEvents.data.data) &&
+            loginEvents.data.data.length > 0 ? (
             <div className="space-y-4">
               <Table>
                 <TableHeader>
@@ -344,28 +359,39 @@ const DashboardNotifications = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {loginEvents.data.data.map((event: any) => (
-                    <TableRow key={event.id}>
-                      <TableCell className="font-medium">{event.name || "N/A"}</TableCell>
-                      <TableCell className="text-sm">{event.email || "N/A"}</TableCell>
-                      <TableCell className="text-sm">{event.phone || "N/A"}</TableCell>
-                      <TableCell className="text-sm font-mono">{event.ip || "N/A"}</TableCell>
-                      <TableCell>
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            event.status === "success"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-700"
-                          }`}
-                        >
-                          {event.status || "unknown"}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {formatDateProfessional(event.createdAt)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {loginEvents.data.data.map(
+                    (event: {
+                      id: string;
+                      name?: string;
+                      email?: string;
+                      phone?: string;
+                      ip?: string;
+                      status?: string;
+                      timestamp?: string;
+                      createdAt?: string;
+                    }) => (
+                      <TableRow key={event.id}>
+                        <TableCell className="font-medium">{event.name || "N/A"}</TableCell>
+                        <TableCell className="text-sm">{event.email || "N/A"}</TableCell>
+                        <TableCell className="text-sm">{event.phone || "N/A"}</TableCell>
+                        <TableCell className="text-sm font-mono">{event.ip || "N/A"}</TableCell>
+                        <TableCell>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              event.status === "success"
+                                ? "bg-green-100 text-green-700"
+                                : "bg-red-100 text-red-700"
+                            }`}
+                          >
+                            {event.status || "unknown"}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-sm text-muted-foreground">
+                          {formatDateProfessional(event.createdAt)}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  )}
                 </TableBody>
               </Table>
               {loginEvents.data.pagination && (

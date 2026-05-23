@@ -15,14 +15,20 @@ const DashboardSettings = () => (
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <label className="text-xs font-semibold uppercase text-muted-foreground block mb-1.5">Full Name</label>
+            <label className="text-xs font-semibold uppercase text-muted-foreground block mb-1.5">
+              Full Name
+            </label>
             <Input defaultValue="John Doe" />
           </div>
           <div>
-            <label className="text-xs font-semibold uppercase text-muted-foreground block mb-1.5">Email</label>
+            <label className="text-xs font-semibold uppercase text-muted-foreground block mb-1.5">
+              Email
+            </label>
             <Input defaultValue="john@afrisinc.com" />
           </div>
-          <Button variant="default" className="w-full">Save Changes</Button>
+          <Button variant="default" className="w-full">
+            Save Changes
+          </Button>
         </CardContent>
       </Card>
       <Card>
@@ -31,14 +37,20 @@ const DashboardSettings = () => (
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <label className="text-xs font-semibold uppercase text-muted-foreground block mb-1.5">Current Password</label>
+            <label className="text-xs font-semibold uppercase text-muted-foreground block mb-1.5">
+              Current Password
+            </label>
             <Input type="password" />
           </div>
           <div>
-            <label className="text-xs font-semibold uppercase text-muted-foreground block mb-1.5">New Password</label>
+            <label className="text-xs font-semibold uppercase text-muted-foreground block mb-1.5">
+              New Password
+            </label>
             <Input type="password" />
           </div>
-          <Button variant="outline" className="w-full">Update Password</Button>
+          <Button variant="outline" className="w-full">
+            Update Password
+          </Button>
         </CardContent>
       </Card>
     </div>

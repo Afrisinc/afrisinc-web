@@ -9,9 +9,9 @@ const AIContent = () => {
 
   const stats = {
     total: posts?.length || 0,
-    published: posts?.filter(p => p.status === "published").length || 0,
-    pending: posts?.filter(p => p.status === "pending").length || 0,
-    failed: posts?.filter(p => p.status === "failed").length || 0,
+    published: posts?.filter((p) => p.status === "published").length || 0,
+    pending: posts?.filter((p) => p.status === "pending").length || 0,
+    failed: posts?.filter((p) => p.status === "failed").length || 0,
   };
 
   const statCards = [
@@ -37,7 +37,10 @@ const AIContent = () => {
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {statCards.map((stat) => (
-          <Card key={stat.label} className="border-border/50 hover:shadow-card transition-shadow duration-300">
+          <Card
+            key={stat.label}
+            className="border-border/50 hover:shadow-card transition-shadow duration-300"
+          >
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>

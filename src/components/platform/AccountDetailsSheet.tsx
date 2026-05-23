@@ -19,11 +19,7 @@ interface AccountDetailsSheetProps {
 
 const typeVariant = (t: string) => (t === "INDIVIDUAL" ? "default" : "secondary");
 
-export function AccountDetailsSheet({
-  account,
-  isOpen,
-  onClose,
-}: AccountDetailsSheetProps) {
+export function AccountDetailsSheet({ account, isOpen, onClose }: AccountDetailsSheetProps) {
   const [activeTab, setActiveTab] = useState("details");
   const [enrollDialogOpen, setEnrollDialogOpen] = useState(false);
 
@@ -53,7 +49,11 @@ export function AccountDetailsSheet({
         </SheetHeader>
 
         {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden mt-4">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="flex-1 flex flex-col overflow-hidden mt-4"
+        >
           <TabsList className="grid w-full grid-cols-2 flex-shrink-0">
             <TabsTrigger value="details" className="gap-2">
               <Briefcase className="h-4 w-4" />
@@ -133,11 +133,7 @@ export function AccountDetailsSheet({
               {/* Products Tab */}
               <TabsContent value="products" className="space-y-4 mt-4">
                 <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    className="flex-1"
-                    onClick={() => setEnrollDialogOpen(true)}
-                  >
+                  <Button size="sm" className="flex-1" onClick={() => setEnrollDialogOpen(true)}>
                     <Plus className="h-4 w-4 mr-2" />
                     Enroll Product
                   </Button>
@@ -158,8 +154,12 @@ export function AccountDetailsSheet({
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
                               <div className="flex-1">
-                                <p className="font-medium text-sm">{product.product?.name || "Unknown Product"}</p>
-                                <p className="text-xs text-muted-foreground">Code: {product.product?.code || product.product_id}</p>
+                                <p className="font-medium text-sm">
+                                  {product.product?.name || "Unknown Product"}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  Code: {product.product?.code || product.product_id}
+                                </p>
                               </div>
                             </div>
 

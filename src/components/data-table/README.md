@@ -129,6 +129,7 @@ import { CopyableText } from "@/components/ui/copyable-text";
 ```
 
 **Features:**
+
 - Displays first 8 characters + "..."
 - Shows full text on hover (tooltip)
 - Copy button appears on hover
@@ -136,6 +137,7 @@ import { CopyableText } from "@/components/ui/copyable-text";
 - Success toast notification
 
 **Props:**
+
 - `text` - The full text to display and copy
 - `truncateAt` - Number of characters to show (default: 8)
 - `showTooltip` - Show full text on hover (default: true)
@@ -144,6 +146,7 @@ import { CopyableText } from "@/components/ui/copyable-text";
 - `showCopy` - Show copy button (default: true)
 
 **Example with custom message:**
+
 ```tsx
 {
   key: "apiKey",
@@ -162,37 +165,37 @@ import { CopyableText } from "@/components/ui/copyable-text";
 
 ### DataTable Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `columns` | `ColumnConfig[]` | **required** | Column definitions |
-| `data` | `T[]` | **required** | Table data |
-| `total` | `number` | **required** | Total number of records |
-| `loading` | `boolean` | `false` | Loading state |
-| `error` | `Error \| null` | `null` | Error object |
-| `onQueryChange` | `(query) => void` | **required** | Query change handler |
-| `enableSearch` | `boolean` | `true` | Enable global search |
-| `enableExport` | `boolean` | `false` | Enable export dropdown |
-| `enableDateRange` | `boolean` | `false` | Enable date range filter |
-| `enableColumnFilters` | `boolean` | `false` | Enable column filters |
-| `rowKey` | `string` | **required** | Unique row identifier |
-| `onRowClick` | `(row) => void` | - | Row click handler |
-| `emptyMessage` | `string` | `"No data found"` | Empty state message |
-| `searchPlaceholder` | `string` | `"Search..."` | Search input placeholder |
-| `pageSize` | `number` | `10` | Records per page |
+| Prop                  | Type              | Default           | Description              |
+| --------------------- | ----------------- | ----------------- | ------------------------ |
+| `columns`             | `ColumnConfig[]`  | **required**      | Column definitions       |
+| `data`                | `T[]`             | **required**      | Table data               |
+| `total`               | `number`          | **required**      | Total number of records  |
+| `loading`             | `boolean`         | `false`           | Loading state            |
+| `error`               | `Error \| null`   | `null`            | Error object             |
+| `onQueryChange`       | `(query) => void` | **required**      | Query change handler     |
+| `enableSearch`        | `boolean`         | `true`            | Enable global search     |
+| `enableExport`        | `boolean`         | `false`           | Enable export dropdown   |
+| `enableDateRange`     | `boolean`         | `false`           | Enable date range filter |
+| `enableColumnFilters` | `boolean`         | `false`           | Enable column filters    |
+| `rowKey`              | `string`          | **required**      | Unique row identifier    |
+| `onRowClick`          | `(row) => void`   | -                 | Row click handler        |
+| `emptyMessage`        | `string`          | `"No data found"` | Empty state message      |
+| `searchPlaceholder`   | `string`          | `"Search..."`     | Search input placeholder |
+| `pageSize`            | `number`          | `10`              | Records per page         |
 
 ### ColumnConfig
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `key` | `string` | Column key (must match data key) |
-| `label` | `string` | Column header label |
-| `sortable` | `boolean` | Enable sorting |
-| `filterable` | `boolean` | Enable filtering |
-| `filterType` | `FilterType` | Filter type (select, date, etc.) |
-| `filterOptions` | `FilterOption[]` | Options for select filter |
-| `render` | `(value, row) => ReactNode` | Custom cell renderer |
-| `width` | `string` | Column width (CSS value) |
-| `align` | `"left" \| "center" \| "right"` | Text alignment |
+| Prop            | Type                            | Description                      |
+| --------------- | ------------------------------- | -------------------------------- |
+| `key`           | `string`                        | Column key (must match data key) |
+| `label`         | `string`                        | Column header label              |
+| `sortable`      | `boolean`                       | Enable sorting                   |
+| `filterable`    | `boolean`                       | Enable filtering                 |
+| `filterType`    | `FilterType`                    | Filter type (select, date, etc.) |
+| `filterOptions` | `FilterOption[]`                | Options for select filter        |
+| `render`        | `(value, row) => ReactNode`     | Custom cell renderer             |
+| `width`         | `string`                        | Column width (CSS value)         |
+| `align`         | `"left" \| "center" \| "right"` | Text alignment                   |
 
 ## Query Parameters
 
@@ -240,7 +243,7 @@ To enable export:
   onExport={(format) => {
     // Call export API endpoint
     const url = `/api/users/export?format=${format}&search=${query.search}`;
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   }}
 />
 ```
@@ -287,9 +290,5 @@ Fully typed with TypeScript generics:
 ```tsx
 import type { User } from "@/types/user";
 
-<DataTable<User>
-  columns={columns}
-  data={users}
-  rowKey="id"
-/>
+<DataTable<User> columns={columns} data={users} rowKey="id" />;
 ```

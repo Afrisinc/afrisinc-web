@@ -2,7 +2,16 @@ import { useState } from "react";
 import { Eye, Ban, CheckCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { DataTable, type ColumnConfig, type DataTableQuery } from "@/components/data-table";
 import { CopyableText } from "@/components/ui/copyable-text";
 import { UserAccountsSheet } from "@/components/platform/UserAccountsSheet";
@@ -20,7 +29,10 @@ export default function PlatformUsers() {
 
   const [selectedUser, setSelectedUser] = useState<PlatformUser | null>(null);
   const [accountsSheetOpen, setAccountsSheetOpen] = useState(false);
-  const [confirmAction, setConfirmAction] = useState<{ user: PlatformUser; action: "suspend" | "reactivate" } | null>(null);
+  const [confirmAction, setConfirmAction] = useState<{
+    user: PlatformUser;
+    action: "suspend" | "reactivate";
+  } | null>(null);
 
   const handleUserClick = (user: PlatformUser) => {
     setSelectedUser(user);
@@ -88,9 +100,7 @@ export default function PlatformUsers() {
         { label: "Suspended", value: "SUSPENDED" },
         { label: "Pending", value: "PENDING" },
       ],
-      render: (value) => (
-        <Badge variant={statusVariant(value)}>{value}</Badge>
-      ),
+      render: (value) => <Badge variant={statusVariant(value)}>{value}</Badge>,
     },
     {
       key: "createdAt",
@@ -102,7 +112,7 @@ export default function PlatformUsers() {
       key: "lastLogin",
       label: "Last Login",
       sortable: true,
-      render: (value) => value ? new Date(value).toLocaleDateString() : "Never",
+      render: (value) => (value ? new Date(value).toLocaleDateString() : "Never"),
     },
     {
       key: "actions",
@@ -110,24 +120,36 @@ export default function PlatformUsers() {
       align: "right",
       render: (_, user) => (
         <div className="flex justify-end gap-1">
-          <Button variant="ghost" size="icon" onClick={(e) => {
-            e.stopPropagation();
-            handleUserClick(user);
-          }}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleUserClick(user);
+            }}
+          >
             <Eye className="h-4 w-4" />
           </Button>
           {user.status === "ACTIVE" ? (
-            <Button variant="ghost" size="icon" onClick={(e) => {
-              e.stopPropagation();
-              setConfirmAction({ user, action: "suspend" });
-            }}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                setConfirmAction({ user, action: "suspend" });
+              }}
+            >
               <Ban className="h-4 w-4 text-destructive" />
             </Button>
           ) : (
-            <Button variant="ghost" size="icon" onClick={(e) => {
-              e.stopPropagation();
-              setConfirmAction({ user, action: "reactivate" });
-            }}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => {
+                e.stopPropagation();
+                setConfirmAction({ user, action: "reactivate" });
+              }}
+            >
               <CheckCircle className="h-4 w-4 text-secondary" />
             </Button>
           )}

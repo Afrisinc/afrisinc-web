@@ -118,7 +118,11 @@ export function ConnectionsTable({ connections, isLoading }: ConnectionsTablePro
                     </div>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-destructive hover:text-destructive"
+                    >
                       <X className="h-4 w-4" />
                     </Button>
                   </TableCell>

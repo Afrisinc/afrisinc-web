@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { trackEvent } from '@/lib/analytics';
+import { useEffect } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 export function useScrollDepth() {
   useEffect(() => {
@@ -11,14 +11,14 @@ export function useScrollDepth() {
       [25, 50, 75, 100].forEach((m) => {
         if (pct >= m && !milestones.has(m)) {
           milestones.add(m);
-          trackEvent('scroll_depth', {
+          trackEvent("scroll_depth", {
             depth_percent: m,
             page_path: window.location.pathname,
           });
         }
       });
     };
-    window.addEventListener('scroll', handler, { passive: true });
-    return () => window.removeEventListener('scroll', handler);
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
   }, []);
 }

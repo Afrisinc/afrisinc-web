@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -56,7 +63,9 @@ export function EnrollProductDialog({ account, isOpen, onClose }: EnrollProductD
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Enroll in Product</DialogTitle>
-          <DialogDescription>Add a product to {account?.owner?.firstName || "this account"}'s enrollment</DialogDescription>
+          <DialogDescription>
+            Add a product to {account?.owner?.firstName || "this account"}'s enrollment
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -74,7 +83,10 @@ export function EnrollProductDialog({ account, isOpen, onClose }: EnrollProductD
 
           <div className="space-y-2">
             <Label htmlFor="plan">Plan *</Label>
-            <Select value={formData.plan} onValueChange={(value) => setFormData((prev) => ({ ...prev, plan: value as Plan }))}>
+            <Select
+              value={formData.plan}
+              onValueChange={(value) => setFormData((prev) => ({ ...prev, plan: value as Plan }))}
+            >
               <SelectTrigger id="plan">
                 <SelectValue />
               </SelectTrigger>

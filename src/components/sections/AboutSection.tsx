@@ -25,7 +25,6 @@ const pillars = [
 export const AboutSection = () => {
   return (
     <section id="about" className="py-28 md:py-36 bg-muted/30 relative overflow-hidden">
-
       {/* Decorative large watermark letter */}
       <div className="absolute top-0 right-0 select-none pointer-events-none overflow-hidden leading-none">
         <span
@@ -38,7 +37,6 @@ export const AboutSection = () => {
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-
         {/* Top row */}
         <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
           <div>
@@ -46,17 +44,13 @@ export const AboutSection = () => {
           </div>
           <div>
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-              One Company.{" "}
-              <span className="font-display italic text-gradient-primary">
-                Four Big Bets.
-              </span>
+              One Company. <span className="font-display italic text-gradient-primary">Four Big Bets.</span>
             </h2>
           </div>
         </div>
 
         {/* Two-col layout */}
         <div className="grid lg:grid-cols-[5fr_7fr] gap-10 lg:gap-16 items-start">
-
           {/* Left — sticky pull quote */}
           <div className="lg:sticky lg:top-28">
             <div
@@ -70,9 +64,8 @@ export const AboutSection = () => {
               We don't believe great technology or great storytelling has a hometown. We build for the world.
             </p>
             <p className="mt-6 text-muted-foreground leading-relaxed text-sm">
-              We started with media because stories build trust. Then we built
-              the software that makes things work. Every product we ship is
-              designed to last — not just to launch.
+              We started with media because stories build trust. Then we built the software that makes things
+              work. Every product we ship is designed to last — not just to launch.
             </p>
             <Link
               to="/about"
@@ -112,14 +105,11 @@ export const AboutSection = () => {
                   <h3 className="text-lg font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
                     {pillar.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed text-sm">
-                    {pillar.description}
-                  </p>
+                  <p className="text-muted-foreground leading-relaxed text-sm">{pillar.description}</p>
                 </div>
               </div>
             ))}
           </div>
-
         </div>
       </div>
     </section>

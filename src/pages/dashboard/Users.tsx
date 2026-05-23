@@ -35,9 +35,7 @@ const DashboardUsers = () => (
                 <TableCell>{u.email}</TableCell>
                 <TableCell>{u.role}</TableCell>
                 <TableCell>
-                  <Badge variant={u.status === "Active" ? "default" : "secondary"}>
-                    {u.status}
-                  </Badge>
+                  <Badge variant={u.status === "Active" ? "default" : "secondary"}>{u.status}</Badge>
                 </TableCell>
               </TableRow>
             ))}

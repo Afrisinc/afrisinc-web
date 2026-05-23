@@ -6,12 +6,12 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
-  { name: "About",      href: "/about" },
+  { name: "About", href: "/about" },
   { name: "Technology", href: "/technology" },
-  { name: "Media",      href: "/media" },
-  { name: "Products",   href: "/products" },
-  { name: "Careers",    href: "/careers" },
-  { name: "Contact",    href: "/contact" },
+  { name: "Media", href: "/media" },
+  { name: "Products", href: "/products" },
+  { name: "Careers", href: "/careers" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export const Header = () => {
@@ -40,12 +40,9 @@ export const Header = () => {
       }`}
     >
       {/* Kente accent line at bottom — visible when scrolled */}
-      {isScrolled && (
-        <div className="absolute bottom-0 left-0 right-0 kente-border opacity-35" />
-      )}
+      {isScrolled && <div className="absolute bottom-0 left-0 right-0 kente-border opacity-35" />}
 
       <div className="container mx-auto px-6 flex items-center justify-between">
-
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 group flex-shrink-0">
           <img
@@ -113,7 +110,6 @@ export const Header = () => {
           <div className="absolute top-0 left-0 right-0 kente-border opacity-55" />
 
           <div className="container mx-auto px-6 pt-8 pb-10 flex flex-col relative z-10">
-
             {/* Numbered nav links */}
             <nav className="divide-y divide-background/10">
               {navLinks.map((link, i) => (
@@ -121,9 +117,7 @@ export const Header = () => {
                   key={link.name}
                   to={link.href}
                   className={`flex items-center gap-5 py-4 transition-colors duration-200 ${
-                    isActive(link.href)
-                      ? "text-primary"
-                      : "text-background/65 hover:text-background"
+                    isActive(link.href) ? "text-primary" : "text-background/65 hover:text-background"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -160,7 +154,6 @@ export const Header = () => {
                 </Link>
               )}
             </div>
-
           </div>
         </div>
       )}

@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
-import { grantConsent, denyConsent } from '@/lib/analytics';
-import { Button } from '@/components/ui/button';
-import { ChevronUp } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { grantConsent, denyConsent } from "@/lib/analytics";
+import { Button } from "@/components/ui/button";
+import { ChevronUp } from "lucide-react";
 
 export function CookieBanner() {
   const [visible, setVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
-    const hasConsent = localStorage.getItem('cookie_consent');
+    const hasConsent = localStorage.getItem("cookie_consent");
     if (!hasConsent) {
       setVisible(true);
       setTimeout(() => setIsAnimating(true), 50);
@@ -16,14 +16,14 @@ export function CookieBanner() {
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem('cookie_consent', 'granted');
+    localStorage.setItem("cookie_consent", "granted");
     grantConsent();
     setIsAnimating(false);
     setTimeout(() => setVisible(false), 300);
   };
 
   const handleDecline = () => {
-    localStorage.setItem('cookie_consent', 'denied');
+    localStorage.setItem("cookie_consent", "denied");
     denyConsent();
     setIsAnimating(false);
     setTimeout(() => setVisible(false), 300);
@@ -36,7 +36,7 @@ export function CookieBanner() {
       {/* Overlay backdrop — fade in/out */}
       <div
         className={`fixed inset-0 z-40 bg-foreground/30 backdrop-blur-sm transition-opacity duration-300 ${
-          isAnimating ? 'opacity-100' : 'opacity-0'
+          isAnimating ? "opacity-100" : "opacity-0"
         }`}
         onClick={handleDecline}
         aria-hidden
@@ -45,7 +45,7 @@ export function CookieBanner() {
       {/* Banner — slide up from bottom */}
       <div
         className={`fixed bottom-0 left-0 right-0 z-50 transform transition-all duration-300 ease-out ${
-          isAnimating ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]'
+          isAnimating ? "translate-y-0" : "translate-y-[calc(100%+20px)]"
         }`}
       >
         {/* Decorative top border — terra accent */}
@@ -72,8 +72,8 @@ export function CookieBanner() {
 
                 {/* Description */}
                 <p className="text-sm md:text-base leading-relaxed text-muted-foreground max-w-2xl">
-                  We use analytics to understand how you use our site and to enhance your experience.
-                  You can accept all cookies or customize your preferences.
+                  We use analytics to understand how you use our site and to enhance your experience. You can
+                  accept all cookies or customize your preferences.
                 </p>
 
                 {/* Privacy link */}

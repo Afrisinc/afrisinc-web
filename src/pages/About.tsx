@@ -4,16 +4,16 @@ import { Link } from "react-router-dom";
 import { Eye, Target, Rocket, Globe, Users, TrendingUp, ArrowRight, ArrowUpRight } from "lucide-react";
 
 const stats = [
-  { value: "4",    label: "Departments" },
-  { value: "10+",  label: "Live Products" },
-  { value: "15+",  label: "Countries" },
+  { value: "4", label: "Departments" },
+  { value: "10+", label: "Live Products" },
+  { value: "15+", label: "Countries" },
   { value: "2020", label: "Founded" },
 ];
 
 const accentColors = {
-  terra:  { bg: "hsl(22 88% 52% / 0.08)",  text: "hsl(22 82% 46%)",  border: "hsl(22 88% 52% / 0.2)" },
+  terra: { bg: "hsl(22 88% 52% / 0.08)", text: "hsl(22 82% 46%)", border: "hsl(22 88% 52% / 0.2)" },
   forest: { bg: "hsl(158 42% 26% / 0.08)", text: "hsl(158 42% 32%)", border: "hsl(158 42% 26% / 0.2)" },
-  gold:   { bg: "hsl(43 95% 52% / 0.10)",  text: "hsl(38 80% 38%)",  border: "hsl(43 95% 52% / 0.25)" },
+  gold: { bg: "hsl(43 95% 52% / 0.10)", text: "hsl(38 80% 38%)", border: "hsl(43 95% 52% / 0.25)" },
   indigo: { bg: "hsl(240 40% 30% / 0.08)", text: "hsl(240 40% 52%)", border: "hsl(240 40% 30% / 0.2)" },
 };
 
@@ -27,7 +27,8 @@ const values = [
   {
     icon: Globe,
     title: "Global Standards",
-    description: "Built in Africa, trusted worldwide. We hold every product to the same standard as anyone, anywhere — no exceptions.",
+    description:
+      "Built in Africa, trusted worldwide. We hold every product to the same standard as anyone, anywhere — no exceptions.",
     accent: "indigo",
   },
   {
@@ -45,24 +46,34 @@ const values = [
 ];
 
 const milestones = [
-  { year: "2020", title: "Founded",         description: "Afrisinc established with a vision for African tech excellence." },
-  { year: "2021", title: "Media Launch",    description: "Launched our media division with news and content platforms." },
-  { year: "2022", title: "Tech Expansion",  description: "Expanded into enterprise software and SaaS platforms." },
-  { year: "2023", title: "Global Reach",    description: "Partnerships across 15+ countries and growing." },
-  { year: "2024", title: "Innovation Hub",  description: "Opened our flagship technology innovation center." },
+  {
+    year: "2020",
+    title: "Founded",
+    description: "Afrisinc established with a vision for African tech excellence.",
+  },
+  {
+    year: "2021",
+    title: "Media Launch",
+    description: "Launched our media division with news and content platforms.",
+  },
+  {
+    year: "2022",
+    title: "Tech Expansion",
+    description: "Expanded into enterprise software and SaaS platforms.",
+  },
+  { year: "2023", title: "Global Reach", description: "Partnerships across 15+ countries and growing." },
+  { year: "2024", title: "Innovation Hub", description: "Opened our flagship technology innovation center." },
 ];
 
 const About = () => {
   return (
     <PublicLayout>
-
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative min-h-[65vh] flex items-center overflow-hidden bg-background dot-grid grain">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background/80 pointer-events-none" />
 
         <div className="container mx-auto px-6 pt-36 pb-28 relative z-10">
           <div className="max-w-4xl">
-
             <p className="line-accent mb-12 animate-fade-in">About Afrisinc</p>
 
             <h1 className="animate-fade-up animation-delay-100" style={{ lineHeight: 1 }}>
@@ -81,8 +92,8 @@ const About = () => {
             </h1>
 
             <p className="text-lg text-muted-foreground leading-[1.75] max-w-lg mt-10 animate-fade-up animation-delay-200">
-              We don't believe great technology or great storytelling has a hometown.
-              Built from Africa. Designed for the world.
+              We don't believe great technology or great storytelling has a hometown. Built from Africa.
+              Designed for the world.
             </p>
 
             {/* Stats */}
@@ -103,7 +114,6 @@ const About = () => {
                 ))}
               </div>
             </div>
-
           </div>
         </div>
       </section>
@@ -111,34 +121,34 @@ const About = () => {
       {/* ── Vision & Mission ─────────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-background">
         <div className="container mx-auto px-6">
-
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
             <div>
               <p className="line-accent">Purpose</p>
             </div>
             <div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                Driven by{" "}
-                <span className="font-display italic text-gradient-primary">Vision.</span>
+                Driven by <span className="font-display italic text-gradient-primary">Vision.</span>
               </h2>
             </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-5">
-
             {/* Vision */}
             <div className="group rounded-2xl border border-border bg-card p-8 hover:border-primary/25 hover:shadow-card-hover transition-all duration-300">
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-105"
-                style={{ background: accentColors.terra.bg, border: `1px solid ${accentColors.terra.border}` }}
+                style={{
+                  background: accentColors.terra.bg,
+                  border: `1px solid ${accentColors.terra.border}`,
+                }}
               >
                 <Eye className="w-5 h-5" style={{ color: accentColors.terra.text }} />
               </div>
               <h3 className="heading-subsection mb-4">Our Vision</h3>
               <p className="text-muted-foreground leading-relaxed">
-                To become Africa's leading technology conglomerate, setting global standards
-                in software innovation, digital media, and enterprise solutions. We envision
-                a future where African technology talent and solutions power businesses worldwide.
+                To become Africa's leading technology conglomerate, setting global standards in software
+                innovation, digital media, and enterprise solutions. We envision a future where African
+                technology talent and solutions power businesses worldwide.
               </p>
             </div>
 
@@ -149,12 +159,11 @@ const About = () => {
               </div>
               <h3 className="heading-subsection mb-4">Our Mission</h3>
               <p className="text-muted-foreground leading-relaxed">
-                To build world-class technology products and platforms that solve real problems,
-                create value for businesses and individuals, and showcase African excellence
-                on the global stage. We commit to innovation, quality, and sustainable growth.
+                To build world-class technology products and platforms that solve real problems, create value
+                for businesses and individuals, and showcase African excellence on the global stage. We commit
+                to innovation, quality, and sustainable growth.
               </p>
             </div>
-
           </div>
         </div>
       </section>
@@ -162,15 +171,13 @@ const About = () => {
       {/* ── Core Values ──────────────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-muted/30">
         <div className="container mx-auto px-6">
-
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
             <div>
               <p className="line-accent">Core Values</p>
             </div>
             <div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                What We{" "}
-                <span className="font-display italic text-gradient-primary">Stand For.</span>
+                What We <span className="font-display italic text-gradient-primary">Stand For.</span>
               </h2>
             </div>
           </div>
@@ -196,22 +203,19 @@ const About = () => {
               );
             })}
           </div>
-
         </div>
       </section>
 
       {/* ── Our Journey ──────────────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-background">
         <div className="container mx-auto px-6">
-
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
             <div>
               <p className="line-accent">Our Journey</p>
             </div>
             <div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                Five Years.{" "}
-                <span className="font-display italic text-gradient-primary">Growing Fast.</span>
+                Five Years. <span className="font-display italic text-gradient-primary">Growing Fast.</span>
               </h2>
             </div>
           </div>
@@ -241,14 +245,11 @@ const About = () => {
                   <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
                     {milestone.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed text-sm">
-                    {milestone.description}
-                  </p>
+                  <p className="text-muted-foreground leading-relaxed text-sm">{milestone.description}</p>
                 </div>
               </div>
             ))}
           </div>
-
         </div>
       </section>
 
@@ -268,7 +269,6 @@ const About = () => {
         </div>
 
         <div className="container mx-auto px-6 relative z-10">
-
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-background/10">
             <div>
               <p className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-background/40 before:block before:w-6 before:h-px before:bg-background/40 before:flex-shrink-0">
@@ -277,8 +277,7 @@ const About = () => {
             </div>
             <div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-background leading-[1.0]">
-                Ready to Build{" "}
-                <span className="font-display italic text-gradient-primary">Together?</span>
+                Ready to Build <span className="font-display italic text-gradient-primary">Together?</span>
               </h2>
             </div>
           </div>
@@ -303,10 +302,8 @@ const About = () => {
               </Link>
             </div>
           </div>
-
         </div>
       </section>
-
     </PublicLayout>
   );
 };

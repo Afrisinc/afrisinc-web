@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -73,7 +80,10 @@ export function AddMemberDialog({ organization, isOpen, onClose }: AddMemberDial
 
           <div className="space-y-2">
             <Label htmlFor="role">Role *</Label>
-            <Select value={formData.role} onValueChange={(value) => setFormData((prev) => ({ ...prev, role: value as Role }))}>
+            <Select
+              value={formData.role}
+              onValueChange={(value) => setFormData((prev) => ({ ...prev, role: value as Role }))}
+            >
               <SelectTrigger id="role">
                 <SelectValue />
               </SelectTrigger>

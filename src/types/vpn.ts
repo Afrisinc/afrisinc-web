@@ -10,8 +10,8 @@ export interface VPNServer {
   networkCidr: string;
   maxClients: number;
   currentClients: number;
-  status: 'active' | 'inactive' | 'maintenance';
-  healthStatus: 'healthy' | 'degraded' | 'unhealthy';
+  status: "active" | "inactive" | "maintenance";
+  healthStatus: "healthy" | "degraded" | "unhealthy";
   latitude: number;
   longitude: number;
   createdAt: string;
@@ -26,7 +26,7 @@ export interface VPNServer {
   ip?: string;
   port?: number;
   country?: string;
-  protocol?: 'wireguard' | 'openvpn' | 'ikev2';
+  protocol?: "wireguard" | "openvpn" | "ikev2";
   load?: number;
   maxConnections?: number;
   currentConnections?: number;
@@ -40,7 +40,7 @@ export interface VPNServer {
 export interface VPNUser {
   id: string;
   email: string;
-  status: 'active' | 'suspended' | 'disconnected' | 'pending';
+  status: "active" | "suspended" | "disconnected" | "pending";
   devices: VPNDevice[];
   createdAt: string;
 
@@ -75,7 +75,7 @@ export interface VPNDevice {
   id: string;
   userId: string;
   name: string;
-  type: 'desktop' | 'mobile' | 'router' | 'unknown' | 'other';
+  type: "desktop" | "mobile" | "router" | "unknown" | "other";
   isConnected: boolean;
   createdAt: string;
 
@@ -84,11 +84,11 @@ export interface VPNDevice {
   deviceName?: string;
   deviceType?: string;
   ip?: string;
-  status?: 'active' | 'disconnected';
+  status?: "active" | "disconnected";
   lastConnected?: string | null;
 
   // Legacy fields for backward compatibility
-  os?: 'windows' | 'macos' | 'linux' | 'ios' | 'android' | 'other';
+  os?: "windows" | "macos" | "linux" | "ios" | "android" | "other";
   publicKey?: string;
   lastIp?: string | null;
   lastSeen?: string | null;
@@ -103,7 +103,7 @@ export interface VPNConnection {
   serverId: string;
   serverName: string;
   serverLocation: string;
-  protocol: 'wireguard' | 'openvpn' | 'ikev2';
+  protocol: "wireguard" | "openvpn" | "ikev2";
   clientIp: string;
   assignedIp: string;
   bytesIn: number;
@@ -116,7 +116,7 @@ export interface VPNConfig {
   id: string;
   deviceId: string;
   serverId: string;
-  protocol: 'wireguard' | 'openvpn' | 'ikev2';
+  protocol: "wireguard" | "openvpn" | "ikev2";
   config: string;
   createdAt: string;
   expiresAt: string | null;

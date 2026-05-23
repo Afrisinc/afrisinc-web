@@ -1,5 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, Users, Package, DollarSign, ArrowUpRight, ArrowDownRight, Activity, Zap } from "lucide-react";
+import {
+  TrendingUp,
+  Users,
+  Package,
+  DollarSign,
+  ArrowUpRight,
+  ArrowDownRight,
+  Activity,
+  Zap,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const stats = [
@@ -22,7 +31,8 @@ const DashboardOverview = () => (
     <div className="space-y-3 animate-fade-in">
       <h1 className="heading-hero">Your Performance at a Glance</h1>
       <p className="text-muted-foreground max-w-2xl">
-        The numbers that matter. See your revenue, user growth, product momentum, and trajectory — all updated live. Use these metrics to guide what comes next.
+        The numbers that matter. See your revenue, user growth, product momentum, and trajectory — all updated
+        live. Use these metrics to guide what comes next.
       </p>
     </div>
 
@@ -46,7 +56,9 @@ const DashboardOverview = () => (
               </div>
               <div className="space-y-2">
                 <div className="text-3xl font-bold">{stat.value}</div>
-                <div className={`text-xs font-semibold flex items-center gap-1 ${stat.up ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}>
+                <div
+                  className={`text-xs font-semibold flex items-center gap-1 ${stat.up ? "text-emerald-600 dark:text-emerald-400" : "text-red-600 dark:text-red-400"}`}
+                >
                   {stat.up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                   {stat.change}
                 </div>
@@ -69,7 +81,10 @@ const DashboardOverview = () => (
           </CardHeader>
           <CardContent className="pt-6 space-y-3">
             {activities.map((activity) => (
-              <div key={activity.id} className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors group cursor-pointer">
+              <div
+                key={activity.id}
+                className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors group cursor-pointer"
+              >
                 <div className="p-1.5 rounded bg-muted flex-shrink-0 group-hover:bg-muted transition-colors">
                   <activity.icon className="w-3 h-3 text-muted-foreground" />
                 </div>

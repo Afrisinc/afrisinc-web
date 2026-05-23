@@ -80,18 +80,15 @@ export const useGenerateAIPost = () => {
       const timeoutId = setTimeout(() => controller.abort(), 60000);
 
       try {
-        const response = await fetch(
-          `${config.serverUrl}/content/ai/generate`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(params),
-            signal: controller.signal,
-          }
-        );
+        const response = await fetch(`${config.serverUrl}/content/ai/generate`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(params),
+          signal: controller.signal,
+        });
 
         if (!response.ok) {
           const error = await response.json();

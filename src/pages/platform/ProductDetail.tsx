@@ -17,7 +17,12 @@ import {
   TrendingUp,
   AlertCircle,
 } from "lucide-react";
-import { useProductEnrollments, useProductById, useProductAccounts, useUpdateProduct } from "@/hooks/usePlatform";
+import {
+  useProductEnrollments,
+  useProductById,
+  useProductAccounts,
+  useUpdateProduct,
+} from "@/hooks/usePlatform";
 import { toast } from "sonner";
 
 export default function ProductDetail() {
@@ -69,8 +74,9 @@ export default function ProductDetail() {
         },
       });
       toast.success("Product settings updated");
-    } catch (error: any) {
-      const errorMessage = error?.message || "Failed to update product";
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      const errorMessage = err?.message || "Failed to update product";
       toast.error(errorMessage);
     }
   };
@@ -131,9 +137,7 @@ export default function ProductDetail() {
           <Card className="border-border hover:shadow-card-hover transition-all duration-300">
             <CardContent className="pt-6">
               <div className="space-y-3">
-                <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">
-                  Active
-                </p>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Active</p>
                 <div className="text-3xl font-bold text-emerald-600">{enrollment?.active || 0}</div>
                 <p className="text-xs text-muted-foreground">Currently active</p>
               </div>
@@ -284,7 +288,9 @@ export default function ProductDetail() {
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
                 <CardTitle>Enrolled Accounts</CardTitle>
-                <Button variant="outline" size="sm">Add Account</Button>
+                <Button variant="outline" size="sm">
+                  Add Account
+                </Button>
               </div>
             </CardHeader>
             <CardContent>
@@ -310,12 +316,17 @@ export default function ProductDetail() {
                     </TableHeader>
                     <TableBody>
                       {accounts.map((account, idx) => (
-                        <TableRow key={account.id} className={idx % 2 === 0 ? "bg-transparent" : "bg-muted/10"}>
+                        <TableRow
+                          key={account.id}
+                          className={idx % 2 === 0 ? "bg-transparent" : "bg-muted/10"}
+                        >
                           <TableCell className="font-mono text-xs">{account.id.slice(0, 8)}...</TableCell>
                           <TableCell>
                             <Badge variant="outline">{account.type}</Badge>
                           </TableCell>
-                          <TableCell className="font-medium">{account.ownerName || account.owner?.email}</TableCell>
+                          <TableCell className="font-medium">
+                            {account.ownerName || account.owner?.email}
+                          </TableCell>
                           <TableCell>
                             <Badge variant={account.status === "ACTIVE" ? "default" : "destructive"}>
                               {account.status}
