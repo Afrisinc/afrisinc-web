@@ -7,6 +7,7 @@ ARG VITE_NOTIFY_URL=""
 ARG VITE_NOTIFY_APP_ID=""
 ARG VITE_GA_MEASUREMENT_ID=""
 ARG VITE_GA_DEBUG=false
+ARG VITE_FB_APP_ID=""
 
 # Enable pnpm via Corepack
 RUN corepack enable && corepack prepare pnpm@10 --activate
@@ -24,6 +25,7 @@ RUN VITE_API_URL=${VITE_API_URL} \
     VITE_NOTIFY_APP_ID=${VITE_NOTIFY_APP_ID} \
     VITE_GA_MEASUREMENT_ID=${VITE_GA_MEASUREMENT_ID} \
     VITE_GA_DEBUG=${VITE_GA_DEBUG} \
+    VITE_FB_APP_ID=${VITE_FB_APP_ID} \
     pnpm build
 
 # Build the SSR server
