@@ -72,11 +72,14 @@ const Media = () => {
     onStart(); // Track form start
     setIsSubscribing(true);
     try {
-      await subscribeNewsletter(email);
+      await subscribeNewsletter(email, {
+        categories: selectedCategory ? [selectedCategory] : [],
+        formPage: "media_page",
+      });
       trackSubmit(); // Track successful subscription
       toast({
         title: "You're subscribed!",
-        description: "Thank you for subscribing.",
+        description: "Thank you for subscribing to Afrisinc Media.",
       });
       setEmail("");
     } catch {

@@ -34,10 +34,13 @@ const ArticlesPage = () => {
     e.preventDefault();
     setIsSubscribing(true);
     try {
-      await subscribeNewsletter(email);
+      await subscribeNewsletter(email, {
+        categories: filters.category ? [filters.category] : [],
+        formPage: "articles_page",
+      });
       toast({
         title: "You're subscribed!",
-        description: "Thank you for subscribing.",
+        description: "Thank you for subscribing to Afrisinc Media.",
       });
       setEmail("");
     } catch {
