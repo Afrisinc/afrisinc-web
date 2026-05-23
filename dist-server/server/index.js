@@ -6,6 +6,11 @@ import { seoMiddleware } from "./seo-middleware.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const isProduction = process.env.NODE_ENV === "production";
 const PORT = process.env.PORT || 8090;
+// In production, server runs from /app/dist-server/server/
+// In dev, server runs from /project/server/
+// So production needs ../../dist, dev needs ../dist
+const distPath = isProduction ? resolve(__dirname, "../../dist") : resolve(__dirname, "../dist");
+const rootPath = isProduction ? resolve(__dirname, "../..") : resolve(__dirname, "..");
 async function createServer() {
     const app = express();
     let vite = null;
@@ -20,15 +25,15 @@ async function createServer() {
     }
     else {
         // Production: serve static files
-        app.use(express.static(resolve(__dirname, "../dist"), { index: false }));
+        app.use(express.static(distPath, { index: false }));
     }
     // SSR middleware for social crawlers on article pages
     app.use(seoMiddleware);
     // Fallback: serve index.html for SPA routing
     app.get("*", async (req, res) => {
         const indexPath = isProduction
-            ? resolve(__dirname, "../dist/index.html")
-            : resolve(__dirname, "../index.html");
+            ? resolve(distPath, "index.html")
+            : resolve(rootPath, "index.html");
         let html = fs.readFileSync(indexPath, "utf-8");
         if (!isProduction && vite) {
             html = await vite.transformIndexHtml(req.url, html);

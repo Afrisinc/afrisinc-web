@@ -8,6 +8,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const isProduction = process.env.NODE_ENV === "production";
 const PORT = process.env.PORT || 8090;
 
+// In production, server runs from /app/dist-server/server/
+// In dev, server runs from /project/server/
+// So production needs ../../dist, dev needs ../dist
+const distPath = isProduction ? resolve(__dirname, "../../dist") : resolve(__dirname, "../dist");
+const rootPath = isProduction ? resolve(__dirname, "../..") : resolve(__dirname, "..");
+
 // Type for Vite dev server (only used in development)
 type ViteDevServer = {
   middlewares: express.Handler;
@@ -29,7 +35,7 @@ async function createServer() {
     app.use(vite.middlewares);
   } else {
     // Production: serve static files
-    app.use(express.static(resolve(__dirname, "../dist"), { index: false }));
+    app.use(express.static(distPath, { index: false }));
   }
 
   // SSR middleware for social crawlers on article pages
@@ -37,9 +43,7 @@ async function createServer() {
 
   // Fallback: serve index.html for SPA routing
   app.get("*", async (req, res) => {
-    const indexPath = isProduction
-      ? resolve(__dirname, "../dist/index.html")
-      : resolve(__dirname, "../index.html");
+    const indexPath = isProduction ? resolve(distPath, "index.html") : resolve(rootPath, "index.html");
 
     let html = fs.readFileSync(indexPath, "utf-8");
 

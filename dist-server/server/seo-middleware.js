@@ -4,6 +4,10 @@ import { fileURLToPath } from "node:url";
 import { generateArticleMetaTags, generateDefaultMetaTags, isSocialCrawler, SITE_SEO, } from "../src/lib/seo.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const isProduction = process.env.NODE_ENV === "production";
+// In production, server runs from /app/dist-server/server/
+// In dev, server runs from /project/server/
+const distPath = isProduction ? resolve(__dirname, "../../dist") : resolve(__dirname, "../dist");
+const rootPath = isProduction ? resolve(__dirname, "../..") : resolve(__dirname, "..");
 // Article page pattern: /media/articles/:slug
 const ARTICLE_PATTERN = /^\/media\/articles\/([^/]+)$/;
 // Category placeholder images (mirrors articlesService.ts)
@@ -65,8 +69,8 @@ function getApiUrl() {
     // Try to load from config.json
     try {
         const configPath = isProduction
-            ? resolve(__dirname, "../dist/config.json")
-            : resolve(__dirname, "../public/config.json");
+            ? resolve(distPath, "config.json")
+            : resolve(rootPath, "public/config.json");
         const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
         if (config.serverUrl)
             return config.serverUrl;
@@ -172,8 +176,8 @@ export async function seoMiddleware(req, res, next) {
         const article = await fetchArticle(slug);
         // Read HTML template
         const indexPath = isProduction
-            ? resolve(__dirname, "../dist/index.html")
-            : resolve(__dirname, "../index.html");
+            ? resolve(distPath, "index.html")
+            : resolve(rootPath, "index.html");
         let html = fs.readFileSync(indexPath, "utf-8");
         // Generate and inject meta tags
         const metaTags = article ? generateArticleMetaTags(article) : generateDefaultMetaTags();

@@ -13,6 +13,11 @@ import {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const isProduction = process.env.NODE_ENV === "production";
 
+// In production, server runs from /app/dist-server/server/
+// In dev, server runs from /project/server/
+const distPath = isProduction ? resolve(__dirname, "../../dist") : resolve(__dirname, "../dist");
+const rootPath = isProduction ? resolve(__dirname, "../..") : resolve(__dirname, "..");
+
 // Backend article response shape
 interface BackendArticle {
   id: string;
@@ -97,8 +102,8 @@ function getApiUrl(): string {
   // Try to load from config.json
   try {
     const configPath = isProduction
-      ? resolve(__dirname, "../dist/config.json")
-      : resolve(__dirname, "../public/config.json");
+      ? resolve(distPath, "config.json")
+      : resolve(rootPath, "public/config.json");
     const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
     if (config.serverUrl) return config.serverUrl;
   } catch {
@@ -214,9 +219,7 @@ export async function seoMiddleware(req: Request, res: Response, next: NextFunct
     const article = await fetchArticle(slug);
 
     // Read HTML template
-    const indexPath = isProduction
-      ? resolve(__dirname, "../dist/index.html")
-      : resolve(__dirname, "../index.html");
+    const indexPath = isProduction ? resolve(distPath, "index.html") : resolve(rootPath, "index.html");
     let html = fs.readFileSync(indexPath, "utf-8");
 
     // Generate and inject meta tags
