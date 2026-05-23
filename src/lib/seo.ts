@@ -128,3 +128,20 @@ export function isSocialCrawler(userAgent: string): boolean {
   const ua = userAgent.toLowerCase();
   return crawlers.some((crawler) => ua.includes(crawler.toLowerCase()));
 }
+
+/**
+ * Strip HTML tags from a string and decode common HTML entities
+ */
+export function stripHtmlTags(html: string | undefined | null): string {
+  if (!html) return "";
+  return html
+    .replace(/<[^>]*>/g, "") // Remove HTML tags
+    .replace(/&nbsp;/g, " ") // Replace non-breaking spaces
+    .replace(/&amp;/g, "&") // Replace ampersands
+    .replace(/&lt;/g, "<") // Replace less than
+    .replace(/&gt;/g, ">") // Replace greater than
+    .replace(/&quot;/g, '"') // Replace quotes
+    .replace(/&#39;/g, "'") // Replace apostrophes
+    .replace(/\s+/g, " ") // Normalize whitespace
+    .trim();
+}

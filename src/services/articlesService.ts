@@ -3,6 +3,7 @@
 import type { Article, ArticleCategory, ArticlesResponse, ArticleFilters } from "@/types/article";
 import { getRuntimeConfig } from "@/lib/config";
 import { mockArticles, mockFeaturedArticle, mockCategories } from "@/lib/mockArticles";
+import { stripHtmlTags } from "@/lib/seo";
 
 // Backend article response shape
 interface BackendArticle {
@@ -124,12 +125,15 @@ async function mapBackendArticle(backendArticle: BackendArticle): Promise<Articl
     }
   })();
 
+  // Strip HTML from summary for display, keep original for content
+  const cleanSummary = stripHtmlTags(backendArticle.source_summary);
+
   return {
     id: backendArticle.id,
     slug: backendArticle.slug || backendArticle.id.toString(),
     title: backendArticle.source_headline || "",
-    summary: backendArticle.source_summary || "",
-    content: `<p>${backendArticle.source_summary || ""}</p>`,
+    summary: cleanSummary,
+    content: backendArticle.source_summary || "",
     featured_image: featuredImage,
     category: parsedCategories,
     type: "news",
@@ -148,7 +152,7 @@ async function mapBackendArticle(backendArticle: BackendArticle): Promise<Articl
     ai_generated: backendArticle.ai_generated || false,
     seo: {
       meta_title: backendArticle.source_headline || "",
-      meta_description: backendArticle.source_summary || "",
+      meta_description: cleanSummary,
       og_image: featuredImage,
     },
   };

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { generateArticleMetaTags, generateDefaultMetaTags, isSocialCrawler, SITE_SEO, } from "../src/lib/seo.js";
+import { generateArticleMetaTags, generateDefaultMetaTags, isSocialCrawler, stripHtmlTags, SITE_SEO, } from "../src/lib/seo.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const isProduction = process.env.NODE_ENV === "production";
 // In production, server runs from /app/dist-server/server/
@@ -116,7 +116,7 @@ async function fetchArticle(slug) {
         }
         return {
             title: article.source_headline || article.title || "",
-            description: article.source_summary || article.summary || "",
+            description: stripHtmlTags(article.source_summary || article.summary),
             image: imageUrl,
             url: `${SITE_SEO.siteUrl}/media/articles/${slug}`,
             type: "article",
@@ -175,9 +175,7 @@ export async function seoMiddleware(req, res, next) {
         // Fetch article data
         const article = await fetchArticle(slug);
         // Read HTML template
-        const indexPath = isProduction
-            ? resolve(distPath, "index.html")
-            : resolve(rootPath, "index.html");
+        const indexPath = isProduction ? resolve(distPath, "index.html") : resolve(rootPath, "index.html");
         let html = fs.readFileSync(indexPath, "utf-8");
         // Generate and inject meta tags
         const metaTags = article ? generateArticleMetaTags(article) : generateDefaultMetaTags();
