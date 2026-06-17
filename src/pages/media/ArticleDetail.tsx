@@ -66,14 +66,23 @@ const ArticleDetail = () => {
   if (isLoading) {
     return (
       <PublicLayout>
-        <div className="pt-32 pb-20">
-          <div className="container mx-auto px-6">
-            <Skeleton className="h-6 w-48 mb-6" />
-            <Skeleton className="h-12 w-3/4 mb-4" />
-            <Skeleton className="h-6 w-full max-w-2xl mb-8" />
-            <Skeleton className="aspect-[21/9] rounded-2xl mb-8" />
-            <div className="max-w-3xl mx-auto space-y-4">
+        <div className="pt-20 md:pt-24 pb-12">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <Skeleton className="h-5 w-40 mb-6" />
+            <Skeleton className="h-6 w-24 mb-4 rounded-full" />
+            <Skeleton className="h-10 sm:h-12 w-full max-w-xl mb-3" />
+            <Skeleton className="h-5 w-full max-w-2xl mb-6" />
+            <div className="flex items-center gap-4 py-4 border-y border-border mb-8">
+              <Skeleton className="h-9 w-9 rounded-full" />
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-4 w-20" />
+              <Skeleton className="h-4 w-16" />
+            </div>
+            <Skeleton className="aspect-[16/9] sm:aspect-[2/1] rounded-xl sm:rounded-2xl mb-10" />
+            <div className="max-w-3xl mx-auto space-y-3">
               <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-5/6" />
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-3/4" />
             </div>
@@ -86,15 +95,15 @@ const ArticleDetail = () => {
   if (error || !article) {
     return (
       <PublicLayout>
-        <div className="py-28 md:py-36">
-          <div className="container mx-auto px-6 text-center">
-            <h1 className="text-3xl font-bold text-foreground mb-4">Article Not Found</h1>
-            <p className="text-muted-foreground mb-8">
+        <div className="py-20 md:py-28">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">Article Not Found</h1>
+            <p className="text-muted-foreground mb-6 max-w-md mx-auto">
               The article you're looking for doesn't exist or has been removed.
             </p>
-            <Button variant="outline" size="lg" className="group" asChild>
+            <Button variant="outline" size="default" className="group" asChild>
               <Link to="/media">
-                <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
                 Back to Media
               </Link>
             </Button>
@@ -147,24 +156,24 @@ const ArticleDetail = () => {
         </script>
       </Helmet>
 
-      {/* ── Hero Header ───────────────────────────────────────────────────── */}
-      <section className="py-28 md:py-36 bg-background">
-        <div className="container mx-auto px-6">
+      {/* ── Hero Header + Featured Image ─────────────────────────────────── */}
+      <section className="pt-20 md:pt-24 pb-8 md:pb-12 bg-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8 animate-fade-in">
+          <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6 animate-fade-in">
             <Link to="/media" className="hover:text-foreground transition-colors">
               Media
             </Link>
-            <span>/</span>
+            <span className="text-muted-foreground/50">/</span>
             <Link to="/media/articles" className="hover:text-foreground transition-colors">
               Articles
             </Link>
-            <span>/</span>
-            <span className="text-foreground truncate max-w-[200px]">{article.title}</span>
-          </div>
+            <span className="text-muted-foreground/50">/</span>
+            <span className="text-foreground truncate max-w-[180px] sm:max-w-[280px]">{article.title}</span>
+          </nav>
 
           {/* Category + Type badges */}
-          <div className="flex flex-wrap items-center gap-3 mb-8 animate-fade-up animation-delay-100">
+          <div className="flex flex-wrap items-center gap-2 mb-4 animate-fade-up animation-delay-100">
             <span
               className="px-3 py-1 text-xs font-semibold rounded-full"
               style={{
@@ -185,57 +194,61 @@ const ArticleDetail = () => {
 
           {/* Title */}
           <h1
-            className="font-bold tracking-tight text-foreground leading-[1.0] mb-6 animate-fade-up animation-delay-200"
-            style={{ fontSize: "clamp(32px, 5vw, 56px)", lineHeight: 1.1 }}
+            className="font-bold tracking-tight text-foreground mb-4 animate-fade-up animation-delay-200"
+            style={{ fontSize: "clamp(1.75rem, 4vw, 3rem)", lineHeight: 1.15 }}
           >
             {article.title}
           </h1>
 
           {/* Summary */}
-          <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl mb-8 animate-fade-up animation-delay-300">
+          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-3xl mb-6 animate-fade-up animation-delay-300">
             {article.summary}
           </p>
 
           {/* Meta row */}
-          <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground pt-8 border-t border-border animate-fade-up animation-delay-400">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-sm text-muted-foreground py-4 border-y border-border animate-fade-up animation-delay-400">
             {article.author && (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 {article.author.avatar && (
                   <img
                     src={article.author.avatar}
                     alt={article.author.name}
-                    className="w-10 h-10 rounded-full object-cover"
+                    className="w-9 h-9 rounded-full object-cover ring-2 ring-border"
                   />
                 )}
-                <div>
-                  <div className="font-medium text-foreground">{article.author.name}</div>
-                  {article.author.role && <div className="text-xs">{article.author.role}</div>}
+                <div className="leading-tight">
+                  <div className="font-medium text-foreground text-sm">{article.author.name}</div>
+                  {article.author.role && (
+                    <div className="text-xs text-muted-foreground">{article.author.role}</div>
+                  )}
                 </div>
               </div>
             )}
 
-            <div className="flex items-center gap-1">
-              <Calendar className="w-4 h-4" />
+            <div className="flex items-center gap-1.5">
+              <Calendar className="w-4 h-4 flex-shrink-0" />
               <span>{format(publishedDate, "MMM d, yyyy")}</span>
             </div>
 
             {wasUpdated && (
-              <div className="flex items-center gap-1 text-primary">
-                <RefreshCw className="w-4 h-4" />
-                <span>Updated {formatDistanceToNow(updatedDate, { addSuffix: true })}</span>
+              <div className="flex items-center gap-1.5 text-primary">
+                <RefreshCw className="w-3.5 h-3.5 flex-shrink-0" />
+                <span className="text-xs">
+                  Updated {formatDistanceToNow(updatedDate, { addSuffix: true })}
+                </span>
               </div>
             )}
 
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
+            <div className="flex items-center gap-1.5">
+              <Clock className="w-4 h-4 flex-shrink-0" />
               <span>{article.read_time} min read</span>
             </div>
 
             {/* Share menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="group rounded-full">
-                  <Share2 className="w-4 h-4 mr-2" />
+                <Button variant="outline" size="sm" className="group rounded-full h-8 px-3">
+                  <Share2 className="w-3.5 h-3.5 mr-1.5" />
                   Share
                 </Button>
               </DropdownMenuTrigger>
@@ -263,32 +276,33 @@ const ArticleDetail = () => {
       </section>
 
       {/* ── Featured Image ───────────────────────────────────────────────── */}
-      <section className="py-12 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="rounded-2xl overflow-hidden border border-border shadow-card">
+      <section className="pb-6 md:pb-10 bg-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <figure className="relative rounded-xl sm:rounded-2xl overflow-hidden bg-muted">
             <img
               src={article.featured_image}
               alt={article.title}
-              className="w-full aspect-[21/9] object-cover"
+              className="w-full aspect-[16/9] sm:aspect-[2/1] lg:aspect-[21/10] object-cover"
+              loading="eager"
             />
-          </div>
+          </figure>
         </div>
       </section>
 
       {/* ── Article Content ────────────────────────────────────────────────── */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
+      <section className="py-8 md:py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
             {/* Source Attribution */}
             {article.source && (
-              <div className="bg-muted/50 border border-border rounded-2xl p-6 mb-10">
-                <p className="text-sm text-muted-foreground">
+              <div className="bg-muted/40 border border-border rounded-xl p-4 sm:p-5 mb-8">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   This article is summarized from{" "}
                   <a
                     href={article.source.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary hover:underline inline-flex items-center gap-1"
+                    className="text-primary font-medium hover:underline inline-flex items-center gap-1"
                   >
                     {article.source.name}
                     <ExternalLink className="w-3 h-3" />
@@ -300,37 +314,43 @@ const ArticleDetail = () => {
 
             {/* Content */}
             <article
-              className="prose prose-lg dark:prose-invert max-w-none
+              className="prose prose-base sm:prose-lg dark:prose-invert max-w-none
                 prose-headings:font-bold prose-headings:text-foreground prose-headings:tracking-tight
-                prose-p:text-foreground/80 prose-p:leading-relaxed
+                prose-headings:mt-8 prose-headings:mb-4
+                prose-h2:text-xl prose-h2:sm:text-2xl
+                prose-h3:text-lg prose-h3:sm:text-xl
+                prose-p:text-foreground/80 prose-p:leading-relaxed prose-p:mb-4
                 prose-a:text-primary prose-a:no-underline hover:prose-a:underline
                 prose-strong:text-foreground prose-strong:font-semibold
-                prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground
-                prose-li:text-foreground/80"
+                prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground prose-blockquote:pl-4 prose-blockquote:my-6
+                prose-li:text-foreground/80 prose-li:my-1
+                prose-img:rounded-lg prose-img:my-6"
               dangerouslySetInnerHTML={{ __html: article.content }}
             />
 
             {/* Tags */}
-            <div className="flex flex-wrap gap-2 mt-16 pt-8 border-t border-border">
-              {article.tags.map((tag) => (
-                <a
-                  key={tag}
-                  href={`/media/articles?tag=${encodeURIComponent(tag)}`}
-                  className="px-3 py-1 text-xs font-medium rounded-full bg-muted text-muted-foreground border border-border hover:border-primary/30 hover:bg-primary/5 transition-all duration-200"
-                >
-                  #{tag}
-                </a>
-              ))}
-            </div>
+            {article.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-10 pt-6 border-t border-border">
+                {article.tags.map((tag) => (
+                  <a
+                    key={tag}
+                    href={`/media/articles?tag=${encodeURIComponent(tag)}`}
+                    className="px-3 py-1.5 text-xs font-medium rounded-full bg-muted text-muted-foreground border border-border hover:border-primary/30 hover:bg-primary/5 transition-all duration-200"
+                  >
+                    #{tag}
+                  </a>
+                ))}
+              </div>
+            )}
 
             {/* Read Original */}
             {article.source && (
-              <div className="mt-12 p-8 rounded-2xl bg-muted/30 border border-border text-center">
-                <p className="text-muted-foreground mb-6 text-sm">Want to read the full original article?</p>
-                <Button variant="default" size="lg" className="group shadow-primary" asChild>
+              <div className="mt-10 p-6 sm:p-8 rounded-xl bg-muted/30 border border-border text-center">
+                <p className="text-muted-foreground mb-4 text-sm">Want to read the full original article?</p>
+                <Button variant="default" size="default" className="group" asChild>
                   <a href={article.source.url} target="_blank" rel="noopener noreferrer">
                     Visit {article.source.name}
-                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </a>
                 </Button>
               </div>
@@ -341,25 +361,29 @@ const ArticleDetail = () => {
 
       {/* ── Related Articles ───────────────────────────────────────────────── */}
       {relatedArticles.length > 0 && (
-        <section className="py-28 md:py-36 bg-muted/30">
-          <div className="container mx-auto px-6">
-            <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
+        <section className="py-12 md:py-16 bg-muted/30">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 pb-6 border-b border-border">
               <div>
-                <p className="line-accent">Related</p>
-              </div>
-              <div>
-                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                  More from <span className="font-display italic text-gradient-primary">Afrisinc.</span>
+                <p className="text-sm font-medium text-muted-foreground mb-1">Related Articles</p>
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+                  More from <span className="font-display italic text-gradient-primary">Afrisinc</span>
                 </h2>
               </div>
+              <Button variant="outline" size="sm" className="w-fit" asChild>
+                <Link to="/media/articles">
+                  View All Articles
+                  <ArrowUpRight className="w-3.5 h-3.5 ml-1.5" />
+                </Link>
+              </Button>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               {relatedArticles.map((related, index) => (
                 <div
                   key={related.id}
                   className="animate-fade-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
+                  style={{ animationDelay: `${index * 80}ms` }}
                 >
                   <ArticleCard article={related} />
                 </div>
@@ -370,10 +394,10 @@ const ArticleDetail = () => {
       )}
 
       {/* ── Back CTA ──────────────────────────────────────────────────────── */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-6">
+      <section className="py-10 md:py-12 bg-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <Button variant="outline" size="lg" className="group" asChild>
+            <Button variant="outline" size="default" className="group" asChild>
               <Link to="/media">
                 <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
                 Back to Media
