@@ -66,8 +66,6 @@ jobs:
             export IMAGE_TAG="latest"
             export VITE_API_URL="${{ secrets.VITE_API_URL }}"
 
-
             docker compose pull
-            docker compose up -d --remove-orphans
+            docker compose up -d
             docker image prune -af
-            docker compose ps
