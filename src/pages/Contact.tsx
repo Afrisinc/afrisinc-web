@@ -16,6 +16,18 @@ const contactMeta = [
     href: "mailto:hello@afrisinc.com",
   },
   {
+    icon: Phone,
+    label: "Phone",
+    value: "+250786077754",
+    href: "tel:+250786077754",
+  },
+  {
+    icon: Mail,
+    label: "Email",
+    value: "vladmirbrenn@afrisinc.com",
+    href: "mailto:vladmirbrenn@afrisinc.com",
+  },
+  {
     icon: MapPin,
     label: "Headquarters",
     value: "Kigali, Rwanda",
