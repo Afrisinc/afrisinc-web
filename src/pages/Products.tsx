@@ -13,6 +13,7 @@ import {
   ShoppingCart,
   MessageSquare,
   Calendar,
+  Bell,
 } from "lucide-react";
 
 const accentColors = {
@@ -23,6 +24,26 @@ const accentColors = {
 };
 
 const products = [
+  {
+    icon: Bell,
+    logo: "/notify-logo.png",
+    name: "Notify",
+    tagline: "One API for all your notifications",
+    description:
+      "One API to send Email, SMS, Push, and in-app notifications at scale. Built for developers, loved by teams.",
+    status: "Live",
+    pricing: "Free tier available",
+    features: [
+      "Email, SMS & Push notifications",
+      "Web & mobile push notifications",
+      "In-app notification center",
+      "Scheduled campaigns",
+      "API & SDK integration",
+      "Built to scale",
+    ],
+    accent: "indigo",
+    link: "https://notify.afrisinc.com",
+  },
   // {
   //   icon: Globe,
   //   name: "Afrisinc Commerce",
@@ -227,10 +248,14 @@ const Products = () => {
                     <div className={index % 2 === 1 ? "lg:order-2" : ""}>
                       <div className="flex items-center gap-3 mb-6">
                         <div
-                          className="w-12 h-12 rounded-xl flex items-center justify-center"
+                          className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden"
                           style={{ background: colors.bg, border: `1px solid ${colors.border}` }}
                         >
-                          <product.icon className="w-5 h-5" style={{ color: colors.text }} />
+                          {product.logo ? (
+                            <img src={product.logo} alt={product.name} className="w-8 h-8 object-contain" />
+                          ) : (
+                            <product.icon className="w-5 h-5" style={{ color: colors.text }} />
+                          )}
                         </div>
                         <span
                           className="px-3 py-1 text-xs font-semibold rounded-full"
@@ -265,10 +290,17 @@ const Products = () => {
 
                       <div className="flex flex-wrap gap-3">
                         <Button variant="default" size="lg" className="group shadow-primary" asChild>
-                          <Link to="/contact">
-                            Get Started
-                            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                          </Link>
+                          {product.link ? (
+                            <a href={product.link} target="_blank" rel="noopener noreferrer">
+                              Get Started
+                              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                            </a>
+                          ) : (
+                            <Link to="/contact">
+                              Get Started
+                              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                            </Link>
+                          )}
                         </Button>
                         <Button variant="outline" size="lg" className="group">
                           Learn More
