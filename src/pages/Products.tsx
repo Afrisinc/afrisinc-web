@@ -24,26 +24,26 @@ const accentColors = {
 };
 
 const products = [
-  {
-    icon: Bell,
-    logo: "/notify-logo.png",
-    name: "Notify",
-    tagline: "One API for all your notifications",
-    description:
-      "One API to send Email, SMS, Push, and in-app notifications at scale. Built for developers, loved by teams.",
-    status: "Live",
-    pricing: "Free tier available",
-    features: [
-      "Email, SMS & Push notifications",
-      "Web & mobile push notifications",
-      "In-app notification center",
-      "Scheduled campaigns",
-      "API & SDK integration",
-      "Built to scale",
-    ],
-    accent: "indigo",
-    link: "https://notify.afrisinc.com",
-  },
+  // {
+  //   icon: Bell,
+  //   logo: "/notify-logo.png",
+  //   name: "Notify",
+  //   tagline: "One API for all your notifications",
+  //   description:
+  //     "One API to send Email, SMS, Push, and in-app notifications at scale. Built for developers, loved by teams.",
+  //   status: "Live",
+  //   pricing: "Free tier available",
+  //   features: [
+  //     "Email, SMS & Push notifications",
+  //     "Web & mobile push notifications",
+  //     "In-app notification center",
+  //     "Scheduled campaigns",
+  //     "API & SDK integration",
+  //     "Built to scale",
+  //   ],
+  //   accent: "indigo",
+  //   link: "https://notify.afrisinc.com",
+  // },
   // {
   //   icon: Globe,
   //   name: "Afrisinc Commerce",
