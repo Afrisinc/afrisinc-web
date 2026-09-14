@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "react-router-dom";
 import { PublicLayout } from "@/components/layout/PublicLayout";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useArticle, useArticles } from "@/hooks/useArticles";
+import { useReadCompletion, useScrollProgress } from "@/hooks/useReadingProgress";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 import { formatDistanceToNow, format } from "date-fns";
 import {
@@ -26,7 +28,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { getCategoryPlaceholderImage } from "@/services/articlesService";
+import { getCategoryPlaceholderImage, markArticleRead, markArticleView } from "@/services/articlesService";
+import { NoIndexMeta } from "@/components/seo/NoIndexMeta";
 
 const typeColors: Record<string, { bg: string; text: string; border: string }> = {
   Documentary: { bg: "hsl(22 88% 52% / 0.1)", text: "hsl(22 82% 46%)", border: "hsl(22 88% 52% / 0.25)" },
@@ -40,6 +43,15 @@ const ArticleDetail = () => {
   const { data: relatedData } = useArticles({
     category: article?.category[0],
     per_page: 3,
+  });
+  const progress = useScrollProgress();
+
+  useEffect(() => {
+    if (slug) markArticleView(slug);
+  }, [slug]);
+
+  useReadCompletion(slug ? `article-read:${slug}` : undefined, progress, () => {
+    if (slug) markArticleRead(slug);
   });
 
   const relatedArticles = relatedData?.articles.filter((a) => a.id !== article?.id).slice(0, 3) || [];
@@ -95,6 +107,7 @@ const ArticleDetail = () => {
   if (error || !article) {
     return (
       <PublicLayout>
+        <NoIndexMeta title="Article Not Found" />
         <div className="py-20 md:py-28">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">Article Not Found</h1>

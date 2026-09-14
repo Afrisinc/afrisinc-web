@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Play, ArrowRight, ArrowUpRight } from "lucide-react";
+import { Play, ArrowRight, ArrowUpRight, ChevronDown, Clock } from "lucide-react";
 import { useFeaturedArticle, useArticles, useCategories } from "@/hooks/useArticles";
+import { useStories } from "@/hooks/useStories";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 import { FeaturedArticle } from "@/components/articles/FeaturedArticle";
+import { StoryCard } from "@/components/stories/StoryCard";
 import { useToast } from "@/hooks/use-toast";
 import { subscribeNewsletter } from "@/services/notifyService";
 import { useTrackForm } from "@/hooks/useTrackForm";
@@ -31,6 +33,24 @@ const videos = [
     views: "28K views",
     thumbnail: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&q=80",
   },
+  {
+    title: "Inside Afrisinc's Engineering Culture",
+    duration: "18:20",
+    views: "9.4K views",
+    thumbnail: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&q=80",
+  },
+  {
+    title: "From Idea to Product: A Founder's Playbook",
+    duration: "31:10",
+    views: "21K views",
+    thumbnail: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80",
+  },
+  {
+    title: "Securing African Fintech at Scale",
+    duration: "27:55",
+    views: "17K views",
+    thumbnail: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&q=80",
+  },
 ];
 
 const podcasts = [
@@ -52,19 +72,42 @@ const podcasts = [
     duration: "52 min",
     guest: "With Amina Diallo, CEO",
   },
+  {
+    title: "The Afrisinc Podcast",
+    episode: "EP 39: Designing for Low-Bandwidth Markets",
+    duration: "39 min",
+    guest: "With Kwame Boateng, Head of Design",
+  },
+  {
+    title: "The Afrisinc Podcast",
+    episode: "EP 38: Raising a Series A in Africa",
+    duration: "61 min",
+    guest: "With Ngozi Adeyemi, Founder",
+  },
+  {
+    title: "The Afrisinc Podcast",
+    episode: "EP 37: The Open RAN Opportunity",
+    duration: "44 min",
+    guest: "With David Mwangi, Network Architect",
+  },
 ];
+
+const INITIAL_MEDIA_COUNT = 3;
 
 const Media = () => {
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
+  const [videosExpanded, setVideosExpanded] = useState(false);
+  const [podcastsExpanded, setPodcastsExpanded] = useState(false);
   const { data: featuredArticle, isLoading: isLoadingFeatured } = useFeaturedArticle();
   const { data: articlesData, isLoading: isLoadingArticles } = useArticles({
     per_page: 6,
     category: selectedCategory,
   });
   const { data: categories = [] } = useCategories();
+  const { data: storiesData, isLoading: isLoadingStories } = useStories({ limit: 3 });
   const { onStart, onSubmit: trackSubmit, onError } = useTrackForm("newsletter_form", "Newsletter Signup");
 
   const handleSubscribe = async (e: React.FormEvent) => {
@@ -251,6 +294,58 @@ const Media = () => {
         </div>
       </section>
 
+      {/* ── Stories ──────────────────────────────────────────────────────── */}
+      {(isLoadingStories || (storiesData?.items.length ?? 0) > 0) && (
+        <section className="py-28 md:py-36 bg-background">
+          <div className="container mx-auto px-6">
+            <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
+              <div>
+                <p className="line-accent">Stories</p>
+              </div>
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
+                  Original Fiction,{" "}
+                  <span className="font-display italic text-gradient-primary">Told in Episodes.</span>
+                </h2>
+                <Button variant="outline" size="lg" className="group flex-shrink-0" asChild>
+                  <Link to="/media/stories">
+                    View All
+                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            {isLoadingStories ? (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="bg-card rounded-2xl overflow-hidden border border-border">
+                    <Skeleton className="aspect-[16/10] w-full" />
+                    <div className="p-6 space-y-3">
+                      <Skeleton className="h-4 w-20" />
+                      <Skeleton className="h-5 w-full" />
+                      <Skeleton className="h-4 w-3/4" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {storiesData?.items.map((story, index) => (
+                  <div
+                    key={story.id}
+                    className="animate-fade-up"
+                    style={{ animationDelay: `${index * 80}ms` }}
+                  >
+                    <StoryCard story={story} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* ── Videos ───────────────────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-background">
         <div className="container mx-auto px-6">
@@ -272,7 +367,7 @@ const Media = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {videos.map((video, index) => (
+            {videos.slice(0, INITIAL_MEDIA_COUNT).map((video, index) => (
               <div
                 key={video.title}
                 className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/25 hover:shadow-card-hover transition-all duration-300 cursor-pointer animate-fade-up"
@@ -307,6 +402,68 @@ const Media = () => {
               </div>
             ))}
           </div>
+
+          {videos.length > INITIAL_MEDIA_COUNT && (
+            <>
+              <div
+                className={`grid transition-[grid-template-rows] duration-500 ease-in-out ${
+                  videosExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 pt-5">
+                    {videos.slice(INITIAL_MEDIA_COUNT).map((video) => (
+                      <div
+                        key={video.title}
+                        className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/25 hover:shadow-card-hover transition-all duration-300 cursor-pointer"
+                      >
+                        <div className="relative aspect-video overflow-hidden">
+                          <img
+                            src={video.thumbnail}
+                            alt={video.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+
+                          {/* Play button overlay */}
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors duration-300">
+                            <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
+                              <Play className="w-6 h-6 text-primary-foreground ml-0.5" />
+                            </div>
+                          </div>
+
+                          {/* Duration badge */}
+                          <span className="absolute bottom-3 right-3 px-3 py-1 text-xs font-medium rounded-full bg-foreground/50 text-background backdrop-blur-sm">
+                            {video.duration}
+                          </span>
+                        </div>
+
+                        <div className="p-6">
+                          <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                            {video.title}
+                          </h3>
+                          <p className="text-muted-foreground text-sm">{video.views}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-center mt-10">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="group"
+                  onClick={() => setVideosExpanded((v) => !v)}
+                >
+                  {videosExpanded ? "Show Less" : `Show ${videos.length - INITIAL_MEDIA_COUNT} More`}
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-300 ${videosExpanded ? "rotate-180" : ""}`}
+                  />
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </section>
 
@@ -331,10 +488,10 @@ const Media = () => {
           </div>
 
           <div className="divide-y divide-border">
-            {podcasts.map((podcast, index) => (
+            {podcasts.slice(0, INITIAL_MEDIA_COUNT).map((podcast, index) => (
               <div
                 key={podcast.episode}
-                className="group relative flex gap-8 py-8 hover:bg-background/50 -mx-4 px-4 transition-all duration-300 rounded-xl animate-fade-up"
+                className="group relative flex gap-8 py-8 hover:bg-background/50 -mx-4 px-4 transition-all duration-300 rounded-xl animate-fade-up cursor-pointer"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 {/* Left accent bar */}
@@ -354,12 +511,70 @@ const Media = () => {
                 </div>
 
                 {/* Duration — right side on desktop */}
-                <div className="text-sm font-medium text-muted-foreground whitespace-nowrap hidden sm:block">
+                <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground whitespace-nowrap hidden sm:flex flex-shrink-0">
+                  <Clock className="w-3.5 h-3.5" />
                   {podcast.duration}
                 </div>
               </div>
             ))}
           </div>
+
+          {podcasts.length > INITIAL_MEDIA_COUNT && (
+            <>
+              <div
+                className={`grid transition-[grid-template-rows] duration-500 ease-in-out ${
+                  podcastsExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                }`}
+              >
+                <div className="overflow-hidden">
+                  <div className="divide-y divide-border">
+                    {podcasts.slice(INITIAL_MEDIA_COUNT).map((podcast) => (
+                      <div
+                        key={podcast.episode}
+                        className="group relative flex gap-8 py-8 hover:bg-background/50 -mx-4 px-4 transition-all duration-300 rounded-xl cursor-pointer"
+                      >
+                        {/* Left accent bar */}
+                        <div className="absolute left-0 top-3 bottom-3 w-[3px] scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-center rounded-full bg-primary" />
+
+                        {/* Play icon */}
+                        <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
+                          <Play className="w-5 h-5 text-primary ml-0.5" />
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
+                            {podcast.episode}
+                          </h3>
+                          <p className="text-muted-foreground text-sm">{podcast.guest}</p>
+                        </div>
+
+                        {/* Duration — right side on desktop */}
+                        <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground whitespace-nowrap hidden sm:flex flex-shrink-0">
+                          <Clock className="w-3.5 h-3.5" />
+                          {podcast.duration}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-center mt-10">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="group"
+                  onClick={() => setPodcastsExpanded((v) => !v)}
+                >
+                  {podcastsExpanded ? "Show Less" : `Show ${podcasts.length - INITIAL_MEDIA_COUNT} More`}
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-300 ${podcastsExpanded ? "rotate-180" : ""}`}
+                  />
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </section>
 

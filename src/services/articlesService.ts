@@ -2,8 +2,8 @@
 
 import type { Article, ArticleCategory, ArticlesResponse, ArticleFilters } from "@/types/article";
 import { getRuntimeConfig } from "@/lib/config";
-import { mockArticles, mockFeaturedArticle, mockCategories } from "@/lib/mockArticles";
 import { stripHtmlTags } from "@/lib/seo";
+import { getReaderDeviceId } from "@/lib/readerDevice";
 
 // Backend article response shape
 interface BackendArticle {
@@ -30,14 +30,14 @@ let categoriesCache: ArticleCategory[] | null = null;
 const categoryPlaceholders: Record<string, string> = {
   technology: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&q=80",
   business: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80",
-  africa: "https://images.unsplash.com/photo-1526304640581-d334cdbbf92e?w=1200&q=80",
+  africa: "https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=1200&q=80",
   crypto: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=1200&q=80",
   blockchain: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1200&q=80",
   fintech: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&q=80",
   innovation: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1200&q=80",
-  ai: "https://images.unsplash.com/photo-1677442d019cecf3e5fa5aeddab77b02ef61208fa?w=1200&q=80",
+  ai: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&q=80",
   healthcare: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80",
-  edtech: "https://images.unsplash.com/photo-1516534775068-bb57e39c139f?w=1200&q=80",
+  edtech: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&q=80",
   startup: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80",
   infrastructure: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=80",
   general: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&q=80",
@@ -165,64 +165,43 @@ async function mapBackendArticle(backendArticle: BackendArticle): Promise<Articl
  * GET /articles?search=...&page=1&limit=10
  */
 export async function fetchArticles(filters: ArticleFilters = {}): Promise<ArticlesResponse> {
-  try {
-    const config = getRuntimeConfig();
-    const searchParams = new URLSearchParams();
+  const config = getRuntimeConfig();
+  const searchParams = new URLSearchParams();
 
-    if (filters.search) {
-      searchParams.append("search", filters.search);
-    }
-
-    const page = filters.page || 1;
-    const limit = filters.per_page || 10;
-    searchParams.append("page", page.toString());
-    searchParams.append("limit", limit.toString());
-
-    const url = `${config.serverUrl}/articles?${searchParams.toString()}`;
-
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch articles: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    // Map backend response to our format
-    const articles = await Promise.all((data.data?.data || []).map(mapBackendArticle));
-
-    return {
-      articles,
-      total: data.data?.pagination?.total || 0,
-      page: data.data?.pagination?.page || page,
-      per_page: data.data?.pagination?.limit || limit,
-      total_pages: data.data?.pagination?.totalPages || 0,
-    };
-  } catch {
-    // API unavailable — return mock data filtered by search
-    const page = filters.page || 1;
-    const limit = filters.per_page || 10;
-    let filtered = mockArticles;
-    if (filters.search) {
-      const q = filters.search.toLowerCase();
-      filtered = filtered.filter(
-        (a) => a.title.toLowerCase().includes(q) || a.summary.toLowerCase().includes(q)
-      );
-    }
-    const start = (page - 1) * limit;
-    return {
-      articles: filtered.slice(start, start + limit),
-      total: filtered.length,
-      page,
-      per_page: limit,
-      total_pages: Math.ceil(filtered.length / limit),
-    };
+  if (filters.search) {
+    searchParams.append("search", filters.search);
   }
+
+  const page = filters.page || 1;
+  const limit = filters.per_page || 10;
+  searchParams.append("page", page.toString());
+  searchParams.append("limit", limit.toString());
+
+  const url = `${config.serverUrl}/media/articles?${searchParams.toString()}`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch articles: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  // Map backend response to our format
+  const articles = await Promise.all((data.data?.data || []).map(mapBackendArticle));
+
+  return {
+    articles,
+    total: data.data?.pagination?.total || 0,
+    page: data.data?.pagination?.page || page,
+    per_page: data.data?.pagination?.limit || limit,
+    total_pages: data.data?.pagination?.totalPages || 0,
+  };
 }
 
 /**
@@ -233,57 +212,39 @@ export async function fetchArticlesByCategory(
   category: string,
   filters: ArticleFilters = {}
 ): Promise<ArticlesResponse> {
-  try {
-    const config = getRuntimeConfig();
-    const searchParams = new URLSearchParams();
+  const config = getRuntimeConfig();
+  const searchParams = new URLSearchParams();
 
-    const page = filters.page || 1;
-    const limit = filters.per_page || 10;
-    searchParams.append("page", page.toString());
-    searchParams.append("limit", limit.toString());
+  const page = filters.page || 1;
+  const limit = filters.per_page || 10;
+  searchParams.append("page", page.toString());
+  searchParams.append("limit", limit.toString());
 
-    const url = `${config.serverUrl}/articles/category/${encodeURIComponent(category)}?${searchParams.toString()}`;
+  const url = `${config.serverUrl}/media/articles/category/${encodeURIComponent(category)}?${searchParams.toString()}`;
 
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch articles by category: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    // Map backend response to our format
-    const articles = await Promise.all((data.data?.data || []).map(mapBackendArticle));
-
-    return {
-      articles,
-      total: data.data?.pagination?.total || 0,
-      page: data.data?.pagination?.page || page,
-      per_page: data.data?.pagination?.limit || limit,
-      total_pages: data.data?.pagination?.totalPages || 0,
-    };
-  } catch {
-    // API unavailable — return mock data filtered by category
-    const page = filters.page || 1;
-    const limit = filters.per_page || 10;
-    const filtered = mockArticles.filter((a) => {
-      const cats = Array.isArray(a.category) ? a.category : [a.category];
-      return cats.some((c) => c.toLowerCase() === category.toLowerCase());
-    });
-    const start = (page - 1) * limit;
-    return {
-      articles: filtered.slice(start, start + limit),
-      total: filtered.length,
-      page,
-      per_page: limit,
-      total_pages: Math.ceil(filtered.length / limit),
-    };
+  if (!response.ok) {
+    throw new Error(`Failed to fetch articles by category: ${response.status}`);
   }
+
+  const data = await response.json();
+
+  // Map backend response to our format
+  const articles = await Promise.all((data.data?.data || []).map(mapBackendArticle));
+
+  return {
+    articles,
+    total: data.data?.pagination?.total || 0,
+    page: data.data?.pagination?.page || page,
+    per_page: data.data?.pagination?.limit || limit,
+    total_pages: data.data?.pagination?.totalPages || 0,
+  };
 }
 
 /**
@@ -292,7 +253,7 @@ export async function fetchArticlesByCategory(
  */
 export async function fetchArticleById(id: string): Promise<Article | null> {
   const config = getRuntimeConfig();
-  const url = `${config.serverUrl}/articles/${encodeURIComponent(id)}`;
+  const url = `${config.serverUrl}/media/articles/${encodeURIComponent(id)}`;
 
   const response = await fetch(url, {
     method: "GET",
@@ -317,26 +278,21 @@ export async function fetchArticleById(id: string): Promise<Article | null> {
  * Tries GET /articles/slug/:slug first; falls back to mock data.
  */
 export async function fetchArticleBySlug(slug: string): Promise<Article | null> {
-  try {
-    const config = getRuntimeConfig();
-    const url = `${config.serverUrl}/articles/slug/${encodeURIComponent(slug)}`;
+  const config = getRuntimeConfig();
+  const url = `${config.serverUrl}/media/articles/slug/${encodeURIComponent(slug)}`;
 
-    const response = await fetch(url, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
 
-    if (!response.ok) {
-      if (response.status === 404) return null;
-      throw new Error(`Failed to fetch article by slug: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return mapBackendArticle(data.data);
-  } catch {
-    // API unavailable — search mock data
-    return mockArticles.find((a) => a.slug === slug) || null;
+  if (!response.ok) {
+    if (response.status === 404) return null;
+    throw new Error(`Failed to fetch article by slug: ${response.status}`);
   }
+
+  const data = await response.json();
+  return mapBackendArticle(data.data);
 }
 
 /**
@@ -344,69 +300,86 @@ export async function fetchArticleBySlug(slug: string): Promise<Article | null> 
  * Note: If your backend has a dedicated categories endpoint, use that instead
  */
 export async function fetchCategories(): Promise<ArticleCategory[]> {
-  try {
-    // Return cached categories if available
-    if (categoriesCache) {
-      return categoriesCache;
-    }
-
-    const config = getRuntimeConfig();
-    const url = `${config.serverUrl}/articles?limit=100`;
-
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch categories: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    // Extract unique categories from articles
-    const categoryMap = new Map<string, ArticleCategory>();
-    (data.data?.data || []).forEach((article: BackendArticle) => {
-      // Handle category as string or array of strings
-      const categoryArray = Array.isArray(article.category) ? article.category : [article.category];
-
-      // Process all categories in the array
-      categoryArray.forEach((categoryRaw: string) => {
-        if (categoryRaw) {
-          const categorySlug = categoryRaw.toLowerCase();
-          if (!categoryMap.has(categorySlug)) {
-            categoryMap.set(categorySlug, {
-              id: categorySlug,
-              name: categoryRaw,
-              slug: categorySlug,
-              description: "",
-            });
-          }
-        }
-      });
-    });
-
-    categoriesCache = Array.from(categoryMap.values());
+  // Return cached categories if available
+  if (categoriesCache) {
     return categoriesCache;
-  } catch {
-    // API unavailable — return categories derived from mock data
-    return mockCategories;
   }
+
+  const config = getRuntimeConfig();
+  const url = `${config.serverUrl}/media/articles?limit=100`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch categories: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  // Extract unique categories from articles
+  const categoryMap = new Map<string, ArticleCategory>();
+  (data.data?.data || []).forEach((article: BackendArticle) => {
+    // Handle category as string or array of strings
+    const categoryArray = Array.isArray(article.category) ? article.category : [article.category];
+
+    // Process all categories in the array
+    categoryArray.forEach((categoryRaw: string) => {
+      if (categoryRaw) {
+        const categorySlug = categoryRaw.toLowerCase();
+        if (!categoryMap.has(categorySlug)) {
+          categoryMap.set(categorySlug, {
+            id: categorySlug,
+            name: categoryRaw,
+            slug: categorySlug,
+            description: "",
+          });
+        }
+      }
+    });
+  });
+
+  categoriesCache = Array.from(categoryMap.values());
+  return categoriesCache;
 }
 
 /**
  * Fetch featured article - returns first article marked as featured
  */
 export async function fetchFeaturedArticle(): Promise<Article | null> {
-  try {
-    const response = await fetchArticles({ per_page: 1 });
+  const response = await fetchArticles({ per_page: 1 });
 
-    const featured = response.articles.find((a) => a.is_featured);
-    return featured || response.articles[0] || null;
+  const featured = response.articles.find((a) => a.is_featured);
+  return featured || response.articles[0] || null;
+}
+
+/**
+ * Fire-and-forget pings identifying this browser via an anonymous, persistent
+ * device id — no login involved. Never block or break the reading experience;
+ * a failed ping just means one fewer count, not a broken page.
+ */
+async function ping(path: string): Promise<void> {
+  try {
+    const config = getRuntimeConfig();
+    await fetch(`${config.serverUrl}${path}`, {
+      method: "POST",
+      headers: { "x-reader-device-id": getReaderDeviceId() },
+    });
   } catch {
-    // API unavailable — return mock featured article
-    return mockFeaturedArticle;
+    // Analytics-only signal.
   }
+}
+
+/** Call once when an article page mounts. */
+export function markArticleView(slug: string): void {
+  void ping(`/media/articles/slug/${encodeURIComponent(slug)}/view`);
+}
+
+/** Call once when the reader scrolls an article to its end. */
+export function markArticleRead(slug: string): void {
+  void ping(`/media/articles/slug/${encodeURIComponent(slug)}/read`);
 }

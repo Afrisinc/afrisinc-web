@@ -19,6 +19,9 @@ import Technology from "./pages/Technology";
 import Media from "./pages/Media";
 import ArticlesPage from "./pages/media/Articles";
 import ArticleDetail from "./pages/media/ArticleDetail";
+import StoriesPage from "./pages/media/Stories";
+import StoryDetailPage from "./pages/media/StoryDetail";
+import StoryReaderPage from "./pages/media/StoryReader";
 import Products from "./pages/Products";
 import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
@@ -116,6 +119,9 @@ const App = () => {
                     <Route path="/media" element={<Media />} />
                     <Route path="/media/articles" element={<ArticlesPage />} />
                     <Route path="/media/articles/:slug" element={<ArticleDetail />} />
+                    <Route path="/media/stories" element={<StoriesPage />} />
+                    <Route path="/media/stories/:id" element={<StoryDetailPage />} />
+                    <Route path="/media/stories/:id/episode/:episodeNumber" element={<StoryReaderPage />} />
                     <Route path="/products" element={<Products />} />
                     <Route path="/careers" element={<Careers />} />
                     <Route path="/contact" element={<Contact />} />
