@@ -3,7 +3,7 @@ name: Deploy AfrisInc Web — Production
 on:
   push:
     branches:
-      - main # deploy on pushes to main
+      - main
 
 jobs:
   deploy:
@@ -13,36 +13,35 @@ jobs:
       DEPLOY_GHCR_TOKEN: ${{ secrets.DEPLOY_GHCR_TOKEN }}
 
     steps:
-      # Step 1: Checkout code
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Login to GitHub Container Registry
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ secrets.GHCR_OWNER }} # org name, e.g., afrisinc
-          password: ${{ secrets.GHCR_TOKEN }} # your PAT
+          username: ${{ secrets.GHCR_OWNER }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
-      # Step 3: Build Docker image
-      - name: Build Docker image
-        run: |
-          docker build \
-            --build-arg VITE_API_URL=${{ secrets.VITE_API_URL }} \
-            --build-arg VITE_NOTIFY_URL=${{ secrets.VITE_NOTIFY_URL }} \
-            --build-arg VITE_NOTIFY_APP_ID=${{ secrets.VITE_NOTIFY_APP_ID }} \
-            --build-arg VITE_GA_MEASUREMENT_ID=${{ secrets.VITE_GA_MEASUREMENT_ID }} \
-            --build-arg VITE_GA_DEBUG=false \
-            --build-arg VITE_FB_APP_ID=${{ secrets.VITE_FB_APP_ID }} \
-            -t ghcr.io/${{ secrets.GHCR_OWNER }}/afrisinc-web:latest .
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ secrets.GHCR_OWNER }}/afrisinc-web:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VITE_API_URL=${{ secrets.VITE_API_URL }}
+            VITE_NOTIFY_URL=${{ secrets.VITE_NOTIFY_URL }}
+            VITE_NOTIFY_APP_ID=${{ secrets.VITE_NOTIFY_APP_ID }}
+            VITE_GA_MEASUREMENT_ID=${{ secrets.VITE_GA_MEASUREMENT_ID }}
+            VITE_GA_DEBUG=false
+            VITE_FB_APP_ID=${{ secrets.VITE_FB_APP_ID }}
 
-      # Step 4: Push Docker image to GHCR
-      - name: Push Docker image
-        run: |
-          docker push ghcr.io/${{ secrets.GHCR_OWNER }}/afrisinc-web:latest
-
-      # Step 5: SSH deploy to VPS
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -60,11 +59,10 @@ jobs:
 
             echo "$DEPLOY_GHCR_TOKEN" | docker login ghcr.io -u "$DEPLOY_GHCR_USERNAME" --password-stdin
 
-            # Export required environment variables for docker-compose
             export GHCR_OWNER="${{ secrets.GHCR_OWNER }}"
             export IMAGE_TAG="latest"
             export VITE_API_URL="${{ secrets.VITE_API_URL }}"
 
             docker compose pull
-            docker compose up -d 
+            docker compose up -d
             docker image prune -af
