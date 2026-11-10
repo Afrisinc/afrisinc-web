@@ -1,5 +1,5 @@
 # ---------- Build ----------
-FROM node:20-alpine AS builder
+FROM node:25-alpine AS builder
 WORKDIR /app
 
 ARG VITE_API_URL=http://localhost:8091
@@ -32,7 +32,7 @@ RUN VITE_API_URL=${VITE_API_URL} \
 RUN pnpm build:server
 
 # ---------- Serve with SSR ----------
-FROM node:20-alpine AS runner
+FROM node:25-alpine AS runner
 WORKDIR /app
 
 # Enable pnpm
