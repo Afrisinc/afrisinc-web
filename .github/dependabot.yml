@@ -6,7 +6,6 @@ updates:
     interval: weekly
   cooldown:
     default-days: 5
-    semver-major-days: 21
   open-pull-requests-limit: 5
   groups:
     actions:
@@ -30,5 +29,4 @@ updates:
     interval: weekly
   cooldown:
     default-days: 5
-    semver-major-days: 21
   open-pull-requests-limit: 5
