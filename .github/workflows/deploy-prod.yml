@@ -1,20 +1,20 @@
-name: Deploy AfrisInc Web — Production
-
+name: Build AfrisInc Web — Production image (main)
 on:
   push:
     branches:
       - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    env:
-      DEPLOY_GHCR_USERNAME: ${{ secrets.DEPLOY_GHCR_USERNAME }}
-      DEPLOY_GHCR_TOKEN: ${{ secrets.DEPLOY_GHCR_TOKEN }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Image tag
+        id: tag
+        run: echo "tag=main-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
@@ -31,7 +31,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ secrets.GHCR_OWNER }}/afrisinc-web:latest
+          tags: ghcr.io/${{ secrets.GHCR_OWNER }}/afrisinc-web:${{ steps.tag.outputs.tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
@@ -41,28 +41,3 @@ jobs:
             VITE_GA_MEASUREMENT_ID=${{ secrets.VITE_GA_MEASUREMENT_ID }}
             VITE_GA_DEBUG=false
             VITE_FB_APP_ID=${{ secrets.VITE_FB_APP_ID }}
-
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2 # v1.2.5
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: 22
-          timeout: 30s
-          command_timeout: 10m
-          envs: DEPLOY_GHCR_USERNAME,DEPLOY_GHCR_TOKEN
-          script: |
-            set -e
-            APP_PATH="${{ secrets.VPS_APP_PATH }}/afrisinc-web-prod"
-            cd $APP_PATH
-
-            echo "$DEPLOY_GHCR_TOKEN" | docker login ghcr.io -u "$DEPLOY_GHCR_USERNAME" --password-stdin
-
-            export GHCR_OWNER="${{ secrets.GHCR_OWNER }}"
-            export IMAGE_TAG="latest"
-            export VITE_API_URL="${{ secrets.VITE_API_URL }}"
-
-            docker compose pull
-            docker compose up -d
-            docker image prune -af
