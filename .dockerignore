@@ -1,0 +1,18 @@
+# Dependencies & build output — rebuilt inside the image
+node_modules
+dist
+dist-ssr
+dist-server
+
+# Secrets — build config comes from --build-arg only
+.env
+.env.*
+
+# VCS, CI, editor & OS files
+.git
+.github
+.claude
+.vscode
+.idea
+.DS_Store
+*.log
