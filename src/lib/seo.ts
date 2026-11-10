@@ -33,8 +33,9 @@ export const SITE_SEO: SiteSEO = {
 const FB_APP_ID: string = (() => {
   try {
     // Vite client build
-    if (typeof import.meta !== "undefined" && (import.meta as any).env) {
-      return (import.meta as any).env.VITE_FB_APP_ID || "";
+    const viteEnv = (import.meta as { env?: Record<string, string | undefined> }).env;
+    if (typeof import.meta !== "undefined" && viteEnv) {
+      return viteEnv.VITE_FB_APP_ID || "";
     }
   } catch {
     // not in Vite context
