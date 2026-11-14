@@ -87,6 +87,7 @@ const StoryDetailPage = () => {
               src={story.coverImageUrl}
               alt=""
               aria-hidden="true"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover opacity-30"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-foreground via-foreground/85 to-foreground/60" />

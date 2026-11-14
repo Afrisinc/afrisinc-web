@@ -12,6 +12,7 @@ import { NoIndexMeta } from "@/components/seo/NoIndexMeta";
 import { markEpisodeRead, markEpisodeView } from "@/services/storiesService";
 import { readingMinutes } from "@/types/story";
 import { AlertTriangle, ArrowLeft, ArrowRight, BookOpen, MessageCircle, PartyPopper } from "lucide-react";
+import { SmartImage } from "@/components/SmartImage";
 
 /** Marks the episode viewed once per mount — the backend dedupes per device beyond that. */
 function useEpisodeViewTracking(storyId: string | undefined, episodeNumber: number) {
@@ -176,10 +177,11 @@ const StoryReaderPage = () => {
                 className="group flex items-center gap-5 rounded-2xl border border-border/60 bg-card hover:border-primary/30 hover:shadow-card transition-all duration-300 p-4 sm:p-5"
               >
                 {story.coverImageUrl ? (
-                  <img
+                  <SmartImage
                     src={story.coverImageUrl}
                     alt=""
-                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover flex-shrink-0"
+                    width={80}
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl flex-shrink-0"
                   />
                 ) : (
                   <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-muted flex items-center justify-center flex-shrink-0">

@@ -13,6 +13,7 @@ import { StoryCard } from "@/components/stories/StoryCard";
 import { useToast } from "@/hooks/use-toast";
 import { subscribeNewsletter } from "@/services/notifyService";
 import { useTrackForm } from "@/hooks/useTrackForm";
+import { SmartImage } from "@/components/SmartImage";
 
 const videos = [
   {
@@ -374,10 +375,11 @@ const Media = () => {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="relative aspect-video overflow-hidden">
-                  <img
+                  <SmartImage
                     src={video.thumbnail}
                     alt={video.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    width={480}
+                    imageClassName="group-hover:scale-105 transition-transform duration-300"
                   />
 
                   {/* Play button overlay */}
@@ -418,10 +420,11 @@ const Media = () => {
                         className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/25 hover:shadow-card-hover transition-all duration-300 cursor-pointer"
                       >
                         <div className="relative aspect-video overflow-hidden">
-                          <img
+                          <SmartImage
                             src={video.thumbnail}
                             alt={video.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            width={480}
+                            imageClassName="group-hover:scale-105 transition-transform duration-300"
                           />
 
                           {/* Play button overlay */}

@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Article } from "@/types/article";
 import { formatDistanceToNow } from "date-fns";
+import { getCategoryPlaceholderImage } from "@/services/articlesService";
+import { SmartImage } from "@/components/SmartImage";
 
 interface FeaturedArticleProps {
   article: Article | null;
@@ -39,10 +41,12 @@ export function FeaturedArticle({ article, isLoading }: FeaturedArticleProps) {
         to={`/media/articles/${article.slug}`}
         className="relative rounded-2xl overflow-hidden aspect-video group"
       >
-        <img
+        <SmartImage
           src={article.featured_image}
           alt={article.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          width={800}
+          fallbackSrc={getCategoryPlaceholderImage(article.category)}
+          imageClassName="group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
         <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground">Featured</Badge>
@@ -103,10 +107,11 @@ export function FeaturedArticle({ article, isLoading }: FeaturedArticleProps) {
             <>
               <div className="flex items-center gap-2">
                 {article.author.avatar && (
-                  <img
+                  <SmartImage
                     src={article.author.avatar}
                     alt={article.author.name}
-                    className="w-8 h-8 rounded-full object-cover"
+                    width={32}
+                    className="w-8 h-8 rounded-full flex-shrink-0"
                   />
                 )}
                 <span className="font-medium text-foreground">{article.author.name}</span>

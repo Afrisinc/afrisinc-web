@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import type { StoryPublic } from "@/types/story";
 import { readingMinutes } from "@/types/story";
 import { formatDistanceToNow } from "date-fns";
+import { SmartImage } from "@/components/SmartImage";
 
 interface StoryCardProps {
   story: StoryPublic;
@@ -44,10 +45,11 @@ export function StoryCard({ story, variant = "default" }: StoryCardProps) {
         <article className="grid lg:grid-cols-[1.1fr_1fr] gap-8 items-center rounded-2xl border border-border/50 bg-card p-3 sm:p-4 lg:p-6 shadow-card hover:shadow-card-hover transition-all duration-300">
           <div className="relative aspect-[16/10] lg:aspect-[4/3] overflow-hidden rounded-xl bg-muted flex items-center justify-center">
             {story.coverImageUrl ? (
-              <img
+              <SmartImage
                 src={story.coverImageUrl}
                 alt={story.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                width={480}
+                imageClassName="group-hover:scale-105 transition-transform duration-500"
               />
             ) : (
               <BookOpen className="w-10 h-10 text-muted-foreground/40" />
@@ -106,10 +108,11 @@ export function StoryCard({ story, variant = "default" }: StoryCardProps) {
       <article className="bg-card rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 h-full flex flex-col border border-border/50">
         <div className="relative aspect-[16/10] overflow-hidden bg-muted flex items-center justify-center">
           {story.coverImageUrl ? (
-            <img
+            <SmartImage
               src={story.coverImageUrl}
               alt={story.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              width={480}
+              imageClassName="group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
             <BookOpen className="w-10 h-10 text-muted-foreground/40" />

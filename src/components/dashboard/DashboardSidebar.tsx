@@ -132,7 +132,14 @@ export const DashboardSidebar = () => {
           to="/"
           className="group flex items-center gap-3 hover:opacity-80 transition-opacity duration-200"
         >
-          <img src="/afrisic-logo.png" alt="Afrisinc" className="w-10 h-10 object-contain" />
+          <img
+            src="/afrisic-logo-128.webp"
+            alt="Afrisinc"
+            width={40}
+            height={40}
+            decoding="async"
+            className="w-10 h-10 object-contain"
+          />
           <div className="flex flex-col">
             <span className="font-bold text-foreground text-sm leading-tight">Afrisinc</span>
             <span className="text-xs text-muted-foreground">Dashboard</span>

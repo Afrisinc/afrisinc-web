@@ -64,7 +64,15 @@ export const Footer = () => {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link to="/" className="flex items-center gap-2.5 mb-6">
-              <img src="/afrisic-logo.png" alt="Afrisinc" className="w-8 h-8 rounded-lg object-cover" />
+              <img
+                src="/afrisic-logo-128.webp"
+                alt="Afrisinc"
+                width={32}
+                height={32}
+                loading="lazy"
+                decoding="async"
+                className="w-8 h-8 rounded-lg object-cover"
+              />
               <span className="font-bold text-background tracking-tight">
                 Afri<span className="font-display italic text-gradient-primary">sinc</span>
               </span>

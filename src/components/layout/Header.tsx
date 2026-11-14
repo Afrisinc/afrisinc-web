@@ -46,7 +46,10 @@ export const Header = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 group flex-shrink-0">
           <img
-            src="/afrisic-logo.png"
+            src="/afrisic-logo-128.webp"
+            width={36}
+            height={36}
+            decoding="async"
             alt="Afrisinc"
             className="w-9 h-9 rounded-xl object-cover transition-transform duration-300 group-hover:scale-105"
           />

@@ -58,7 +58,14 @@ const Register = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6 justify-center">
-            <img src="/afrisic-logo.png" alt="Afrisinc Logo" className="w-10 h-10 rounded-xl object-cover" />
+            <img
+              src="/afrisic-logo-128.webp"
+              alt="Afrisinc Logo"
+              width={40}
+              height={40}
+              decoding="async"
+              className="w-10 h-10 rounded-xl object-cover"
+            />
             <span className="text-xl font-bold text-foreground">Afrisinc</span>
           </Link>
           <h1 className="text-2xl font-bold text-foreground">Create your account</h1>
