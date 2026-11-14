@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -56,50 +55,7 @@ import TestComponent from "./pages/TestComponent";
 
 const queryClient = new QueryClient();
 
-// Inject GA4 script
-function injectGAScript() {
-  const gaId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-  const debug = import.meta.env.VITE_GA_DEBUG === "true";
-  const isProd = import.meta.env.MODE === "production";
-
-  // Only load GA4 in production or when debug is enabled
-  if (!gaId || (!isProd && !debug)) {
-    return;
-  }
-
-  // Inject dataLayer and gtag function
-  const win = window as Window & { dataLayer?: unknown[]; gtag?: (...args: unknown[]) => void };
-  win.dataLayer = win.dataLayer || [];
-  function gtag(...args: unknown[]) {
-    win.dataLayer?.push(...args);
-  }
-  win.gtag = gtag;
-
-  gtag("js", new Date());
-  gtag("consent", "default", {
-    ad_storage: "denied",
-    analytics_storage: "denied",
-    wait_for_update: 500,
-  });
-  gtag("config", gaId, {
-    page_path: window.location.pathname,
-    debug_mode: debug,
-    send_page_view: false,
-  });
-
-  // Load GA4 script
-  const script = document.createElement("script");
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
-  document.head.appendChild(script);
-}
-
 const App = () => {
-  // Inject GA4 script on component mount
-  useEffect(() => {
-    injectGAScript();
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>

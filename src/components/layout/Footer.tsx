@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
+import { openCookieSettings } from "@/lib/analytics";
 
-const footerLinks = {
+type FooterLink = { name: string; href?: string; onClick?: () => void };
+
+const footerLinks: Record<string, FooterLink[]> = {
   Company: [
     { name: "About", href: "/about" },
     { name: "Careers", href: "/careers" },
@@ -21,9 +24,9 @@ const footerLinks = {
     { name: "API", href: "#" },
   ],
   Legal: [
-    { name: "Privacy", href: "#" },
+    { name: "Privacy", href: "/privacy" },
     { name: "Terms", href: "#" },
-    { name: "Cookies", href: "#" },
+    { name: "Cookie settings", onClick: openCookieSettings },
   ],
 };
 
@@ -81,12 +84,22 @@ export const Footer = () => {
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="text-background/42 hover:text-background transition-colors duration-200 text-sm"
-                    >
-                      {link.name}
-                    </Link>
+                    {link.onClick ? (
+                      <button
+                        type="button"
+                        onClick={link.onClick}
+                        className="text-background/42 hover:text-background transition-colors duration-200 text-sm"
+                      >
+                        {link.name}
+                      </button>
+                    ) : (
+                      <Link
+                        to={link.href ?? "#"}
+                        className="text-background/42 hover:text-background transition-colors duration-200 text-sm"
+                      >
+                        {link.name}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

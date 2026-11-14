@@ -1,117 +1,113 @@
-import { useEffect, useState } from "react";
-import { grantConsent, denyConsent } from "@/lib/analytics";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Cookie, X } from "lucide-react";
+import { COOKIE_SETTINGS_EVENT, getStoredConsent, setConsent, type ConsentChoice } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
-import { ChevronUp } from "lucide-react";
+
+const TRANSITION_MS = 300;
+
+const CHOICE_LABEL: Record<ConsentChoice, string> = {
+  granted: "Analytics cookies are currently on.",
+  denied: "Analytics cookies are currently off.",
+};
 
 export function CookieBanner() {
+  const { pathname } = useLocation();
+  const panelRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [entered, setEntered] = useState(false);
+  const [current, setCurrent] = useState<ConsentChoice | null>(null);
 
-  useEffect(() => {
-    const hasConsent = localStorage.getItem("cookie_consent");
-    if (!hasConsent) {
-      setVisible(true);
-      setTimeout(() => setIsAnimating(true), 50);
-    }
+  const show = useCallback((focus: boolean) => {
+    setCurrent(getStoredConsent());
+    setVisible(true);
+    window.setTimeout(() => {
+      setEntered(true);
+      if (focus) panelRef.current?.focus();
+    }, 50);
   }, []);
 
-  const handleAccept = () => {
-    localStorage.setItem("cookie_consent", "granted");
-    grantConsent();
-    setIsAnimating(false);
-    setTimeout(() => setVisible(false), 300);
+  const hide = useCallback(() => {
+    setEntered(false);
+    window.setTimeout(() => setVisible(false), TRANSITION_MS);
+  }, []);
+
+  useEffect(() => {
+    if (!getStoredConsent()) show(false);
+    const reopen = () => show(true);
+    window.addEventListener(COOKIE_SETTINGS_EVENT, reopen);
+    return () => window.removeEventListener(COOKIE_SETTINGS_EVENT, reopen);
+  }, [show]);
+
+  const choose = (choice: ConsentChoice) => {
+    setConsent(choice);
+    hide();
   };
 
-  const handleDecline = () => {
-    localStorage.setItem("cookie_consent", "denied");
-    denyConsent();
-    setIsAnimating(false);
-    setTimeout(() => setVisible(false), 300);
-  };
-
-  if (!visible) return null;
+  if (!visible || pathname.startsWith("/dashboard")) return null;
 
   return (
-    <>
-      {/* Overlay backdrop — fade in/out */}
-      <div
-        className={`fixed inset-0 z-40 bg-foreground/30 backdrop-blur-sm transition-opacity duration-300 ${
-          isAnimating ? "opacity-100" : "opacity-0"
-        }`}
-        onClick={handleDecline}
-        aria-hidden
-      />
-
-      {/* Banner — slide up from bottom */}
-      <div
-        className={`fixed bottom-0 left-0 right-0 z-50 transform transition-all duration-300 ease-out ${
-          isAnimating ? "translate-y-0" : "translate-y-[calc(100%+20px)]"
-        }`}
-      >
-        {/* Decorative top border — terra accent */}
-        <div className="h-[3px] bg-gradient-to-r from-transparent via-[hsl(22_88%_52%)] to-transparent" />
-
-        {/* Main container */}
-        <div className="bg-background border-t border-border shadow-2xl">
-          <div className="container mx-auto px-6 py-10 md:py-12 lg:py-10">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-              {/* Left: Content */}
-              <div className="flex-1 space-y-3">
-                {/* Eyebrow label */}
-                <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[hsl(22_88%_52%)]" />
-                  <span className="text-[10px] uppercase tracking-[0.18em] font-semibold text-muted-foreground/55">
-                    Privacy & Analytics
-                  </span>
-                </div>
-
-                {/* Headline */}
-                <h3 className="text-lg md:text-xl font-bold text-foreground leading-tight">
-                  We Use Cookies to Improve Your Experience
-                </h3>
-
-                {/* Description */}
-                <p className="text-sm md:text-base leading-relaxed text-muted-foreground max-w-2xl">
-                  We use analytics to understand how you use our site and to enhance your experience. You can
-                  accept all cookies or customize your preferences.
-                </p>
-
-                {/* Privacy link */}
-                <a
-                  href="/privacy"
-                  className="inline-flex items-center text-sm font-medium text-primary hover:text-primary/80 transition-colors duration-200 mt-1"
-                >
-                  Learn more about our privacy policy →
-                </a>
-              </div>
-
-              {/* Right: Actions */}
-              <div className="flex flex-col sm:flex-row gap-3 lg:flex-shrink-0">
-                {/* Decline button */}
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={handleDecline}
-                  className="h-12 px-6 border-border/50 text-foreground hover:bg-muted/50 hover:border-border transition-all duration-200 font-medium text-sm"
-                >
-                  Decline
-                </Button>
-
-                {/* Accept button — primary CTA with glow */}
-                <Button
-                  variant="default"
-                  size="lg"
-                  onClick={handleAccept}
-                  className="h-12 px-6 shadow-primary hover:shadow-lg transition-all duration-200 font-medium text-sm group"
-                >
-                  Accept All
-                  <ChevronUp className="w-4 h-4 ml-1 transition-transform duration-200 group-hover:-translate-y-0.5" />
-                </Button>
-              </div>
-            </div>
+    <section
+      ref={panelRef}
+      tabIndex={-1}
+      aria-labelledby="cookie-banner-title"
+      aria-describedby="cookie-banner-description"
+      onKeyDown={(event) => {
+        if (event.key === "Escape" && current) hide();
+      }}
+      className={`fixed z-50 inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] sm:inset-x-auto sm:left-6 sm:bottom-6 sm:w-[400px] rounded-2xl border border-border bg-card/95 backdrop-blur-md shadow-2xl outline-none transition-all duration-300 ease-out motion-reduce:transition-none ${
+        entered ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+      }`}
+    >
+      <div className="p-5 sm:p-6">
+        <div className="flex items-start gap-3.5">
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[hsl(22_88%_52%/0.12)] text-[hsl(22_88%_52%)]">
+            <Cookie className="h-5 w-5" aria-hidden />
           </div>
+
+          <div className="min-w-0 flex-1">
+            <h2 id="cookie-banner-title" className="text-base font-semibold leading-snug text-foreground">
+              Your privacy, your choice
+            </h2>
+            <p
+              id="cookie-banner-description"
+              className="mt-1.5 text-sm leading-relaxed text-muted-foreground"
+            >
+              We'd like to use analytics cookies to see how the site is used and make it better. Nothing is
+              tracked unless you accept.{" "}
+              <Link
+                to="/privacy"
+                className="font-medium text-foreground underline decoration-border underline-offset-4 transition-colors duration-200 hover:decoration-foreground"
+              >
+                Privacy policy
+              </Link>
+            </p>
+            {current && (
+              <p className="mt-2 text-xs font-medium text-muted-foreground/80">{CHOICE_LABEL[current]}</p>
+            )}
+          </div>
+
+          {current && (
+            <button
+              type="button"
+              onClick={hide}
+              aria-label="Close cookie settings"
+              className="-mr-1.5 -mt-1.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <X className="h-4 w-4" aria-hidden />
+            </button>
+          )}
+        </div>
+
+        <div className="mt-5 grid grid-cols-2 gap-2.5">
+          <Button variant="outline" onClick={() => choose("denied")} className="h-10 text-sm font-medium">
+            Decline
+          </Button>
+          <Button variant="default" onClick={() => choose("granted")} className="h-10 text-sm font-medium">
+            Accept
+          </Button>
         </div>
       </div>
-    </>
+    </section>
   );
 }
