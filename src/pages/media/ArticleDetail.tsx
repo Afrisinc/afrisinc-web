@@ -30,6 +30,7 @@ import {
 import { toast } from "sonner";
 import { getCategoryPlaceholderImage, markArticleRead, markArticleView } from "@/services/articlesService";
 import { NoIndexMeta } from "@/components/seo/NoIndexMeta";
+import { SmartImage } from "@/components/SmartImage";
 
 const typeColors: Record<string, { bg: string; text: string; border: string }> = {
   Documentary: { bg: "hsl(22 88% 52% / 0.1)", text: "hsl(22 82% 46%)", border: "hsl(22 88% 52% / 0.25)" },
@@ -223,10 +224,11 @@ const ArticleDetail = () => {
             {article.author && (
               <div className="flex items-center gap-2.5">
                 {article.author.avatar && (
-                  <img
+                  <SmartImage
                     src={article.author.avatar}
                     alt={article.author.name}
-                    className="w-9 h-9 rounded-full object-cover ring-2 ring-border"
+                    width={36}
+                    className="w-9 h-9 rounded-full ring-2 ring-border flex-shrink-0"
                   />
                 )}
                 <div className="leading-tight">
@@ -292,11 +294,13 @@ const ArticleDetail = () => {
       <section className="pb-6 md:pb-10 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <figure className="relative rounded-xl sm:rounded-2xl overflow-hidden bg-muted">
-            <img
+            <SmartImage
               src={article.featured_image}
               alt={article.title}
-              className="w-full aspect-[16/9] sm:aspect-[2/1] lg:aspect-[21/10] object-cover"
-              loading="eager"
+              width={1200}
+              priority
+              fallbackSrc={getCategoryPlaceholderImage(article.category)}
+              className="h-auto aspect-[16/9] sm:aspect-[2/1] lg:aspect-[21/10]"
             />
           </figure>
         </div>

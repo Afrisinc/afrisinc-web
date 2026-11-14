@@ -3,6 +3,8 @@ import { Clock, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { Article } from "@/types/article";
 import { formatDistanceToNow } from "date-fns";
+import { getCategoryPlaceholderImage } from "@/services/articlesService";
+import { SmartImage } from "@/components/SmartImage";
 
 interface ArticleCardProps {
   article: Article;
@@ -30,10 +32,12 @@ export function ArticleCard({ article, variant = "default" }: ArticleCardProps) 
       <Link to={`/media/articles/${article.slug}`} className="group block">
         <article className="flex gap-4 p-4 rounded-xl bg-card hover:bg-muted/50 transition-colors border border-border/50">
           <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
-            <img
+            <SmartImage
               src={article.featured_image}
               alt={article.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              width={80}
+              fallbackSrc={getCategoryPlaceholderImage(article.category)}
+              imageClassName="group-hover:scale-105 transition-transform duration-300"
             />
           </div>
           <div className="flex-1 min-w-0">
@@ -60,10 +64,12 @@ export function ArticleCard({ article, variant = "default" }: ArticleCardProps) 
       <article className="bg-card rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1 h-full flex flex-col border border-border/50">
         {/* Image */}
         <div className="relative aspect-[16/10] overflow-hidden">
-          <img
+          <SmartImage
             src={article.featured_image}
             alt={article.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            width={480}
+            fallbackSrc={getCategoryPlaceholderImage(article.category)}
+            imageClassName="group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -120,10 +126,11 @@ export function ArticleCard({ article, variant = "default" }: ArticleCardProps) 
               {article.author && (
                 <>
                   {article.author.avatar && (
-                    <img
+                    <SmartImage
                       src={article.author.avatar}
                       alt={article.author.name}
-                      className="w-6 h-6 rounded-full object-cover ring-2 ring-border"
+                      width={24}
+                      className="w-6 h-6 rounded-full ring-2 ring-border flex-shrink-0"
                     />
                   )}
                   <span className="font-medium text-foreground">{article.author.name}</span>
