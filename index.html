@@ -38,8 +38,9 @@
       (function () {
         var stored = localStorage.getItem("theme");
         var system = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        var theme = stored || system;
+        var theme = stored === "light" || stored === "dark" ? stored : system;
         if (theme === "dark") document.documentElement.classList.add("dark");
+        document.documentElement.style.colorScheme = theme;
       })();
     </script>
   </head>
