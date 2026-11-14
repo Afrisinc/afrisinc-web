@@ -138,7 +138,7 @@ export const Header = () => {
 
             {/* Bottom row */}
             <div className="mt-8 pt-6 border-t border-background/10 flex items-center justify-between gap-4">
-              <ThemeToggle />
+              <ThemeToggle inverted />
               {user && token ? (
                 <Button variant="default" size="sm" className="group shadow-primary" asChild>
                   <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
