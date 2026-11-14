@@ -169,14 +169,14 @@ const Privacy = () => {
                     improve the experience for everyone.
                   </p>
                   <p>
-                    <strong className="text-foreground">What we track:</strong> page views, clicks, form
-                    submissions, scroll depth, and time spent on pages. We use this data to find what's
+                    <strong className="text-foreground">What we track:</strong> page views and form
+                    interactions such as starting or submitting a form. We use this data to find what's
                     working and what isn't.
                   </p>
                   <p>
                     <strong className="text-foreground">Your control:</strong> You choose whether to allow
-                    analytics when you first visit. You can change your preference anytime in the cookie
-                    banner at the bottom of the page.
+                    analytics when you first visit. You can change your preference anytime using the "Cookie
+                    settings" link in the site footer.
                   </p>
                 </div>
 
@@ -225,7 +225,8 @@ const Privacy = () => {
                         <code className="text-xs bg-muted px-2 py-1 rounded text-foreground">
                           cookie_consent
                         </code>
-                        . Delete this to see the banner again.
+                        . Use the "Cookie settings" link in the footer to change it. If you decline, any
+                        existing analytics cookies are removed.
                       </p>
                     </div>
                   </div>
@@ -257,7 +258,7 @@ const Privacy = () => {
                     },
                     {
                       title: "Opt Out of Analytics",
-                      desc: "Decline all tracking cookies at any time via the cookie banner.",
+                      desc: "Decline analytics cookies at any time via the Cookie settings link in the footer.",
                     },
                     {
                       title: "Unsubscribe",
@@ -290,9 +291,9 @@ const Privacy = () => {
                     <div>
                       <h4 className="font-bold text-foreground mb-2">Legal Basis for Processing</h4>
                       <p className="text-sm">
-                        We process your data based on your consent (when you submit a form) or legitimate
-                        interest (analytics to improve our site). We never sell or share your data with third
-                        parties.
+                        We process your data based on your consent, both when you submit a form and when you
+                        accept analytics cookies. You can withdraw that consent at any time. We never sell
+                        your data.
                       </p>
                     </div>
 

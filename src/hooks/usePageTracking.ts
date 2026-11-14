@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { trackPageView } from "@/lib/analytics";
 
+const TITLE_SETTLE_MS = 150;
+
 export function usePageTracking() {
-  const location = useLocation();
+  const { pathname, search } = useLocation();
 
   useEffect(() => {
-    const url = location.pathname + (location.search ? location.search : "");
-    trackPageView(url);
-  }, [location.pathname, location.search]);
+    const timer = window.setTimeout(() => trackPageView(pathname + search), TITLE_SETTLE_MS);
+    return () => window.clearTimeout(timer);
+  }, [pathname, search]);
 }
