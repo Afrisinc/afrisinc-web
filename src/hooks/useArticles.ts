@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import {
   fetchArticles,
   fetchArticlesByCategory,
@@ -13,6 +13,8 @@ export function useArticles(filters: ArticleFilters = {}) {
     queryKey: ["articles", filters],
     queryFn: () =>
       filters.category ? fetchArticlesByCategory(filters.category, filters) : fetchArticles(filters),
+    // Keep current results on screen while a new filter/page loads — no skeleton flash.
+    placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }

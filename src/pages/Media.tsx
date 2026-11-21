@@ -1,630 +1,354 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { AlertCircle, BookOpen, FileText, Newspaper } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { PublicLayout } from "@/components/layout/PublicLayout";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Play, ArrowRight, ArrowUpRight, ChevronDown, Clock } from "lucide-react";
-import { useFeaturedArticle, useArticles, useCategories } from "@/hooks/useArticles";
-import { useStories } from "@/hooks/useStories";
 import { ArticleCard } from "@/components/articles/ArticleCard";
-import { FeaturedArticle } from "@/components/articles/FeaturedArticle";
 import { StoryCard } from "@/components/stories/StoryCard";
-import { useToast } from "@/hooks/use-toast";
-import { subscribeNewsletter } from "@/services/notifyService";
-import { useTrackForm } from "@/hooks/useTrackForm";
-import { SmartImage } from "@/components/SmartImage";
+import {
+  CardGridSkeleton,
+  CategoryFilter,
+  LatestHeadlines,
+  LeadStory,
+  MEDIA_GRID_CLASS,
+  MediaEmptyState,
+  MediaSection,
+  MediaSectionNav,
+  NewsletterSignup,
+  PodcastEpisodeRow,
+  RevealMore,
+  VideoCard,
+  type MediaNavItem,
+} from "@/components/media";
+import { useArticles, useCategories, useFeaturedArticle } from "@/hooks/useArticles";
+import { useStories } from "@/hooks/useStories";
+import { MEDIA_LINKS, PODCAST_EPISODES, PODCAST_SHOW_NAME, VIDEOS } from "@/data/media";
+import { SITE_SEO } from "@/lib/seo";
+import { cn } from "@/lib/utils";
 
-const videos = [
-  {
-    title: "Afrisinc Cloud Platform Demo",
-    duration: "12:45",
-    views: "15K views",
-    thumbnail: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80",
-  },
-  {
-    title: "Building Enterprise Software in Africa",
-    duration: "24:30",
-    views: "32K views",
-    thumbnail: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&q=80",
-  },
-  {
-    title: "Tech Leadership Panel Discussion",
-    duration: "45:00",
-    views: "28K views",
-    thumbnail: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=600&q=80",
-  },
-  {
-    title: "Inside Afrisinc's Engineering Culture",
-    duration: "18:20",
-    views: "9.4K views",
-    thumbnail: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&q=80",
-  },
-  {
-    title: "From Idea to Product: A Founder's Playbook",
-    duration: "31:10",
-    views: "21K views",
-    thumbnail: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80",
-  },
-  {
-    title: "Securing African Fintech at Scale",
-    duration: "27:55",
-    views: "17K views",
-    thumbnail: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&q=80",
-  },
-];
-
-const podcasts = [
-  {
-    title: "The Afrisinc Podcast",
-    episode: "EP 42: Scaling Tech Teams Remotely",
-    duration: "58 min",
-    guest: "With Sarah Mensah, CTO",
-  },
-  {
-    title: "The Afrisinc Podcast",
-    episode: "EP 41: Future of Cloud Computing",
-    duration: "45 min",
-    guest: "With James Okonkwo, Head of Cloud",
-  },
-  {
-    title: "The Afrisinc Podcast",
-    episode: "EP 40: Startup to Enterprise Journey",
-    duration: "52 min",
-    guest: "With Amina Diallo, CEO",
-  },
-  {
-    title: "The Afrisinc Podcast",
-    episode: "EP 39: Designing for Low-Bandwidth Markets",
-    duration: "39 min",
-    guest: "With Kwame Boateng, Head of Design",
-  },
-  {
-    title: "The Afrisinc Podcast",
-    episode: "EP 38: Raising a Series A in Africa",
-    duration: "61 min",
-    guest: "With Ngozi Adeyemi, Founder",
-  },
-  {
-    title: "The Afrisinc Podcast",
-    episode: "EP 37: The Open RAN Opportunity",
-    duration: "44 min",
-    guest: "With David Mwangi, Network Architect",
-  },
-];
-
+const ARTICLES_PAGE_SIZE = 9;
+const ARTICLES_GRID_COUNT = 6;
+const HEADLINES_COUNT = 4;
 const INITIAL_MEDIA_COUNT = 3;
 
-const Media = () => {
-  const { toast } = useToast();
-  const [email, setEmail] = useState("");
-  const [isSubscribing, setIsSubscribing] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
-  const [videosExpanded, setVideosExpanded] = useState(false);
-  const [podcastsExpanded, setPodcastsExpanded] = useState(false);
-  const { data: featuredArticle, isLoading: isLoadingFeatured } = useFeaturedArticle();
-  const { data: articlesData, isLoading: isLoadingArticles } = useArticles({
-    per_page: 6,
-    category: selectedCategory,
-  });
-  const { data: categories = [] } = useCategories();
-  const { data: storiesData, isLoading: isLoadingStories } = useStories({ limit: 3 });
-  const { onStart, onSubmit: trackSubmit, onError } = useTrackForm("newsletter_form", "Newsletter Signup");
+const SEO = {
+  title: "Media Hub | Afrisinc",
+  description:
+    "News, analysis, original stories, video and podcasts from Africa's technology ecosystem — curated by Afrisinc.",
+  url: `${SITE_SEO.siteUrl}/media`,
+};
 
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    onStart(); // Track form start
-    setIsSubscribing(true);
-    try {
-      await subscribeNewsletter(email, {
-        categories: selectedCategory ? [selectedCategory] : [],
-        formPage: "media_page",
-      });
-      trackSubmit(); // Track successful subscription
-      toast({
-        title: "You're subscribed!",
-        description: "Thank you for subscribing to Afrisinc Media.",
-      });
-      setEmail("");
-    } catch {
-      onError("email", "server"); // Track error
-      toast({
-        title: "Failed to subscribe",
-        description: "Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubscribing(false);
-    }
-  };
+const Media = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+
+  const featured = useFeaturedArticle();
+  // Unfiltered feed powers the "Latest" rail; shares a cache entry with the grid when no filter is set.
+  const latest = useArticles({ per_page: ARTICLES_PAGE_SIZE });
+  const grid = useArticles({ per_page: ARTICLES_PAGE_SIZE, category: selectedCategory });
+  const { data: categories = [] } = useCategories();
+  const stories = useStories({ limit: 3 });
+
+  const featuredId = featured.data?.id;
+
+  const headlines = useMemo(
+    () => (latest.data?.articles ?? []).filter((a) => a.id !== featuredId).slice(0, HEADLINES_COUNT),
+    [latest.data, featuredId]
+  );
+
+  // Avoid repeating what's already above the fold when the reader hasn't filtered.
+  const gridArticles = useMemo(() => {
+    const exclude = new Set<string>(featuredId ? [featuredId] : []);
+    if (!selectedCategory) headlines.forEach((a) => exclude.add(a.id));
+    const all = grid.data?.articles ?? [];
+    const deduped = all.filter((a) => !exclude.has(a.id));
+    // Fall back to the full list if de-duplication would leave the grid looking empty.
+    return (deduped.length >= 3 ? deduped : all).slice(0, ARTICLES_GRID_COUNT);
+  }, [grid.data, featuredId, headlines, selectedCategory]);
+
+  const navigate = useNavigate();
+  const storyItems = stories.data?.items ?? [];
+  const hasLead = featured.isLoading || Boolean(featured.data);
+  const hasHeadlines = latest.isLoading || headlines.length > 0;
+
+  const navItems: MediaNavItem[] = [
+    { id: "top-stories", label: "Top stories" },
+    { id: "articles", label: "Articles", count: latest.data?.total || undefined },
+    { id: "stories", label: "Stories", count: stories.data?.total || undefined },
+    { id: "video", label: "Video", count: VIDEOS.length },
+    { id: "podcast", label: "Podcast", count: PODCAST_EPISODES.length },
+  ];
+
+  const categoryOptions = categories.map((c) => ({ value: c.slug, label: c.name }));
+  const activeCategoryName = categories.find((c) => c.slug === selectedCategory)?.name;
 
   return (
     <PublicLayout>
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[60vh] flex items-center overflow-hidden bg-background dot-grid grain">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background/80 pointer-events-none" />
+      <Helmet>
+        <title>{SEO.title}</title>
+        <meta name="description" content={SEO.description} />
+        <link rel="canonical" href={SEO.url} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={SEO.title} />
+        <meta property="og:description" content={SEO.description} />
+        <meta property="og:url" content={SEO.url} />
+        <meta property="og:image" content={SITE_SEO.defaultImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content={SITE_SEO.twitterHandle} />
+      </Helmet>
 
+      {/* ── Masthead ─────────────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-background dot-grid grain">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/85 to-background pointer-events-none"
+        />
         <div className="container mx-auto px-6 pt-36 pb-24 relative z-10">
-          <div className="max-w-4xl">
-            <p className="line-accent mb-12 animate-fade-in">Media Hub</p>
-
-            <h1 className="animate-fade-up animation-delay-100" style={{ lineHeight: 1 }}>
-              <span
-                className="block font-bold tracking-[-0.03em] text-foreground font-sans"
-                style={{ fontSize: "clamp(28px, 6.5vw, 76px)", lineHeight: 0.92 }}
-              >
-                Stories That
-              </span>
-              <span
-                className="block font-display italic font-bold tracking-[-0.02em] text-gradient-primary"
-                style={{ fontSize: "clamp(28px, 6.5vw, 76px)", lineHeight: 1.02 }}
-              >
-                Matter.
-              </span>
-            </h1>
-
-            <p className="text-lg text-muted-foreground leading-[1.75] max-w-lg mt-10 animate-fade-up animation-delay-200">
-              News, insights, and stories from Africa's technology ecosystem and beyond. Stay informed on
-              what's shaping the future.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Latest Headlines Ticker ───────────────────────────────────────── */}
-      {articlesData && articlesData.articles.length > 0 && (
-        <div className="border-y border-border bg-muted/40">
-          <div className="container mx-auto px-6">
-            <div className="flex items-center gap-0 overflow-hidden">
-              <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-destructive py-3 pr-5 border-r border-border flex-shrink-0">
-                <span className="w-1.5 h-1.5 rounded-full bg-destructive animate-pulse" />
-                Latest
-              </span>
-              <div className="flex items-center gap-6 overflow-x-auto scrollbar-none pl-5 py-3">
-                {articlesData.articles.slice(0, 4).map((article, i) => (
-                  <Link
-                    key={article.id}
-                    to={`/media/articles/${article.slug}`}
-                    className="flex items-center gap-3 flex-shrink-0 group"
-                  >
-                    {i > 0 && <span className="w-1 h-1 rounded-full bg-border flex-shrink-0" />}
-                    <span className="text-[11px] text-muted-foreground group-hover:text-foreground transition-colors line-clamp-1 max-w-[280px]">
-                      {article.title}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── Featured Article ─────────────────────────────────────────────── */}
-      <section className="py-28 md:py-36 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
-            <div>
-              <p className="line-accent">Featured</p>
-            </div>
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                Latest from <span className="font-display italic text-gradient-primary">Afrisinc.</span>
-              </h2>
-            </div>
-          </div>
-
-          <FeaturedArticle article={featuredArticle ?? null} isLoading={isLoadingFeatured} />
-        </div>
-      </section>
-
-      {/* ── Latest Articles ──────────────────────────────────────────────── */}
-      <section className="py-28 md:py-36 bg-muted/30">
-        <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-12 pb-12 border-b border-border">
-            <div>
-              <p className="line-accent">Articles</p>
-            </div>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                Deep Dives and <span className="font-display italic text-gradient-primary">Analysis.</span>
-              </h2>
-              <Button variant="outline" size="lg" className="group flex-shrink-0" asChild>
-                <Link to="/media/articles">
-                  View All
-                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-
-          {/* Category pills */}
-          {categories.length > 0 && (
-            <div className="flex items-center gap-2 flex-wrap mb-10">
-              <button
-                onClick={() => setSelectedCategory(undefined)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors duration-200 ${
-                  !selectedCategory
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-transparent text-muted-foreground border-border hover:border-primary/40 hover:text-foreground"
-                }`}
-              >
-                All
-              </button>
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.slug === selectedCategory ? undefined : cat.slug)}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-colors duration-200 ${
-                    selectedCategory === cat.slug
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-transparent text-muted-foreground border-border hover:border-primary/40 hover:text-foreground"
-                  }`}
+          <div className="grid lg:grid-cols-[1fr_auto] gap-10 lg:items-end">
+            <div className="max-w-4xl">
+              <p className="line-accent mb-12 animate-fade-in">Media Hub</p>
+              <h1 className="animate-fade-up animation-delay-100" style={{ lineHeight: 1 }}>
+                <span
+                  className="block font-bold tracking-[-0.03em] text-foreground font-sans"
+                  style={{ fontSize: "clamp(28px, 6.5vw, 76px)", lineHeight: 0.92 }}
                 >
-                  {cat.name}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {isLoadingArticles ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="bg-card rounded-2xl overflow-hidden border border-border">
-                  <Skeleton className="aspect-[16/10] w-full" />
-                  <div className="p-6 space-y-3">
-                    <Skeleton className="h-4 w-20" />
-                    <Skeleton className="h-5 w-full" />
-                    <Skeleton className="h-4 w-3/4" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {articlesData?.articles.map((article, index) => (
-                <div
-                  key={article.id}
-                  className="animate-fade-up"
-                  style={{ animationDelay: `${index * 80}ms` }}
+                  Stories That
+                </span>
+                <span
+                  className="block font-display italic font-bold tracking-[-0.02em] text-gradient-primary"
+                  style={{ fontSize: "clamp(28px, 6.5vw, 76px)", lineHeight: 1.02 }}
                 >
-                  <ArticleCard article={article} />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ── Stories ──────────────────────────────────────────────────────── */}
-      {(isLoadingStories || (storiesData?.items.length ?? 0) > 0) && (
-        <section className="py-28 md:py-36 bg-background">
-          <div className="container mx-auto px-6">
-            <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
-              <div>
-                <p className="line-accent">Stories</p>
-              </div>
-              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                  Original Fiction,{" "}
-                  <span className="font-display italic text-gradient-primary">Told in Episodes.</span>
-                </h2>
-                <Button variant="outline" size="lg" className="group flex-shrink-0" asChild>
-                  <Link to="/media/stories">
-                    View All
-                    <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-
-            {isLoadingStories ? (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="bg-card rounded-2xl overflow-hidden border border-border">
-                    <Skeleton className="aspect-[16/10] w-full" />
-                    <div className="p-6 space-y-3">
-                      <Skeleton className="h-4 w-20" />
-                      <Skeleton className="h-5 w-full" />
-                      <Skeleton className="h-4 w-3/4" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {storiesData?.items.map((story, index) => (
-                  <div
-                    key={story.id}
-                    className="animate-fade-up"
-                    style={{ animationDelay: `${index * 80}ms` }}
-                  >
-                    <StoryCard story={story} />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-      )}
-
-      {/* ── Videos ───────────────────────────────────────────────────────── */}
-      <section className="py-28 md:py-36 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
-            <div>
-              <p className="line-accent">Video</p>
-            </div>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                Watch Our <span className="font-display italic text-gradient-primary">Latest Videos.</span>
-              </h2>
-              <Button variant="outline" size="lg" className="group flex-shrink-0" asChild>
-                <a href="#" target="_blank" rel="noopener noreferrer">
-                  Visit Channel
-                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </a>
-              </Button>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {videos.slice(0, INITIAL_MEDIA_COUNT).map((video, index) => (
-              <div
-                key={video.title}
-                className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/25 hover:shadow-card-hover transition-all duration-300 cursor-pointer animate-fade-up"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="relative aspect-video overflow-hidden">
-                  <SmartImage
-                    src={video.thumbnail}
-                    alt={video.title}
-                    width={480}
-                    imageClassName="group-hover:scale-105 transition-transform duration-300"
-                  />
-
-                  {/* Play button overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors duration-300">
-                    <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
-                      <Play className="w-6 h-6 text-primary-foreground ml-0.5" />
-                    </div>
-                  </div>
-
-                  {/* Duration badge */}
-                  <span className="absolute bottom-3 right-3 px-3 py-1 text-xs font-medium rounded-full bg-foreground/50 text-background backdrop-blur-sm">
-                    {video.duration}
-                  </span>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
-                    {video.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm">{video.views}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {videos.length > INITIAL_MEDIA_COUNT && (
-            <>
-              <div
-                className={`grid transition-[grid-template-rows] duration-500 ease-in-out ${
-                  videosExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                }`}
-              >
-                <div className="overflow-hidden">
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 pt-5">
-                    {videos.slice(INITIAL_MEDIA_COUNT).map((video) => (
-                      <div
-                        key={video.title}
-                        className="group rounded-2xl border border-border bg-card overflow-hidden hover:border-primary/25 hover:shadow-card-hover transition-all duration-300 cursor-pointer"
-                      >
-                        <div className="relative aspect-video overflow-hidden">
-                          <SmartImage
-                            src={video.thumbnail}
-                            alt={video.title}
-                            width={480}
-                            imageClassName="group-hover:scale-105 transition-transform duration-300"
-                          />
-
-                          {/* Play button overlay */}
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors duration-300">
-                            <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
-                              <Play className="w-6 h-6 text-primary-foreground ml-0.5" />
-                            </div>
-                          </div>
-
-                          {/* Duration badge */}
-                          <span className="absolute bottom-3 right-3 px-3 py-1 text-xs font-medium rounded-full bg-foreground/50 text-background backdrop-blur-sm">
-                            {video.duration}
-                          </span>
-                        </div>
-
-                        <div className="p-6">
-                          <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
-                            {video.title}
-                          </h3>
-                          <p className="text-muted-foreground text-sm">{video.views}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-center mt-10">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="group"
-                  onClick={() => setVideosExpanded((v) => !v)}
-                >
-                  {videosExpanded ? "Show Less" : `Show ${videos.length - INITIAL_MEDIA_COUNT} More`}
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${videosExpanded ? "rotate-180" : ""}`}
-                  />
-                </Button>
-              </div>
-            </>
-          )}
-        </div>
-      </section>
-
-      {/* ── Podcasts ─────────────────────────────────────────────────────── */}
-      <section className="py-28 md:py-36 bg-muted/30">
-        <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-border">
-            <div>
-              <p className="line-accent">Podcast</p>
-            </div>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-[1.0]">
-                The Afrisinc <span className="font-display italic text-gradient-primary">Podcast.</span>
-              </h2>
-              <Button variant="outline" size="lg" className="group flex-shrink-0" asChild>
-                <a href="#" target="_blank" rel="noopener noreferrer">
-                  All Episodes
-                  <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                </a>
-              </Button>
-            </div>
-          </div>
-
-          <div className="divide-y divide-border">
-            {podcasts.slice(0, INITIAL_MEDIA_COUNT).map((podcast, index) => (
-              <div
-                key={podcast.episode}
-                className="group relative flex gap-8 py-8 hover:bg-background/50 -mx-4 px-4 transition-all duration-300 rounded-xl animate-fade-up cursor-pointer"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {/* Left accent bar */}
-                <div className="absolute left-0 top-3 bottom-3 w-[3px] scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-center rounded-full bg-primary" />
-
-                {/* Play icon */}
-                <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
-                  <Play className="w-5 h-5 text-primary ml-0.5" />
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
-                    {podcast.episode}
-                  </h3>
-                  <p className="text-muted-foreground text-sm">{podcast.guest}</p>
-                </div>
-
-                {/* Duration — right side on desktop */}
-                <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground whitespace-nowrap hidden sm:flex flex-shrink-0">
-                  <Clock className="w-3.5 h-3.5" />
-                  {podcast.duration}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {podcasts.length > INITIAL_MEDIA_COUNT && (
-            <>
-              <div
-                className={`grid transition-[grid-template-rows] duration-500 ease-in-out ${
-                  podcastsExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                }`}
-              >
-                <div className="overflow-hidden">
-                  <div className="divide-y divide-border">
-                    {podcasts.slice(INITIAL_MEDIA_COUNT).map((podcast) => (
-                      <div
-                        key={podcast.episode}
-                        className="group relative flex gap-8 py-8 hover:bg-background/50 -mx-4 px-4 transition-all duration-300 rounded-xl cursor-pointer"
-                      >
-                        {/* Left accent bar */}
-                        <div className="absolute left-0 top-3 bottom-3 w-[3px] scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-center rounded-full bg-primary" />
-
-                        {/* Play icon */}
-                        <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors duration-300">
-                          <Play className="w-5 h-5 text-primary ml-0.5" />
-                        </div>
-
-                        {/* Content */}
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
-                            {podcast.episode}
-                          </h3>
-                          <p className="text-muted-foreground text-sm">{podcast.guest}</p>
-                        </div>
-
-                        {/* Duration — right side on desktop */}
-                        <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground whitespace-nowrap hidden sm:flex flex-shrink-0">
-                          <Clock className="w-3.5 h-3.5" />
-                          {podcast.duration}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-center mt-10">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="group"
-                  onClick={() => setPodcastsExpanded((v) => !v)}
-                >
-                  {podcastsExpanded ? "Show Less" : `Show ${podcasts.length - INITIAL_MEDIA_COUNT} More`}
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-300 ${podcastsExpanded ? "rotate-180" : ""}`}
-                  />
-                </Button>
-              </div>
-            </>
-          )}
-        </div>
-      </section>
-
-      {/* ── Newsletter CTA ───────────────────────────────────────────────── */}
-      <section className="py-28 md:py-36 bg-foreground text-background grain relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 kente-border opacity-55" />
-
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="grid lg:grid-cols-[1fr_2fr] gap-8 mb-16 pb-12 border-b border-background/10">
-            <div>
-              <p className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-background/40 before:block before:w-6 before:h-px before:bg-background/40 before:flex-shrink-0">
-                Stay Updated
+                  Matter.
+                </span>
+              </h1>
+              <p className="text-lg text-muted-foreground leading-[1.75] max-w-lg mt-10 animate-fade-up animation-delay-200">
+                News, insights, and stories from Africa's technology ecosystem and beyond. Stay informed on
+                what's shaping the future.
               </p>
             </div>
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-background leading-[1.0]">
-                Get the Latest <span className="font-display italic text-gradient-primary">Insights.</span>
-              </h2>
-            </div>
+
+            <dl className="grid grid-cols-3 gap-6 sm:gap-10 lg:text-right animate-fade-up animation-delay-300">
+              {[
+                { label: "Articles", value: latest.data?.total },
+                { label: "Videos", value: VIDEOS.length },
+                { label: "Episodes", value: PODCAST_EPISODES.length },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                    {stat.label}
+                  </dt>
+                  <dd className="mt-1 text-2xl md:text-3xl font-bold tabular-nums text-foreground">
+                    {stat.value ?? "—"}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
-
-          <p className="text-background/50 text-sm leading-relaxed max-w-sm mb-8">
-            Delivered directly to your inbox. News, analysis, and stories from Afrisinc.
-          </p>
-
-          <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md">
-            <Input
-              type="email"
-              placeholder="your@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="h-12 bg-background/10 border-background/20 text-background placeholder:text-background/40 focus:border-background/40"
-            />
-            <Button
-              type="submit"
-              variant="default"
-              size="lg"
-              className="group shadow-primary flex-shrink-0"
-              disabled={isSubscribing}
-            >
-              {isSubscribing ? "Subscribing..." : "Subscribe"}
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </form>
         </div>
       </section>
+
+      <MediaSectionNav items={navItems} />
+
+      {/* ── Top stories: lead + latest rail ──────────────────────────────── */}
+      <section
+        id="top-stories"
+        aria-label="Top stories"
+        className="scroll-mt-32 pt-16 md:pt-20 pb-28 md:pb-36 bg-background"
+      >
+        <div className="container mx-auto px-6">
+          {hasLead || hasHeadlines ? (
+            <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
+              {hasLead && (
+                <div className={cn(hasHeadlines ? "lg:col-span-8" : "lg:col-span-12")}>
+                  <LeadStory article={featured.data} isLoading={featured.isLoading} />
+                </div>
+              )}
+              {hasHeadlines && (
+                <LatestHeadlines
+                  className={hasLead ? "lg:col-span-4" : "lg:col-span-12"}
+                  articles={headlines}
+                  isLoading={latest.isLoading}
+                />
+              )}
+            </div>
+          ) : (
+            <MediaEmptyState
+              icon={latest.isError ? AlertCircle : Newspaper}
+              title={latest.isError ? "We couldn't load top stories" : "No top stories yet"}
+              description={
+                latest.isError
+                  ? "Something went wrong on our side. Please try again."
+                  : "Our editors are working on the next lead story — check back soon."
+              }
+              actionLabel={latest.isError ? "Retry" : undefined}
+              onAction={
+                latest.isError ? () => void Promise.all([latest.refetch(), featured.refetch()]) : undefined
+              }
+            />
+          )}
+        </div>
+      </section>
+
+      {/* ── Articles ─────────────────────────────────────────────────────── */}
+      <MediaSection
+        id="articles"
+        tone="muted"
+        eyebrow="Articles"
+        title="Deep dives and"
+        accent="analysis."
+        action={{ label: "All articles", href: "/media/articles" }}
+      >
+        <CategoryFilter
+          className="mb-10"
+          options={categoryOptions}
+          value={selectedCategory}
+          onChange={setSelectedCategory}
+          label="Filter articles by category"
+        />
+
+        <div aria-live="polite" aria-busy={grid.isFetching}>
+          {grid.isLoading ? (
+            <CardGridSkeleton count={ARTICLES_GRID_COUNT} />
+          ) : grid.isError ? (
+            <MediaEmptyState
+              icon={AlertCircle}
+              title="We couldn't load articles"
+              description="Something went wrong on our side. Please try again."
+              actionLabel="Retry"
+              onAction={() => grid.refetch()}
+            />
+          ) : gridArticles.length === 0 ? (
+            <MediaEmptyState
+              icon={FileText}
+              title={activeCategoryName ? `No articles in ${activeCategoryName} yet` : "No articles yet"}
+              description="New pieces are published regularly — check back soon."
+              actionLabel={selectedCategory ? "Show all articles" : undefined}
+              onAction={selectedCategory ? () => setSelectedCategory(undefined) : undefined}
+            />
+          ) : (
+            <ul
+              className={cn(
+                MEDIA_GRID_CLASS,
+                "transition-opacity duration-300",
+                grid.isPlaceholderData && "opacity-60"
+              )}
+            >
+              {gridArticles.map((article, index) => (
+                <li
+                  key={article.id}
+                  className="animate-fade-up motion-reduce:animate-none motion-reduce:opacity-100"
+                  style={{ animationDelay: `${index * 60}ms` }}
+                >
+                  <ArticleCard article={article} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </MediaSection>
+
+      {/* ── Stories ──────────────────────────────────────────────────────── */}
+      <MediaSection
+        id="stories"
+        eyebrow="Stories"
+        title="Original fiction,"
+        accent="told in episodes."
+        action={{ label: "All stories", href: "/media/stories" }}
+      >
+        {stories.isLoading ? (
+          <CardGridSkeleton count={3} />
+        ) : stories.isError ? (
+          <MediaEmptyState
+            icon={AlertCircle}
+            title="We couldn't load stories"
+            description="Something went wrong on our side. Please try again."
+            actionLabel="Retry"
+            onAction={() => stories.refetch()}
+          />
+        ) : storyItems.length === 0 ? (
+          <MediaEmptyState
+            icon={BookOpen}
+            title="New stories are on the way"
+            description="Our first serialised fiction is being written. Browse the stories page for updates."
+            actionLabel="Go to stories"
+            onAction={() => navigate("/media/stories")}
+          />
+        ) : (
+          <ul className={MEDIA_GRID_CLASS}>
+            {storyItems.map((story, index) => (
+              <li
+                key={story.id}
+                className="animate-fade-up motion-reduce:animate-none motion-reduce:opacity-100"
+                style={{ animationDelay: `${index * 60}ms` }}
+              >
+                <StoryCard story={story} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </MediaSection>
+
+      {/* ── Video ────────────────────────────────────────────────────────── */}
+      <MediaSection
+        id="video"
+        tone="muted"
+        eyebrow="Video"
+        title="Watch, learn,"
+        accent="build."
+        action={
+          MEDIA_LINKS.videoChannel ? { label: "Visit channel", href: MEDIA_LINKS.videoChannel } : undefined
+        }
+      >
+        <RevealMore
+          items={VIDEOS}
+          initialCount={INITIAL_MEDIA_COUNT}
+          noun="more videos"
+          render={(items, { offset }) => (
+            <ul className={cn(MEDIA_GRID_CLASS, "gap-y-10", offset > 0 && "pt-10")}>
+              {items.map((video) => (
+                <li key={video.id}>
+                  <VideoCard video={video} />
+                </li>
+              ))}
+            </ul>
+          )}
+        />
+      </MediaSection>
+
+      {/* ── Podcast ──────────────────────────────────────────────────────── */}
+      <MediaSection
+        id="podcast"
+        eyebrow="Podcast"
+        title={PODCAST_SHOW_NAME.replace(/Podcast$/, "").trim()}
+        accent="Podcast."
+        description="Candid conversations with the founders, engineers and operators building African tech."
+        action={MEDIA_LINKS.podcast ? { label: "All episodes", href: MEDIA_LINKS.podcast } : undefined}
+      >
+        <RevealMore
+          items={PODCAST_EPISODES}
+          initialCount={INITIAL_MEDIA_COUNT}
+          noun="more episodes"
+          render={(items, { offset }) => (
+            <ol
+              className={cn(
+                "divide-y divide-border",
+                offset > 0 ? "border-t border-border" : "border-y border-border"
+              )}
+            >
+              {items.map((episode) => (
+                <li key={episode.id}>
+                  <PodcastEpisodeRow episode={episode} />
+                </li>
+              ))}
+            </ol>
+          )}
+        />
+      </MediaSection>
+
+      <NewsletterSignup
+        formPage="media_page"
+        categories={selectedCategory ? [selectedCategory] : []}
+        eyebrow="Stay updated"
+      />
     </PublicLayout>
   );
 };

@@ -7,6 +7,7 @@ import type { Article } from "@/types/article";
 import { formatDistanceToNow } from "date-fns";
 import { getCategoryPlaceholderImage } from "@/services/articlesService";
 import { SmartImage } from "@/components/SmartImage";
+import { ARTICLE_TYPE_LABELS, ARTICLE_TYPE_STYLES } from "./articleMeta";
 
 interface FeaturedArticleProps {
   article: Article | null;
@@ -61,21 +62,8 @@ export function FeaturedArticle({ article, isLoading }: FeaturedArticleProps) {
               {cat}
             </Badge>
           ))}
-          <Badge
-            variant="outline"
-            className={
-              article.type === "editorial"
-                ? "bg-primary/10 text-primary border-primary/20"
-                : article.type === "opinion"
-                  ? "bg-purple-500/10 text-purple-600 border-purple-500/20"
-                  : "bg-blue-500/10 text-blue-600 border-blue-500/20"
-            }
-          >
-            {article.type === "editorial"
-              ? "Afrisinc Editorial"
-              : article.type === "opinion"
-                ? "Opinion"
-                : "News"}
+          <Badge variant="outline" className={ARTICLE_TYPE_STYLES[article.type]}>
+            {ARTICLE_TYPE_LABELS[article.type]}
           </Badge>
           {article.ai_generated && (
             <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 text-[11px]">

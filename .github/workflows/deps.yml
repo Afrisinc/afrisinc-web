@@ -2,7 +2,7 @@ name: deps
 on:
   pull_request:
   schedule:
-    - cron: '17 6 * * *'          # nightly — catches newly-disclosed CVEs
+    - cron: "17 6 * * *" # nightly — catches newly-disclosed CVEs
 concurrency:
   group: deps-${{ github.ref }}
   cancel-in-progress: true
@@ -18,4 +18,4 @@ jobs:
           scanners: vuln
           severity: HIGH,CRITICAL
           ignore-unfixed: true
-          exit-code: '0'          # report-only; change to '1' to block
+          exit-code: "0" # report-only; change to '1' to block

@@ -5,23 +5,15 @@ import type { Article } from "@/types/article";
 import { formatDistanceToNow } from "date-fns";
 import { getCategoryPlaceholderImage } from "@/services/articlesService";
 import { SmartImage } from "@/components/SmartImage";
+import { ARTICLE_TYPE_LABELS, ARTICLE_TYPE_STYLES } from "./articleMeta";
 
 interface ArticleCardProps {
   article: Article;
   variant?: "default" | "compact" | "featured";
 }
 
-const typeStyles = {
-  news: "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/30",
-  editorial: "bg-primary/10 text-primary border-primary/30",
-  opinion: "bg-purple-500/10 text-purple-700 dark:text-purple-300 border-purple-500/30",
-};
-
-const typeLabels = {
-  news: "News",
-  editorial: "Afrisinc Editorial",
-  opinion: "Opinion",
-};
+const typeStyles = ARTICLE_TYPE_STYLES;
+const typeLabels = ARTICLE_TYPE_LABELS;
 
 export function ArticleCard({ article, variant = "default" }: ArticleCardProps) {
   const timeAgo = formatDistanceToNow(new Date(article.published_at), { addSuffix: true });
